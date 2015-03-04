@@ -1,4 +1,4 @@
-package com.jnu.thesis.mywinxintest;
+package com.jnu.thesis.activity;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
