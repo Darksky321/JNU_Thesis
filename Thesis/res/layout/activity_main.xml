@@ -32,7 +32,7 @@
             android:id="@+id/img_right"
             android:layout_width="@dimen/qq_dimen_70px"
             android:layout_height="@dimen/qq_dimen_70px"
-            android:layout_alignParentBottom="true"
+            android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
             android:background="@drawable/qq_right" />
     </RelativeLayout>
