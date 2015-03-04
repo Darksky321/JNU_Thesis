@@ -10,6 +10,11 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.qq.xgdemo.po.XGNotification;
 
+/**
+ * 把推送历史保存到数据库
+ * @author Deng
+ *
+ */
 public class NotificationService {
 	private DBOpenHelper dbOpenHelper;
 	private static NotificationService instance = null;

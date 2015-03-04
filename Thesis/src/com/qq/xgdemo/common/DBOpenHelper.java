@@ -4,6 +4,11 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+/**
+ * 访问数据库,数据库保存有推送历史记录
+ * @author Deng
+ *
+ */
 public class DBOpenHelper extends SQLiteOpenHelper {
 
 	public DBOpenHelper(Context context) {

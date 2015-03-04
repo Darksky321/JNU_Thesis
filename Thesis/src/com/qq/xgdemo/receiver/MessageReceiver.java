@@ -19,6 +19,11 @@ import com.tencent.android.tpush.XGPushRegisterResult;
 import com.tencent.android.tpush.XGPushShowedResult;
 import com.tencent.android.tpush.XGPushTextMessage;
 
+/**
+ * ¼Ì³ĞĞÅ¸ë±£ÄÚXGPushBaseReceiverÀà,´¦ÀíÊÕµ½ÍÆËÍºóµÄĞĞÎª
+ * @author Deng
+ *
+ */
 public class MessageReceiver extends XGPushBaseReceiver {
 	private Intent intent = new Intent("com.qq.xgdemo.activity.UPDATE_LISTVIEW");
 	public static final String LogTag = "TPushReceiver";
@@ -27,7 +32,7 @@ public class MessageReceiver extends XGPushBaseReceiver {
 //		Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
 	}
 
-	// é€šçŸ¥å±•ç¤º
+	// Í¨ÖªÕ¹Ê¾
 	@Override
 	public void onNotifactionShowedResult(Context context,
 			XGPushShowedResult notifiShowedRlt) {
@@ -38,16 +43,16 @@ public class MessageReceiver extends XGPushBaseReceiver {
 		notific.setMsg_id(notifiShowedRlt.getMsgId());
 		notific.setTitle(notifiShowedRlt.getTitle());
 		notific.setContent(notifiShowedRlt.getContent());
-		// notificationActionType==1ä¸ºActivityï¼Œ2ä¸ºurlï¼Œ3ä¸ºintent
+		// notificationActionType==1ÎªActivity£¬2Îªurl£¬3Îªintent
 		notific.setNotificationActionType(notifiShowedRlt
 				.getNotificationActionType());
-		// Activity,url,intentéƒ½å¯ä»¥é€šè¿‡getActivity()è·å¾—
+		// Activity,url,intent¶¼¿ÉÒÔÍ¨¹ıgetActivity()»ñµÃ
 		notific.setActivity(notifiShowedRlt.getActivity());
 		notific.setUpdate_time(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
 				.format(Calendar.getInstance().getTime()));
 		NotificationService.getInstance(context).save(notific);
 		context.sendBroadcast(intent);
-		show(context, "æ‚¨æœ‰1æ¡æ–°æ¶ˆæ¯, " + "é€šçŸ¥è¢«å±•ç¤º ï¼Œ " + notifiShowedRlt.toString());
+		show(context, "ÄúÓĞ1ÌõĞÂÏûÏ¢, " + "Í¨Öª±»Õ¹Ê¾ £¬ " + notifiShowedRlt.toString());
 	}
 
 	@Override
@@ -57,9 +62,9 @@ public class MessageReceiver extends XGPushBaseReceiver {
 		}
 		String text = "";
 		if (errorCode == XGPushBaseReceiver.SUCCESS) {
-			text = "åæ³¨å†ŒæˆåŠŸ";
+			text = "·´×¢²á³É¹¦";
 		} else {
-			text = "åæ³¨å†Œå¤±è´¥" + errorCode;
+			text = "·´×¢²áÊ§°Ü" + errorCode;
 		}
 		Log.d(LogTag, text);
 		show(context, text);
@@ -73,9 +78,9 @@ public class MessageReceiver extends XGPushBaseReceiver {
 		}
 		String text = "";
 		if (errorCode == XGPushBaseReceiver.SUCCESS) {
-			text = "\"" + tagName + "\"è®¾ç½®æˆåŠŸ";
+			text = "\"" + tagName + "\"ÉèÖÃ³É¹¦";
 		} else {
-			text = "\"" + tagName + "\"è®¾ç½®å¤±è´¥,é”™è¯¯ç ï¼š" + errorCode;
+			text = "\"" + tagName + "\"ÉèÖÃÊ§°Ü,´íÎóÂë£º" + errorCode;
 		}
 		Log.d(LogTag, text);
 		show(context, text);
@@ -89,16 +94,16 @@ public class MessageReceiver extends XGPushBaseReceiver {
 		}
 		String text = "";
 		if (errorCode == XGPushBaseReceiver.SUCCESS) {
-			text = "\"" + tagName + "\"åˆ é™¤æˆåŠŸ";
+			text = "\"" + tagName + "\"É¾³ı³É¹¦";
 		} else {
-			text = "\"" + tagName + "\"åˆ é™¤å¤±è´¥,é”™è¯¯ç ï¼š" + errorCode;
+			text = "\"" + tagName + "\"É¾³ıÊ§°Ü,´íÎóÂë£º" + errorCode;
 		}
 		Log.d(LogTag, text);
 		show(context, text);
 
 	}
 
-	// é€šçŸ¥ç‚¹å‡»å›è°ƒ actionType=1ä¸ºè¯¥æ¶ˆæ¯è¢«æ¸…é™¤ï¼ŒactionType=0ä¸ºè¯¥æ¶ˆæ¯è¢«ç‚¹å‡»
+	// Í¨Öªµã»÷»Øµ÷ actionType=1Îª¸ÃÏûÏ¢±»Çå³ı£¬actionType=0Îª¸ÃÏûÏ¢±»µã»÷
 	@Override
 	public void onNotifactionClickedResult(Context context,
 			XGPushClickedResult message) {
@@ -107,23 +112,23 @@ public class MessageReceiver extends XGPushBaseReceiver {
 		}
 		String text = "";
 		if (message.getActionType() == XGPushClickedResult.NOTIFACTION_CLICKED_TYPE) {
-			// é€šçŸ¥åœ¨é€šçŸ¥æ è¢«ç‚¹å‡»å•¦ã€‚ã€‚ã€‚ã€‚ã€‚
-			// APPè‡ªå·±å¤„ç†ç‚¹å‡»çš„ç›¸å…³åŠ¨ä½œ
-			// è¿™ä¸ªåŠ¨ä½œå¯ä»¥åœ¨activityçš„onResumeä¹Ÿèƒ½ç›‘å¬ï¼Œè¯·çœ‹ç¬¬3ç‚¹ç›¸å…³å†…å®¹
-			text = "é€šçŸ¥è¢«æ‰“å¼€ :" + message;
+			// Í¨ÖªÔÚÍ¨ÖªÀ¸±»µã»÷À²¡£¡£¡£¡£¡£
+			// APP×Ô¼º´¦Àíµã»÷µÄÏà¹Ø¶¯×÷
+			// Õâ¸ö¶¯×÷¿ÉÒÔÔÚactivityµÄonResumeÒ²ÄÜ¼àÌı£¬Çë¿´µÚ3µãÏà¹ØÄÚÈİ
+			text = "Í¨Öª±»´ò¿ª :" + message;
 		} else if (message.getActionType() == XGPushClickedResult.NOTIFACTION_DELETED_TYPE) {
-			// é€šçŸ¥è¢«æ¸…é™¤å•¦ã€‚ã€‚ã€‚ã€‚
-			// APPè‡ªå·±å¤„ç†é€šçŸ¥è¢«æ¸…é™¤åçš„ç›¸å…³åŠ¨ä½œ
-			text = "é€šçŸ¥è¢«æ¸…é™¤ :" + message;
+			// Í¨Öª±»Çå³ıÀ²¡£¡£¡£¡£
+			// APP×Ô¼º´¦ÀíÍ¨Öª±»Çå³ıºóµÄÏà¹Ø¶¯×÷
+			text = "Í¨Öª±»Çå³ı :" + message;
 		}
-		Toast.makeText(context, "å¹¿æ’­æ¥æ”¶åˆ°é€šçŸ¥è¢«ç‚¹å‡»:" + message.toString(),
+		Toast.makeText(context, "¹ã²¥½ÓÊÕµ½Í¨Öª±»µã»÷:" + message.toString(),
 				Toast.LENGTH_SHORT).show();
-		// è·å–è‡ªå®šä¹‰key-value
+		// »ñÈ¡×Ô¶¨Òåkey-value
 		String customContent = message.getCustomContent();
 		if (customContent != null && customContent.length() != 0) {
 			try {
 				JSONObject obj = new JSONObject(customContent);
-				// key1ä¸ºå‰å°é…ç½®çš„key
+				// key1ÎªÇ°Ì¨ÅäÖÃµÄkey
 				if (!obj.isNull("key")) {
 					String value = obj.getString("key");
 					Log.d(LogTag, "get custom value:" + value);
@@ -133,7 +138,7 @@ public class MessageReceiver extends XGPushBaseReceiver {
 				e.printStackTrace();
 			}
 		}
-		// APPè‡ªä¸»å¤„ç†çš„è¿‡ç¨‹ã€‚ã€‚ã€‚
+		// APP×ÔÖ÷´¦ÀíµÄ¹ı³Ì¡£¡£¡£
 		Log.d(LogTag, text);
 		show(context, text);
 	}
@@ -147,27 +152,27 @@ public class MessageReceiver extends XGPushBaseReceiver {
 		}
 		String text = "";
 		if (errorCode == XGPushBaseReceiver.SUCCESS) {
-			text = message + "æ³¨å†ŒæˆåŠŸ";
-			// åœ¨è¿™é‡Œæ‹¿token
+			text = message + "×¢²á³É¹¦";
+			// ÔÚÕâÀïÄÃtoken
 			String token = message.getToken();
 		} else {
-			text = message + "æ³¨å†Œå¤±è´¥ï¼Œé”™è¯¯ç ï¼š" + errorCode;
+			text = message + "×¢²áÊ§°Ü£¬´íÎóÂë£º" + errorCode;
 		}
 		Log.d(LogTag, text);
 		show(context, text);
 	}
 
-	// æ¶ˆæ¯é€ä¼ 
+	// ÏûÏ¢Í¸´«
 	@Override
 	public void onTextMessage(Context context, XGPushTextMessage message) {
 		// TODO Auto-generated method stub
-		String text = "æ”¶åˆ°æ¶ˆæ¯:" + message.toString();
-		// è·å–è‡ªå®šä¹‰key-value
+		String text = "ÊÕµ½ÏûÏ¢:" + message.toString();
+		// »ñÈ¡×Ô¶¨Òåkey-value
 		String customContent = message.getCustomContent();
 		if (customContent != null && customContent.length() != 0) {
 			try {
 				JSONObject obj = new JSONObject(customContent);
-				// key1ä¸ºå‰å°é…ç½®çš„key
+				// key1ÎªÇ°Ì¨ÅäÖÃµÄkey
 				if (!obj.isNull("key")) {
 					String value = obj.getString("key");
 					Log.d(LogTag, "get custom value:" + value);
@@ -177,7 +182,7 @@ public class MessageReceiver extends XGPushBaseReceiver {
 				e.printStackTrace();
 			}
 		}
-		// APPè‡ªä¸»å¤„ç†æ¶ˆæ¯çš„è¿‡ç¨‹...
+		// APP×ÔÖ÷´¦ÀíÏûÏ¢µÄ¹ı³Ì...
 		Log.d(LogTag, text);
 		show(context, text);
 	}
