@@ -31,7 +31,6 @@ import android.util.Log;
  */
 public class HttpUtils {
 	private URL url;
-	private URL responseURL;
 
 	/**
 	 * 
@@ -40,10 +39,9 @@ public class HttpUtils {
 	 * @param password
 	 * @param deviceId
 	 */
-	public HttpUtils(String url, String responseURL) {
+	public HttpUtils(String url) {
 		try {
 			this.url = new URL(url);
-			this.responseURL = new URL(responseURL);
 		} catch (MalformedURLException e) {
 			// TODO 自动生成的 catch 块
 			e.printStackTrace();
