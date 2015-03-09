@@ -9,5 +9,7 @@
     <string name="title_activity_login">LoginActivity</string>
     <string name="editText_userName">请输入用户名</string>
     <string name="editText_password">请输入密码</string>
+    <string name="button_view_select">查看课题</string>
+    <string name="button_view_result">查看选题结果</string>
 
 </resources>

@@ -19,10 +19,10 @@ import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 
 import com.jnu.thesis.R;
-import com.jnu.thesis.fragment.ChatsFragment;
 import com.jnu.thesis.fragment.ContactsFragment;
 import com.jnu.thesis.fragment.DiscoverFragment;
 import com.jnu.thesis.fragment.MeFragment;
+import com.jnu.thesis.fragment.ThesisFragment;
 import com.tencent.android.tpush.XGPushManager;
 import com.tencent.android.tpush.service.XGPushService;
 
@@ -89,7 +89,7 @@ public class MainActivity extends FragmentActivity implements
 
 		fragmentList = new ArrayList<Fragment>();
 
-		Fragment chatsFragment = new ChatsFragment();
+		Fragment chatsFragment = new ThesisFragment();
 		Fragment contactsFragment = new ContactsFragment();
 		Fragment discoverFragment = new DiscoverFragment();
 		Fragment meFragment = new MeFragment();
@@ -207,4 +207,5 @@ public class MainActivity extends FragmentActivity implements
 		}
 		return super.onMenuOpened(featureId, menu);
 	}
+
 }
