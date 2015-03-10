@@ -11,5 +11,9 @@
     <string name="editText_password">请输入密码</string>
     <string name="button_view_select">查看课题</string>
     <string name="button_view_result">查看选题结果</string>
+    <string name="radioButton_thesis">选题</string>
+    <string name="radioButton_chat">通讯</string>
+    <string name="radioButton_group">小组</string>
+    <string name="radioButton_me">我</string>
 
 </resources>

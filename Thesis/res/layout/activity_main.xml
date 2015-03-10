@@ -32,8 +32,8 @@
             android:id="@+id/img_right"
             android:layout_width="@dimen/qq_dimen_70px"
             android:layout_height="@dimen/qq_dimen_70px"
-            android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
             android:background="@drawable/qq_right" />
     </RelativeLayout>
 
@@ -57,29 +57,29 @@
             style="@style/main_tab"
             android:background="@null"
             android:checked="true"
-            android:drawableTop="@drawable/icon_chat"
-            android:text="微信" />
+            android:drawableTop="@drawable/icon_thesis"
+            android:text="@string/radioButton_thesis" />
 
         <RadioButton
             android:id="@+id/radio_contacts"
             style="@style/main_tab"
             android:background="@null"
             android:drawableTop="@drawable/icon_contacts"
-            android:text="通讯录" />
+            android:text="@string/radioButton_chat" />
 
         <RadioButton
             android:id="@+id/radio_discover"
             style="@style/main_tab"
             android:background="@null"
-            android:drawableTop="@drawable/icon_discover"
-            android:text="发现" />
+            android:drawableTop="@drawable/icon_group"
+            android:text="@string/radioButton_group" />
 
         <RadioButton
             android:id="@+id/radio_me"
             style="@style/main_tab"
             android:background="@null"
             android:drawableTop="@drawable/icon_me"
-            android:text="我" />
+            android:text="@string/radioButton_me" />
     </RadioGroup>
 
 </LinearLayout>
