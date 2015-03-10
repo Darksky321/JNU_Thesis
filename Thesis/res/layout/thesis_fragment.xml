@@ -1,20 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/thesis_fragment"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
 
-    <Button
-        android:id="@+id/button_view_select"
-        android:layout_width="match_parent"
+    <LinearLayout
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="@string/button_view_select" />
+        android:orientation="vertical" >
 
-    <Button
-        android:id="@+id/button_view_result"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/button_view_result" />
+        <Button
+            android:id="@+id/button_view_result"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_selector"
+            android:textSize="20sp"
+            android:text="@string/button_view_result" />
 
-</LinearLayout>
+        <com.jnu.thesis.view.EmbeddedListView
+            android:id="@+id/listView_thesis"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" >
+        </com.jnu.thesis.view.EmbeddedListView>
+    </LinearLayout>
+
+</ScrollView>

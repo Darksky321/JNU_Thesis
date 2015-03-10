@@ -25,8 +25,7 @@ import android.util.Log;
 
 /**
  * 通讯工具类
- * 
- * @author
+ * @author Deng
  *
  */
 public class HttpUtils {
