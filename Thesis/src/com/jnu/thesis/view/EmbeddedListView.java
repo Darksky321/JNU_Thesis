@@ -2,7 +2,7 @@ package com.jnu.thesis.view;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.widget.ListView;
+import android.widget.ExpandableListView;
 
 /**
  * 为了在ScrollView中嵌套ListView, 覆盖onMeasure方法, 确定ListView的高度
@@ -10,7 +10,7 @@ import android.widget.ListView;
  * @author Deng
  *
  */
-public class EmbeddedListView extends ListView {
+public class EmbeddedListView extends ExpandableListView {
 
 	public EmbeddedListView(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);

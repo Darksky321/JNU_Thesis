@@ -9,13 +9,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ScrollView;
+import android.widget.SimpleExpandableListAdapter;
 import android.widget.Toast;
 
 import com.jnu.thesis.R;
+import com.jnu.thesis.bean.ThesisBean;
 import com.jnu.thesis.view.EmbeddedListView;
+import com.jnu.thesis.view.EmbeddedListViewAdapter;
 
 public class ThesisFragment extends Fragment {
 	private Button buttonViewResult;
@@ -42,16 +44,23 @@ public class ThesisFragment extends Fragment {
 
 		listViewThesis = (EmbeddedListView) v
 				.findViewById(R.id.listView_thesis);
-		listViewThesis.setAdapter(new ArrayAdapter<String>(getActivity(),
-				android.R.layout.simple_expandable_list_item_1, getThesisData()));
+		listViewThesis.setAdapter(new EmbeddedListViewAdapter(getActivity(),
+				getThesesData()));
 		return v;
 	}
 
-	private List<String> getThesisData() {
-		List<String> data = new ArrayList<String>();
-		for (int i = 0; i < 30; i++) {
-			data.add("测试" + i);
-		}
-		return data;
+	private List<ThesisBean> getThesesData() {
+		List<ThesisBean> theses = new ArrayList<ThesisBean>();
+		theses.add(new ThesisBean(1, "毕业论文指导系统", "孟小华", 2, "辣鸡来选辣鸡来选辣鸡来选辣鸡来选辣鸡来选辣鸡来选辣鸡来选辣鸡来选辣鸡来选辣鸡来选辣鸡来选辣鸡来选辣鸡来选"));
+		theses.add(new ThesisBean(2, "我的题目很长很长很长很长很长很长很长很长很长很长很长很长很长很长", "邓舜光", 1, "我的题目不可能这么长"));
+		theses.add(new ThesisBean(3, "test3", "c", 1, "adfsadfwe"));
+		theses.add(new ThesisBean(4, "test4", "d", 1, "werw"));
+		theses.add(new ThesisBean(5, "test5", "e", 1, "wwww"));
+		theses.add(new ThesisBean(6, "test6", "f", 1, "bbbb"));
+		theses.add(new ThesisBean(7, "test7", "g", 1, "aaaa"));
+		theses.add(new ThesisBean(8, "test8", "h", 1, "zcvx"));
+		theses.add(new ThesisBean(9, "test9", "i", 1, "zzzz"));
+		theses.add(new ThesisBean(10, "test10", "j", 1, "cxzdsa"));
+		return theses;
 	}
 }
