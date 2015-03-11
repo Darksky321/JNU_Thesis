@@ -12,7 +12,7 @@ public class DiscoverFragment extends Fragment
 	@Override
 	public View onCreateView(LayoutInflater inflater , ViewGroup container , Bundle savedInstanceState)
 	{
-		View v = inflater.inflate(R.layout.discover_fragment, null) ;
+		View v = inflater.inflate(R.layout.fragment__discover, null) ;
 		return v ;
 	}
 }

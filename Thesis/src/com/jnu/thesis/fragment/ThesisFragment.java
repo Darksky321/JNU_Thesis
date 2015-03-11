@@ -27,7 +27,7 @@ public class ThesisFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		// View v = inflater.inflate(R.layout.thesis_fragment, null);
-		View v = inflater.inflate(R.layout.thesis_fragment, container, false);
+		View v = inflater.inflate(R.layout.fragment_thesis, container, false);
 		buttonViewResult = (Button) v.findViewById(R.id.button_view_result);
 		buttonViewResult.setOnClickListener(new OnClickListener() {
 
