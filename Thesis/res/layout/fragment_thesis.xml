@@ -14,13 +14,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/button_selector"
-            android:textSize="20sp"
-            android:text="@string/button_view_result" />
+            android:text="@string/button_view_result"
+            android:textSize="20sp" />
 
         <com.jnu.thesis.view.EmbeddedListView
             android:id="@+id/listView_thesis"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent" >
+            android:layout_height="fill_parent"
+            android:focusable="true" >
         </com.jnu.thesis.view.EmbeddedListView>
     </LinearLayout>
 

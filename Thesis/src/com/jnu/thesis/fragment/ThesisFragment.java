@@ -10,8 +10,8 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ExpandableListView.OnGroupExpandListener;
 import android.widget.ScrollView;
-import android.widget.SimpleExpandableListAdapter;
 import android.widget.Toast;
 
 import com.jnu.thesis.R;
@@ -51,8 +51,10 @@ public class ThesisFragment extends Fragment {
 
 	private List<ThesisBean> getThesesData() {
 		List<ThesisBean> theses = new ArrayList<ThesisBean>();
-		theses.add(new ThesisBean(1, "毕业论文指导系统", "孟小华", 2, "辣鸡来选辣鸡来选辣鸡来选辣鸡来选辣鸡来选辣鸡来选辣鸡来选辣鸡来选辣鸡来选辣鸡来选辣鸡来选辣鸡来选辣鸡来选"));
-		theses.add(new ThesisBean(2, "我的题目很长很长很长很长很长很长很长很长很长很长很长很长很长很长", "邓舜光", 1, "我的题目不可能这么长"));
+		theses.add(new ThesisBean(1, "毕业论文指导系统", "孟小华", 2,
+				"辣鸡来选辣鸡来选辣鸡来选辣鸡来选辣鸡来选辣鸡来选辣鸡来选辣鸡来选辣鸡来选辣鸡来选辣鸡来选辣鸡来选辣鸡来选"));
+		theses.add(new ThesisBean(2, "我的题目很长很长很长很长很长很长很长很长很长很长很长很长很长很长", "邓舜光",
+				1, "我的题目不可能这么长"));
 		theses.add(new ThesisBean(3, "test3", "c", 1, "adfsadfwe"));
 		theses.add(new ThesisBean(4, "test4", "d", 1, "werw"));
 		theses.add(new ThesisBean(5, "test5", "e", 1, "wwww"));

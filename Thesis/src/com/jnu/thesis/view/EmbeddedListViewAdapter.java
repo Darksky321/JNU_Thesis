@@ -93,6 +93,11 @@ public class EmbeddedListViewAdapter extends BaseExpandableListAdapter {
 			groupHolder = (GroupHolder) convertView.getTag();
 		}
 		groupHolder.textViewGroup.setText(group.get(groupPosition));
+		// 展开ExpandableListView时文字滚动
+		if (isExpanded)
+			groupHolder.textViewGroup.setSelected(true);
+		else
+			groupHolder.textViewGroup.setSelected(false);
 		return convertView;
 	}
 
