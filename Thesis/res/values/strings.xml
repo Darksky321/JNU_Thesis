@@ -15,5 +15,7 @@
     <string name="radioButton_chat">通讯</string>
     <string name="radioButton_group">小组</string>
     <string name="radioButton_me">我</string>
+    <string name="button_leave_message">留言</string>
+    <string name="button_submit">提  交</string>
 
 </resources>

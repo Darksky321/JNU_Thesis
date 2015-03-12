@@ -39,7 +39,7 @@ public class ThesisFragment extends Fragment {
 			}
 		});
 
-		ScrollView sv = (ScrollView) v.findViewById(R.id.thesis_fragment);
+		ScrollView sv = (ScrollView) v.findViewById(R.id.scrollView_thesis);
 		sv.smoothScrollTo(0, 0); // 否则会直接显示ListView, 不显示上面的Button
 
 		listViewThesis = (EmbeddedListView) v
@@ -55,9 +55,9 @@ public class ThesisFragment extends Fragment {
 				"辣鸡来选辣鸡来选辣鸡来选辣鸡来选辣鸡来选辣鸡来选辣鸡来选辣鸡来选辣鸡来选辣鸡来选辣鸡来选辣鸡来选辣鸡来选"));
 		theses.add(new ThesisBean(2, "我的题目很长很长很长很长很长很长很长很长很长很长很长很长很长很长", "邓舜光",
 				1, "我的题目不可能这么长"));
-		theses.add(new ThesisBean(3, "test3", "c", 1, "adfsadfwe"));
-		theses.add(new ThesisBean(4, "test4", "d", 1, "werw"));
-		theses.add(new ThesisBean(5, "test5", "e", 1, "wwww"));
+		theses.add(new ThesisBean(3, "我不会做毕业设计怎么想都是你们的错", "nico", 1, "怎样也好了"));
+		theses.add(new ThesisBean(4, "我的毕业设计很坑", "d", 1, "我的后宫很多"));
+		theses.add(new ThesisBean(5, "我们仍未知道那天所做的毕业设计的名字", "a1", 1, "找到你了!"));
 		theses.add(new ThesisBean(6, "test6", "f", 1, "bbbb"));
 		theses.add(new ThesisBean(7, "test7", "g", 1, "aaaa"));
 		theses.add(new ThesisBean(8, "test8", "h", 1, "zcvx"));

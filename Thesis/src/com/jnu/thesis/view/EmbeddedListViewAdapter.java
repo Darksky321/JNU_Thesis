@@ -43,7 +43,7 @@ public class EmbeddedListViewAdapter extends BaseExpandableListAdapter {
 	@Override
 	public int getChildrenCount(int groupPosition) {
 		// TODO 自动生成的方法存根
-		return child.get(0).size();
+		return 1;
 	}
 
 	@Override
@@ -117,15 +117,12 @@ public class EmbeddedListViewAdapter extends BaseExpandableListAdapter {
 		} else {
 			childHolder = (ChildHolder) convertView.getTag();
 		}
-		String str = "";
-		if (childPosition == 0)
-			str = "导师：";
-		else if (childPosition == 1)
-			str = "人数：";
-		else if (childPosition == 2)
-			str = "详情：";
-		childHolder.textViewChild.setText(str
-				+ child.get(groupPosition).get(childPosition));
+		StringBuffer sb = new StringBuffer();
+		sb.append("导师：").append(child.get(groupPosition).get(0)).append("\n")
+				.append("人数：").append(child.get(groupPosition).get(1))
+				.append("\n").append("详情：")
+				.append(child.get(groupPosition).get(2));
+		childHolder.textViewChild.setText(sb.toString());
 		return convertView;
 	}
 
@@ -142,5 +139,4 @@ public class EmbeddedListViewAdapter extends BaseExpandableListAdapter {
 	class ChildHolder {
 		public TextView textViewChild;
 	}
-
 }

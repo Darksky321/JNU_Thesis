@@ -13,8 +13,31 @@
         android:layout_gravity="center_vertical"
         android:layout_marginLeft="60dp"
         android:layout_marginStart="60dp"
-        android:singleLine="false"
         android:gravity="center_vertical"
+        android:singleLine="false"
         android:textSize="20dp" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textViewChild"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/buttonLeaveMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/button_leave_message" >
+        </Button>
+
+        <Button
+            android:id="@+id/buttonSubmit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/button_submit" >
+        </Button>
+    </LinearLayout>
 
 </RelativeLayout>
