@@ -17,5 +17,6 @@
     <string name="radioButton_me">我</string>
     <string name="button_leave_message">留言</string>
     <string name="button_submit">提  交</string>
+    <string name="button_select">选  题</string>
 
 </resources>
