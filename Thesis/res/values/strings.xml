@@ -19,4 +19,14 @@
     <string name="button_submit">提  交</string>
     <string name="button_select">选  题</string>
 
+    <string-array name="choice">
+        <item>选题</item>
+        <item>第一志愿</item>
+        <item>第二志愿</item>
+        <item>第三志愿</item>
+    </string-array>
+    <string name="first_choice">第一志愿</string>
+    <string name="second_choice">第二志愿</string>
+    <string name="third_choice">第三志愿</string>
+
 </resources>

@@ -3,4 +3,5 @@
     <color name="textcolor_checked">#0080FF</color>
     <color name="textcolor">#BEBEBE</color>
     <color name="main_tab_bg">#F7F7F8</color>
+    <color name="base_divide_line_color">#dcdcdc</color>
 </resources>

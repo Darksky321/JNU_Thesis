@@ -8,5 +8,6 @@
     <dimen name="qq_dimen_30px">15dp</dimen>
     <dimen name="qq_dimen_70px">35dp</dimen>
     <dimen name="qq_dimen_660px">330dp</dimen>
+    <dimen name="qq_dimen_330px">146.67dp</dimen>
 
 </resources>

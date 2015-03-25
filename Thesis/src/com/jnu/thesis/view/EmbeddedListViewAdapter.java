@@ -4,10 +4,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
+import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.Button;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.jnu.thesis.R;
@@ -18,6 +24,9 @@ public class EmbeddedListViewAdapter extends BaseExpandableListAdapter {
 	private Activity activity;
 	private List<String> group;
 	private List<List<String>> child;
+	private int first = -1;
+	private int second = -1;
+	private int third = -1;
 
 	public EmbeddedListViewAdapter(Activity activity, List<ThesisBean> theses) {
 		super();
@@ -98,11 +107,17 @@ public class EmbeddedListViewAdapter extends BaseExpandableListAdapter {
 			groupHolder.textViewGroup.setSelected(true);
 		else
 			groupHolder.textViewGroup.setSelected(false);
+		if (first == groupPosition || second == groupPosition
+				|| third == groupPosition)
+			groupHolder.textViewGroup.setTextColor(activity.getResources()
+					.getColor(R.color.textcolor_checked));
+		else
+			groupHolder.textViewGroup.setTextColor(Color.BLACK);
 		return convertView;
 	}
 
 	@Override
-	public View getChildView(int groupPosition, int childPosition,
+	public View getChildView(final int groupPosition, int childPosition,
 			boolean isLastChild, View convertView, ViewGroup parent) {
 		// TODO 自动生成的方法存根
 		ChildHolder childHolder = null;
@@ -113,6 +128,11 @@ public class EmbeddedListViewAdapter extends BaseExpandableListAdapter {
 			childHolder = new ChildHolder();
 			childHolder.textViewChild = (TextView) convertView
 					.findViewById(R.id.textViewChild);
+			childHolder.buttonLeaveMessage = (Button) convertView
+					.findViewById(R.id.buttonLeaveMessage);
+			childHolder.buttonSelect = (Button) convertView
+					.findViewById(R.id.buttonSelect);
+
 			convertView.setTag(childHolder);
 		} else {
 			childHolder = (ChildHolder) convertView.getTag();
@@ -123,6 +143,23 @@ public class EmbeddedListViewAdapter extends BaseExpandableListAdapter {
 				.append("\n").append("详情：")
 				.append(child.get(groupPosition).get(2));
 		childHolder.textViewChild.setText(sb.toString());
+		childHolder.buttonLeaveMessage
+				.setOnClickListener(new OnClickListener() {
+
+					@Override
+					public void onClick(View v) {
+						// TODO 自动生成的方法存根
+
+					}
+				});
+		childHolder.buttonSelect.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO 自动生成的方法存根
+				showChoices(v, groupPosition);
+			}
+		});
 		return convertView;
 	}
 
@@ -138,5 +175,58 @@ public class EmbeddedListViewAdapter extends BaseExpandableListAdapter {
 
 	class ChildHolder {
 		public TextView textViewChild;
+		public Button buttonLeaveMessage;
+		public Button buttonSelect;
+	}
+
+	/**
+	 * 显示志愿选项(第一第二第三志愿)
+	 * 
+	 * @param button
+	 *            在button右下角显示
+	 * @param groupPosition
+	 *            所选中的button编号
+	 */
+	public void showChoices(View button, final int groupPosition) {
+		activity.getLayoutInflater();
+		View v = LayoutInflater.from(activity).inflate(R.layout.choice_item,
+				null);
+		final PopupWindow pw = new PopupWindow(v, LayoutParams.WRAP_CONTENT,
+				LayoutParams.WRAP_CONTENT);
+		pw.setContentView(v);
+		pw.setOutsideTouchable(true);
+		pw.setBackgroundDrawable(new BitmapDrawable());// 用物理键返回取消, 或者点击外面取消,
+														// 需要设置背景
+		pw.setFocusable(true);
+		pw.showAsDropDown(button);
+		Button buttonFirst = (Button) v.findViewById(R.id.button_first);
+		Button buttonSecond = (Button) v.findViewById(R.id.button_second);
+		Button buttonThird = (Button) v.findViewById(R.id.button_third);
+		buttonFirst.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				pw.dismiss();
+				first = groupPosition;
+				// embeddedListView.collapseGroup(groupPosition);
+				// embeddedListView.expandGroup(groupPosition);
+				notifyDataSetChanged(); // 更新ListView, 更新选中的课题的颜色
+			}
+		});
+		buttonSecond.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				pw.dismiss();
+				second = groupPosition;
+				notifyDataSetChanged();
+			}
+		});
+		buttonThird.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				pw.dismiss();
+				third = groupPosition;
+				notifyDataSetChanged();
+			}
+		});
 	}
 }
