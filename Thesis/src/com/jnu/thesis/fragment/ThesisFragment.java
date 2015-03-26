@@ -21,7 +21,10 @@ import com.jnu.thesis.view.EmbeddedListViewAdapter;
 
 public class ThesisFragment extends Fragment {
 	private Button buttonViewResult;
+	private Button buttonSubmit;
 	private EmbeddedListView listViewThesis;
+	private EmbeddedListViewAdapter listViewAdapter;
+	private Thread submitThread;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -29,6 +32,8 @@ public class ThesisFragment extends Fragment {
 		// View v = inflater.inflate(R.layout.thesis_fragment, null);
 		View v = inflater.inflate(R.layout.fragment_thesis, container, false);
 		buttonViewResult = (Button) v.findViewById(R.id.button_view_result);
+		buttonSubmit = (Button) v.findViewById(R.id.button_submit);
+
 		buttonViewResult.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -39,13 +44,38 @@ public class ThesisFragment extends Fragment {
 			}
 		});
 
+		buttonSubmit.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO 自动生成的方法存根
+				int[] choices = listViewAdapter.getChoices();
+				if (choices[0] < 0 || choices[1] < 0 || choices[2] < 0) {
+					Toast.makeText(getActivity(), "请选择三个课题", Toast.LENGTH_SHORT)
+							.show();
+				} else if (submitThread != null && !submitThread.isAlive()) {
+					submitThread = new Thread(new Runnable() {
+
+						@Override
+						public void run() {
+							// TODO 自动生成的方法存根
+
+						}
+
+					});
+					// submitThread.start();
+				}
+			}
+		});
+
 		ScrollView sv = (ScrollView) v.findViewById(R.id.scrollView_thesis);
 		sv.smoothScrollTo(0, 0); // 否则会直接显示ListView, 不显示上面的Button
 
 		listViewThesis = (EmbeddedListView) v
 				.findViewById(R.id.listView_thesis);
-		listViewThesis.setAdapter(new EmbeddedListViewAdapter(getActivity(),
-				getThesesData()));
+		listViewAdapter = new EmbeddedListViewAdapter(getActivity(),
+				getThesesData());
+		listViewThesis.setAdapter(listViewAdapter);
 		return v;
 	}
 

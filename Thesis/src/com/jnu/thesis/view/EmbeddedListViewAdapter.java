@@ -6,6 +6,7 @@ import java.util.List;
 import android.app.Activity;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -187,16 +188,16 @@ public class EmbeddedListViewAdapter extends BaseExpandableListAdapter {
 	 * @param groupPosition
 	 *            所选中的button编号
 	 */
-	public void showChoices(View button, final int groupPosition) {
+	private void showChoices(View button, final int groupPosition) {
 		activity.getLayoutInflater();
 		View v = LayoutInflater.from(activity).inflate(R.layout.choice_item,
 				null);
-		final PopupWindow pw = new PopupWindow(v, LayoutParams.WRAP_CONTENT,
+		final PopupWindow pw = new PopupWindow(v, button.getWidth(),
 				LayoutParams.WRAP_CONTENT);
 		pw.setContentView(v);
 		pw.setOutsideTouchable(true);
-		pw.setBackgroundDrawable(new BitmapDrawable());// 用物理键返回取消, 或者点击外面取消,
-														// 需要设置背景
+		// 用物理键返回取消, 或者点击外面取消, 需要设置背景
+		pw.setBackgroundDrawable(new BitmapDrawable());
 		pw.setFocusable(true);
 		pw.showAsDropDown(button);
 		Button buttonFirst = (Button) v.findViewById(R.id.button_first);
@@ -228,5 +229,13 @@ public class EmbeddedListViewAdapter extends BaseExpandableListAdapter {
 				notifyDataSetChanged();
 			}
 		});
+	}
+
+	public int[] getChoices() {
+		int[] choices = new int[3];
+		choices[0] = first;
+		choices[1] = second;
+		choices[2] = third;
+		return choices;
 	}
 }

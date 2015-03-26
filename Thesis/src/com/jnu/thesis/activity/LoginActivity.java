@@ -22,6 +22,8 @@ import com.jnu.thesis.util.HttpUtils;
 
 public class LoginActivity extends Activity {
 
+	public static final int LOGIN_SUCCESS = 1;
+	public static final int LOGIN_FAILED = 2;
 	private static EditText editText_userName;
 	private static EditText editText_password;
 	private Button button_login;
@@ -66,7 +68,10 @@ public class LoginActivity extends Activity {
 						.add(new BasicNameValuePair("password", password));
 				String result = util.postMessage(nameValuePairs);
 				Message msg = Message.obtain();
-				msg.what = 1;
+				if (!result.equals(""))
+					msg.what = LOGIN_SUCCESS;
+				else
+					msg.what = LOGIN_FAILED;
 				handler.sendMessage(msg);
 			}
 
@@ -79,7 +84,7 @@ public class LoginActivity extends Activity {
 		@Override
 		public void onClick(View v) {
 			// TODO 自动生成的方法存根
-			// if (!loginThread.isAlive())
+			// if (loginThread != null && !loginThread.isAlive())
 			// loginThread.start();
 			Intent intent = new Intent();
 			intent.setClass(context, MainActivity.class);
