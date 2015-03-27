@@ -8,12 +8,13 @@ import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -33,10 +34,12 @@ public class LoginActivity extends Activity {
 	private Thread loginThread;
 	private Runnable loginRunnable;
 	private static Context context;
+	private static ProgressDialog dialog;
 	private static Handler handler = new Handler() {
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
 			case LOGIN_FAILED:
+				dialog.dismiss();
 				Toast.makeText(context, "登陆失败", Toast.LENGTH_SHORT).show();
 				break;
 			case LOGIN_SUCCESS:
@@ -55,11 +58,19 @@ public class LoginActivity extends Activity {
 		setContentView(R.layout.activity_login);
 		context = this;
 		init();
+		dialog = new ProgressDialog(this);
 		loginRunnable = new Runnable() {
 
 			@Override
 			public void run() {
 				// TODO 自动生成的方法存根
+				try {
+					Thread.currentThread();
+					Thread.sleep(2000);
+				} catch (InterruptedException e1) {
+					// TODO 自动生成的 catch 块
+					e1.printStackTrace();
+				} // 搞笑的
 				HttpUtil util = HttpUtil.getInstance();
 				String userName = editText_userName.getText().toString();
 				String password = editText_password.getText().toString();
@@ -111,6 +122,10 @@ public class LoginActivity extends Activity {
 		public void onClick(View v) {
 			// TODO 自动生成的方法存根
 			if (loginThread == null || !loginThread.isAlive()) {
+				dialog.setMessage("登录中...");
+				dialog.setIndeterminate(true);
+				dialog.setCancelable(false);
+				dialog.show();
 				loginThread = new Thread(loginRunnable);
 				loginThread.start();
 				// Intent intent = new Intent();
