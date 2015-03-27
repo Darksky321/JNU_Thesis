@@ -18,7 +18,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.jnu.thesis.R;
-import com.jnu.thesis.util.HttpUtils;
+import com.jnu.thesis.util.HttpUtil;
 
 public class LoginActivity extends Activity {
 
@@ -58,21 +58,22 @@ public class LoginActivity extends Activity {
 			@Override
 			public void run() {
 				// TODO 自动生成的方法存根
-				HttpUtils util = new HttpUtils("http://192.168.0.1");
-				String userName = editText_userName.getText().toString();
-				String password = editText_password.getText().toString();
-				List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
-				nameValuePairs
-						.add(new BasicNameValuePair("username", userName));
-				nameValuePairs
-						.add(new BasicNameValuePair("password", password));
-				String result = util.postMessage(nameValuePairs);
-				Message msg = Message.obtain();
-				if (!result.equals(""))
-					msg.what = LOGIN_SUCCESS;
-				else
-					msg.what = LOGIN_FAILED;
-				handler.sendMessage(msg);
+				// HttpUtil util = new HttpUtil("http://192.168.0.1");
+				// String userName = editText_userName.getText().toString();
+				// String password = editText_password.getText().toString();
+				// List<NameValuePair> nameValuePairs = new
+				// ArrayList<NameValuePair>();
+				// nameValuePairs
+				// .add(new BasicNameValuePair("username", userName));
+				// nameValuePairs
+				// .add(new BasicNameValuePair("password", password));
+				// String result = util.postMessage(nameValuePairs);
+				// Message msg = Message.obtain();
+				// if (!result.equals(""))
+				// msg.what = LOGIN_SUCCESS;
+				// else
+				// msg.what = LOGIN_FAILED;
+				// handler.sendMessage(msg);
 			}
 
 		});
