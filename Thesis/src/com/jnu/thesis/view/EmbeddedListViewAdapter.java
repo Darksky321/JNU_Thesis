@@ -203,7 +203,7 @@ public class EmbeddedListViewAdapter extends BaseExpandableListAdapter {
 		Button buttonFirst = (Button) v.findViewById(R.id.button_first);
 		Button buttonSecond = (Button) v.findViewById(R.id.button_second);
 		Button buttonThird = (Button) v.findViewById(R.id.button_third);
-		buttonFirst.setOnClickListener(new View.OnClickListener() {
+		buttonFirst.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				pw.dismiss();
@@ -213,7 +213,7 @@ public class EmbeddedListViewAdapter extends BaseExpandableListAdapter {
 				notifyDataSetChanged(); // 更新ListView, 更新选中的课题的颜色
 			}
 		});
-		buttonSecond.setOnClickListener(new View.OnClickListener() {
+		buttonSecond.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				pw.dismiss();
