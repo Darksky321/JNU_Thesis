@@ -1,8 +1,7 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:layout_height="match_parent" >
 
     <RelativeLayout
         android:id="@+id/title"
@@ -17,7 +16,7 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
-            android:src="@drawable/ic_ab_back_holo_light_am" />
+            android:src="@drawable/ic_ab_back_white" />
 
         <ImageView
             android:id="@+id/img"
@@ -45,8 +44,19 @@
     <ListView
         android:id="@+id/listView_select_student"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/title"
+        android:layout_marginBottom="60dp"
         android:cacheColorHint="#00000000" >
     </ListView>
 
-</LinearLayout>
+    <Button
+        android:id="@+id/button_submit"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/button_selector"
+        android:text="@string/button_submit"
+        android:textSize="20dp" />
+
+</RelativeLayout>
