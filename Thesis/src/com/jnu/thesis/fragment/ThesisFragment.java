@@ -41,6 +41,9 @@ public class ThesisFragment extends Fragment {
 		listViewThesis = (EmbeddedListView) v
 				.findViewById(R.id.listView_thesis);
 		listViewAdapter = new EmbeddedListViewAdapter(getActivity(), theses);
+		// listViewThesis.setGroupIndicator(getResources().getDrawable(
+		// R.drawable.expand_list_indicator));
+		// listViewThesis.setIndicatorBounds(48, 48);
 		listViewThesis.setAdapter(listViewAdapter);
 
 		// 初始化按钮
@@ -87,11 +90,11 @@ public class ThesisFragment extends Fragment {
 										@Override
 										public void run() {
 											// TODO 自动生成的方法存根
-											int first = theses.get(choices[0])
+											String first = theses.get(choices[0])
 													.getNo();
-											int second = theses.get(choices[1])
+											String second = theses.get(choices[1])
 													.getNo();
-											int third = theses.get(choices[2])
+											String third = theses.get(choices[2])
 													.getNo();
 										}
 
@@ -110,18 +113,18 @@ public class ThesisFragment extends Fragment {
 
 	private List<ThesisBean> getThesesData() {
 		List<ThesisBean> theses = new ArrayList<ThesisBean>();
-		theses.add(new ThesisBean(1, "毕业论文指导系统", "孟小华", 2,
+		theses.add(new ThesisBean("1", "毕业论文指导系统", "孟小华", 2,
 				"辣鸡来选辣鸡来选辣鸡来选辣鸡来选辣鸡来选辣鸡来选辣鸡来选辣鸡来选辣鸡来选辣鸡来选辣鸡来选辣鸡来选辣鸡来选"));
-		theses.add(new ThesisBean(2, "我的题目很长很长很长很长很长很长很长很长很长很长很长很长很长很长", "邓舜光",
+		theses.add(new ThesisBean("2", "我的题目很长很长很长很长很长很长很长很长很长很长很长很长很长很长", "邓舜光",
 				1, "我的题目不可能这么长"));
-		theses.add(new ThesisBean(3, "我不会做毕业设计怎么想都是你们的错", "nico", 1, "怎样也好了"));
-		theses.add(new ThesisBean(4, "我的毕业设计很坑", "d", 1, "我的后宫很多"));
-		theses.add(new ThesisBean(5, "我们仍未知道那天所做的毕业设计的名字", "a1", 1, "找到你了!"));
-		theses.add(new ThesisBean(6, "test6", "f", 1, "bbbb"));
-		theses.add(new ThesisBean(7, "test7", "g", 1, "aaaa"));
-		theses.add(new ThesisBean(8, "test8", "h", 1, "zcvx"));
-		theses.add(new ThesisBean(9, "test9", "i", 1, "zzzz"));
-		theses.add(new ThesisBean(10, "test10", "j", 1, "cxzdsa"));
+		theses.add(new ThesisBean("3", "我不会做毕业设计怎么想都是你们的错", "nico", 1, "怎样也好了"));
+		theses.add(new ThesisBean("4", "我的毕业设计很坑", "d", 1, "我的后宫很多"));
+		theses.add(new ThesisBean("5", "我们仍未知道那天所做的毕业设计的名字", "a1", 1, "找到你了!"));
+		theses.add(new ThesisBean("6", "test6", "f", 1, "bbbb"));
+		theses.add(new ThesisBean("7", "test7", "g", 1, "aaaa"));
+		theses.add(new ThesisBean("8", "test8", "h", 1, "zcvx"));
+		theses.add(new ThesisBean("9", "test9", "i", 1, "zzzz"));
+		theses.add(new ThesisBean("10", "test10", "j", 1, "cxzdsa"));
 		return theses;
 	}
 }

@@ -8,7 +8,7 @@
         android:id="@+id/title"
         android:layout_width="fill_parent"
         android:layout_height="@dimen/qq_dimen_96px"
-        android:background="@android:color/black" >
+        android:background="#2E3132" >
 
         <ImageView
             android:id="@+id/img"

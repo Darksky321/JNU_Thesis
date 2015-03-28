@@ -117,14 +117,14 @@
         <!--
             <service
             android:name="com.tencent.android.tpush.service.XGDaemonService"
-            android:process=":qq_push_daemon" />
+            android:process=":qq_push_daemon" />
         -->
         <!-- 【可选】信鸽拉起其他APP应用，若应用在本地找不到可以自动下载 -->
         <!--
               <service
             android:name="com.tencent.android.tpush.XGDownloadService"
             android:enabled="true"
-            android:exported="false" />
+            android:exported="false" />
         -->
         <!-- 【可选】APP实现的Receiver，用于接收消息透传和操作结果的回调，请根据需要添加 -->
         <!-- YOUR_PACKAGE_PATH.CustomPushReceiver需要改为自己的Receiver： -->
@@ -147,6 +147,14 @@
             android:name="XG_V2_ACCESS_KEY"
             android:value="AN3N5M94ZA8J" />
 
+        <activity
+            android:name=".activity.TeacherMainActivity"
+            android:label="@string/title_activity_teacher_main" >
+        </activity>
+        <activity
+            android:name=".SelectStudentActivity"
+            android:label="@string/title_activity_select_student" >
+        </activity>
     </application>
 
 </manifest>
