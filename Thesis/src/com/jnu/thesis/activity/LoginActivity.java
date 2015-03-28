@@ -10,8 +10,8 @@ import org.apache.http.message.BasicNameValuePair;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -19,6 +19,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.jnu.thesis.R;
@@ -28,9 +29,11 @@ public class LoginActivity extends Activity {
 
 	public static final int LOGIN_SUCCESS = 1;
 	public static final int LOGIN_FAILED = 2;
-	private EditText editText_userName;
-	private EditText editText_password;
-	private Button button_login;
+	private EditText editTextUserName;
+	private EditText editTextPassword;
+	private Button buttonLogin;
+	private TextView textViewTeacherEntry;
+	private int status = 1; // 1代表学生登陆2代表教师登陆
 	private Thread loginThread;
 	private Runnable loginRunnable;
 	private static Context context;
@@ -72,8 +75,8 @@ public class LoginActivity extends Activity {
 					e1.printStackTrace();
 				} // 搞笑的
 				HttpUtil util = HttpUtil.getInstance();
-				String userName = editText_userName.getText().toString();
-				String password = editText_password.getText().toString();
+				String userName = editTextUserName.getText().toString();
+				String password = editTextPassword.getText().toString();
 				List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
 				nameValuePairs
 						.add(new BasicNameValuePair("username", userName));
@@ -95,8 +98,8 @@ public class LoginActivity extends Activity {
 				}
 			}
 		};
-		button_login.setOnClickListener(new ButtonLoginOnClickListener());
-		button_login.setOnLongClickListener(new View.OnLongClickListener() {
+		buttonLogin.setOnClickListener(new ButtonLoginOnClickListener());
+		buttonLogin.setOnLongClickListener(new View.OnLongClickListener() {
 
 			@Override
 			public boolean onLongClick(View v) {
@@ -108,12 +111,30 @@ public class LoginActivity extends Activity {
 				return true;
 			}
 		});
+		textViewTeacherEntry.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);
+		textViewTeacherEntry.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO 自动生成的方法存根
+				if(status == 1) {
+					status = 2;
+					textViewTeacherEntry.setText(R.string.back);
+					buttonLogin.setText(R.string.button_teacher_login);
+				} else {
+					status = 1;
+					textViewTeacherEntry.setText(R.string.teacher_entry);
+					buttonLogin.setText(R.string.button_login);
+				}
+			}
+		});
 	}
 
 	private void init() {
-		editText_userName = (EditText) findViewById(R.id.editText_userName);
-		editText_password = (EditText) findViewById(R.id.editText_password);
-		button_login = (Button) findViewById(R.id.button_login);
+		editTextUserName = (EditText) findViewById(R.id.editText_userName);
+		editTextPassword = (EditText) findViewById(R.id.editText_password);
+		buttonLogin = (Button) findViewById(R.id.button_login);
+		textViewTeacherEntry = (TextView) findViewById(R.id.textView_teacherEntry);
 	}
 
 	private class ButtonLoginOnClickListener implements OnClickListener {

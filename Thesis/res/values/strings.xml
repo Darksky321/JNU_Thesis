@@ -25,8 +25,13 @@
         <item>第二志愿</item>
         <item>第三志愿</item>
     </string-array>
+
     <string name="first_choice">第一志愿</string>
     <string name="second_choice">第二志愿</string>
     <string name="third_choice">第三志愿</string>
+    <string name="teacher_entry">教师入口</string>
+    <string name="title_activity_teacher_login">TeacherLoginActivity</string>
+    <string name="button_teacher_login">教师登陆</string>
+    <string name="back">返回</string>
 
 </resources>
