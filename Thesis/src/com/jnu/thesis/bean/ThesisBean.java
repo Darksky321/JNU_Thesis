@@ -10,15 +10,17 @@ public class ThesisBean implements Parcelable {
 	private String teacherName;
 	private int count;
 	private String detail;
+	private int status;
 
 	public ThesisBean(String no, String name, String teacherName, int count,
-			String detail) {
+			String detail, int status) {
 		super();
 		this.no = no;
 		this.name = name;
 		this.teacherName = teacherName;
 		this.count = count;
 		this.detail = detail;
+		this.status = status;
 	}
 
 	public String getNo() {
@@ -61,6 +63,14 @@ public class ThesisBean implements Parcelable {
 		this.detail = detail;
 	}
 
+	public int getStatus() {
+		return status;
+	}
+
+	public void setStatus(int status) {
+		this.status = status;
+	}
+
 	@Override
 	public int describeContents() {
 		// TODO 自动生成的方法存根
@@ -75,6 +85,7 @@ public class ThesisBean implements Parcelable {
 		dest.writeString(teacherName);
 		dest.writeInt(count);
 		dest.writeString(detail);
+		dest.writeInt(status);
 	}
 
 	public static final Parcelable.Creator<ThesisBean> CREATOR = new Creator<ThesisBean>() {
@@ -95,11 +106,14 @@ public class ThesisBean implements Parcelable {
 		teacherName = in.readString();
 		count = in.readInt();
 		detail = in.readString();
+		status = in.readInt();
 	}
 
 	@Override
 	public String toString() {
 		return "ThesisBean [no=" + no + ", name=" + name + ", teacherName="
-				+ teacherName + ", count=" + count + ", detail=" + detail + "]";
+				+ teacherName + ", count=" + count + ", detail=" + detail
+				+ ", status=" + status + "]";
 	}
+
 }

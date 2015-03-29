@@ -74,7 +74,9 @@ public class TeacherMainActivity extends FragmentActivity implements
 		// 当前为第一个页面
 		main_viewPager.setCurrentItem(0);
 		// ViewPager的页面改变监听器
-		main_viewPager.setOnPageChangeListener(new MyListner());
+		main_viewPager.setOnPageChangeListener(new MyListener());
+		// 设置fragment缓存
+		main_viewPager.setOffscreenPageLimit(fragmentList.size());
 	}
 
 	public class MyAdapter extends FragmentPagerAdapter {
@@ -96,7 +98,7 @@ public class TeacherMainActivity extends FragmentActivity implements
 		}
 	}
 
-	public class MyListner implements OnPageChangeListener {
+	public class MyListener implements OnPageChangeListener {
 
 		@Override
 		public void onPageScrollStateChanged(int arg0) {
