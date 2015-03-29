@@ -238,4 +238,10 @@ public class EmbeddedListViewAdapter extends BaseExpandableListAdapter {
 		choices[2] = third;
 		return choices;
 	}
+
+	public void setChoices(int[] choices) {
+		first = choices[0];
+		second = choices[1];
+		third = choices[2];
+	}
 }

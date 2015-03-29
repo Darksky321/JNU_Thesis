@@ -1,6 +1,8 @@
 package com.jnu.thesis;
 
-public class Config {
+public class Parameter {
+	public static final String host = "http://127.0.0.1/Thesis_Supervision/";
+	public static final String loginAction = "login.action";
 	private static String currentUser = "";
 
 	public static String getCurrentUser() {
@@ -8,6 +10,6 @@ public class Config {
 	}
 
 	public static void setCurrentUser(String currentUser) {
-		Config.currentUser = currentUser;
+		Parameter.currentUser = currentUser;
 	}
 }

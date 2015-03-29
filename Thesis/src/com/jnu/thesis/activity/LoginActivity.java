@@ -1,13 +1,7 @@
 package com.jnu.thesis.activity;
 
-import java.net.URL;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -24,6 +18,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.jnu.thesis.Parameter;
 import com.jnu.thesis.R;
 import com.jnu.thesis.util.HttpUtil;
 import com.tencent.android.tpush.XGPushManager;
@@ -89,7 +84,8 @@ public class LoginActivity extends Activity {
 				String result = "";
 				Message msg = Message.obtain();
 				try {
-					result = util.doPost("", para);
+					result = util.doPost(
+							Parameter.host + Parameter.loginAction, para);
 					if (!result.equals(""))
 						msg.what = LOGIN_SUCCESS;
 					else
