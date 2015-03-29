@@ -2,7 +2,9 @@ package com.jnu.thesis.activity;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -78,18 +80,16 @@ public class LoginActivity extends Activity {
 					// TODO 自动生成的 catch 块
 					e1.printStackTrace();
 				} // 搞笑的
-				HttpUtil util = HttpUtil.getInstance();
+				HttpUtil util = new HttpUtil();
 				String userName = editTextUserName.getText().toString();
 				String password = editTextPassword.getText().toString();
-				List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
-				nameValuePairs
-						.add(new BasicNameValuePair("username", userName));
-				nameValuePairs
-						.add(new BasicNameValuePair("password", password));
+				Map<String, String> para = new HashMap<String, String>();
+				para.put("username", userName);
+				para.put("password", password);
 				String result = "";
 				Message msg = Message.obtain();
 				try {
-					result = util.postMessage(new URL(""), nameValuePairs);
+					result = util.doPost("", para);
 					if (!result.equals(""))
 						msg.what = LOGIN_SUCCESS;
 					else

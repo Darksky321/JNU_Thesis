@@ -1,22 +1,15 @@
 package com.jnu.thesis.util;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.List;
-
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.params.CoreConnectionPNames;
-import org.apache.http.util.EntityUtils;
-
-import android.util.Log;
+import java.net.URLConnection;
+import java.util.Iterator;
+import java.util.Map;
 
 /**
  * 通讯工具类
@@ -26,65 +19,201 @@ import android.util.Log;
  */
 public class HttpUtil {
 
-	private static HttpUtil httpUtil;
-	private static HttpClient httpClient;
+	private static String sessionID = "";
+	private static String charset = "utf-8";
+	private Integer connectTimeout = 10000;
+	private Integer socketTimeout = 10000;
 
-	private HttpUtil() {
-		httpClient = new DefaultHttpClient();
+	public String doPost(String urlString, Map<String, String> parameterMap)
+			throws Exception {
+
+		/* Translate parameter map to parameter date string */
+		StringBuffer parameterBuffer = new StringBuffer();
+		if (parameterMap != null) {
+			Iterator<String> iterator = parameterMap.keySet().iterator();
+			String key = null;
+			String value = null;
+			while (iterator.hasNext()) {
+				key = (String) iterator.next();
+				if (parameterMap.get(key) != null) {
+					value = (String) parameterMap.get(key);
+				} else {
+					value = "";
+				}
+				parameterBuffer.append(key).append("=").append(value);
+				if (iterator.hasNext()) {
+					parameterBuffer.append("&");
+				}
+			}
+		}
+
+		System.out.println("POST parameter : " + parameterBuffer.toString());
+
+		URL url = new URL(urlString);
+		URLConnection connection = url.openConnection();
+		HttpURLConnection httpURLConnection = (HttpURLConnection) connection;
+
+		httpURLConnection.setDoOutput(true);
+		httpURLConnection.setRequestMethod("POST");
+		httpURLConnection.setRequestProperty("Accept-Charset", charset);
+		httpURLConnection.setRequestProperty("Content-Length",
+				String.valueOf(parameterBuffer.length()));
+		httpURLConnection.setConnectTimeout(connectTimeout);
+		httpURLConnection.setReadTimeout(socketTimeout);
+		if (!sessionID.equals(""))
+			httpURLConnection.setRequestProperty("Cookie", sessionID);
+
+		OutputStream outputStream = null;
+		OutputStreamWriter outputStreamWriter = null;
+		InputStream inputStream = null;
+		String result = "";
+
+		try {
+			outputStream = httpURLConnection.getOutputStream();
+			outputStreamWriter = new OutputStreamWriter(outputStream);
+
+			outputStreamWriter.write(parameterBuffer.toString());
+			outputStreamWriter.flush();
+
+			if (httpURLConnection.getResponseCode() >= 300) {
+				throw new Exception(
+						"HTTP Request is not success, Response code is "
+								+ httpURLConnection.getResponseCode());
+			}
+
+			inputStream = httpURLConnection.getInputStream();
+			String setCookie = httpURLConnection.getHeaderField("Set-Cookie");
+			if (setCookie != null) {
+				sessionID = setCookie;
+			}
+			result = changeInputStream(inputStream);
+
+		} finally {
+			if (outputStreamWriter != null) {
+				outputStreamWriter.close();
+			}
+			if (outputStream != null) {
+				outputStream.close();
+			}
+			if (inputStream != null) {
+				inputStream.close();
+			}
+		}
+
+		return result;
 	}
 
-	public static HttpUtil getInstance() {
-		if (httpUtil == null) {
-			httpUtil = new HttpUtil();
+	public String doGet(String urlString, Map<String, String> parameterMap)
+			throws Exception {
+
+		StringBuffer parameterBuffer = new StringBuffer();
+		if (parameterMap != null) {
+			Iterator<String> iterator = parameterMap.keySet().iterator();
+			String key = null;
+			String value = null;
+			while (iterator.hasNext()) {
+				key = (String) iterator.next();
+				if (parameterMap.get(key) != null) {
+					value = (String) parameterMap.get(key);
+				} else {
+					value = "";
+				}
+				parameterBuffer.append(key).append("=").append(value);
+				if (iterator.hasNext()) {
+					parameterBuffer.append("&");
+				}
+			}
+			urlString = urlString + "?" + parameterBuffer;
 		}
-		return httpUtil;
+
+		URL url = new URL(urlString);
+		URLConnection connection = url.openConnection();
+		HttpURLConnection httpURLConnection = (HttpURLConnection) connection;
+
+		httpURLConnection.setRequestProperty("Accept-Charset", charset);
+		httpURLConnection.setRequestProperty("Content-Type",
+				"application/x-www-form-urlencoded");
+		httpURLConnection.setConnectTimeout(connectTimeout);
+		httpURLConnection.setReadTimeout(socketTimeout);
+		if (!sessionID.equals(""))
+			httpURLConnection.setRequestProperty("Cookie", sessionID);
+
+		InputStream inputStream = null;
+		String result = "";
+
+		if (httpURLConnection.getResponseCode() >= 300) {
+			throw new Exception(
+					"HTTP Request is not success, Response code is "
+							+ httpURLConnection.getResponseCode());
+		}
+
+		try {
+			inputStream = httpURLConnection.getInputStream();
+			result = changeInputStream(inputStream);
+
+		} finally {
+			if (inputStream != null) {
+				inputStream.close();
+			}
+		}
+		return result;
 	}
 
 	/**
-	 * post
+	 * 把输入流转换成字符串
 	 * 
-	 * @param nvps
+	 * @param in
 	 * @return
 	 * @throws IOException
-	 * @throws ClientProtocolException
 	 */
-	public String postMessage(URL url, List<NameValuePair> nvps)
-			throws ClientProtocolException, IOException {
-		String resMsg = "";
-		Log.i("commutest", nvps.toString());
-		HttpPost httpPost = new HttpPost(url.toString());
-		httpClient.getParams().setParameter(
-				CoreConnectionPNames.CONNECTION_TIMEOUT, 10000);
-		// UrlEncodedFormEntity postEn = new UrlEncodedFormEntity(nvps);
-		httpPost.setEntity(new UrlEncodedFormEntity(nvps));
-		// Log.i("commutest", EntityUtils.toString(postEn, "UTF-8"));
-		HttpResponse response = httpClient.execute(httpPost);
-		// System.out.println(response.getStatusLine());
-		HttpEntity entity = response.getEntity();
-		// do something useful with the response body
-		// and ensure it is fully consumed
-		resMsg = EntityUtils.toString(entity, "UTF-8");
-		return resMsg;
+	public static String changeInputStream(InputStream in) throws Exception {
+		// TODO 自动生成的方法存根
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		byte[] data = new byte[1024];
+		int len = 0;
+		String result = "";
+		if (in != null) {
+			try {
+				while ((len = in.read(data)) != -1) {
+					baos.write(data, 0, len);
+				}
+				result = new String(baos.toByteArray(), charset);
+			} finally {
+				baos.close();
+			}
+		}
+		return result;
 	}
 
-	// get方式,并没有使用
-	public String getMessage(URL url, String string)
-			throws ClientProtocolException, IOException {
-		String resMsg = "";
-		httpClient.getParams().setParameter(
-				CoreConnectionPNames.CONNECTION_TIMEOUT, 10000);
-		HttpGet httpGet = new HttpGet(url.toString() + "?" + string);
-		HttpResponse response = httpClient.execute(httpGet);
-		HttpEntity entity = response.getEntity();
-		// do something useful with the response body
-		// and ensure it is fully consumed
-		resMsg = EntityUtils.toString(entity, "UTF-8");
-		return resMsg;
+	public static String getSessionID() {
+		return sessionID;
 	}
 
-	public static void destroy() {
-		httpClient.getConnectionManager().shutdown();
-		httpClient = null;
-		httpUtil = null;
+	public static void setSessionID(String sessionID) {
+		HttpUtil.sessionID = sessionID;
+	}
+
+	public static String getCharset() {
+		return charset;
+	}
+
+	public static void setCharset(String charset) {
+		HttpUtil.charset = charset;
+	}
+
+	public Integer getConnectTimeout() {
+		return connectTimeout;
+	}
+
+	public void setConnectTimeout(Integer connectTimeout) {
+		this.connectTimeout = connectTimeout;
+	}
+
+	public Integer getSocketTimeout() {
+		return socketTimeout;
+	}
+
+	public void setSocketTimeout(Integer socketTimeout) {
+		this.socketTimeout = socketTimeout;
 	}
 }
