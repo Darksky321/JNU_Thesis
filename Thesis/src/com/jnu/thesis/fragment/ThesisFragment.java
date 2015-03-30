@@ -45,6 +45,7 @@ public class ThesisFragment extends Fragment {
 		// listViewThesis.setGroupIndicator(getResources().getDrawable(
 		// R.drawable.expand_list_indicator));
 		// listViewThesis.setIndicatorBounds(48, 48);
+		listViewThesis.setGroupIndicator(null);
 		listViewThesis.setAdapter(listViewAdapter);
 
 		// ≥ı ºªØ∞¥≈•

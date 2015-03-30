@@ -6,14 +6,15 @@ import java.util.List;
 import android.app.Activity;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
+import android.webkit.WebView.FindListener;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
@@ -98,16 +99,23 @@ public class EmbeddedListViewAdapter extends BaseExpandableListAdapter {
 			groupHolder = new GroupHolder();
 			groupHolder.textViewGroup = (TextView) convertView
 					.findViewById(R.id.textViewGroup);
+			groupHolder.indicator = (ImageView) convertView
+					.findViewById(R.id.indicator);
 			convertView.setTag(groupHolder);
 		} else {
 			groupHolder = (GroupHolder) convertView.getTag();
 		}
 		groupHolder.textViewGroup.setText(group.get(groupPosition));
 		// 展开ExpandableListView时文字滚动
-		if (isExpanded)
+		if (isExpanded) {
 			groupHolder.textViewGroup.setSelected(true);
-		else
+			groupHolder.indicator
+					.setBackgroundResource(R.drawable.ic_find_previous_holo_light);
+		} else {
 			groupHolder.textViewGroup.setSelected(false);
+			groupHolder.indicator
+					.setBackgroundResource(R.drawable.ic_find_next_holo_light);
+		}
 		if (first == groupPosition || second == groupPosition
 				|| third == groupPosition)
 			groupHolder.textViewGroup.setTextColor(activity.getResources()
@@ -172,6 +180,7 @@ public class EmbeddedListViewAdapter extends BaseExpandableListAdapter {
 
 	class GroupHolder {
 		public TextView textViewGroup;
+		public ImageView indicator;
 	}
 
 	class ChildHolder {
@@ -199,7 +208,8 @@ public class EmbeddedListViewAdapter extends BaseExpandableListAdapter {
 		// 用物理键返回取消, 或者点击外面取消, 需要设置背景
 		pw.setBackgroundDrawable(new BitmapDrawable());
 		pw.setFocusable(true);
-		pw.showAsDropDown(button);
+		pw.showAsDropDown(button, 0, -button.getHeight());
+		pw.setClippingEnabled(false);
 		Button buttonFirst = (Button) v.findViewById(R.id.button_first);
 		Button buttonSecond = (Button) v.findViewById(R.id.button_second);
 		Button buttonThird = (Button) v.findViewById(R.id.button_third);
