@@ -1,8 +1,9 @@
 package com.jnu.thesis;
 
 public class Parameter {
-	public static final String host = "http://127.0.0.1:8080/Thesis_Supervision/";
+	public static final String host = "http://192.168.137.1:8080/Thesis_Supervision/";
 	public static final String loginAction = "login.action";
+	public static final String submitChoice = "submitchoice.action";
 	private static String currentUser = "";
 
 	public static String getCurrentUser() {

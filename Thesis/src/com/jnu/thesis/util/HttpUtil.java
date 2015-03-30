@@ -11,6 +11,8 @@ import java.net.URLConnection;
 import java.util.Iterator;
 import java.util.Map;
 
+import android.util.Log;
+
 /**
  * 通讯工具类
  * 
@@ -23,6 +25,7 @@ public class HttpUtil {
 	private static String charset = "utf-8";
 	private Integer connectTimeout = 10000;
 	private Integer socketTimeout = 10000;
+	private static String TAG = "http";
 
 	public String doPost(String urlString, Map<String, String> parameterMap)
 			throws Exception {
@@ -47,7 +50,7 @@ public class HttpUtil {
 			}
 		}
 
-		System.out.println("POST parameter : " + parameterBuffer.toString());
+		Log.i(TAG, "POST parameter : " + parameterBuffer.toString());
 
 		URL url = new URL(urlString);
 		URLConnection connection = url.openConnection();
@@ -100,6 +103,7 @@ public class HttpUtil {
 			}
 		}
 
+		Log.i(TAG, "POST result : " + result);
 		return result;
 	}
 
@@ -125,6 +129,7 @@ public class HttpUtil {
 			}
 			urlString = urlString + "?" + parameterBuffer;
 		}
+		Log.i(TAG, "GET parameter : " + parameterBuffer.toString());
 
 		URL url = new URL(urlString);
 		URLConnection connection = url.openConnection();
@@ -156,6 +161,7 @@ public class HttpUtil {
 				inputStream.close();
 			}
 		}
+		Log.i(TAG, "GET result : " + result);
 		return result;
 	}
 

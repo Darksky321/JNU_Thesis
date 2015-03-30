@@ -1,5 +1,8 @@
 package com.jnu.thesis.bean;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -11,9 +14,14 @@ public class ThesisBean implements Parcelable {
 	private int count;
 	private String detail;
 	private int status;
+	private String postTime;
+
+	public ThesisBean() {
+		super();
+	}
 
 	public ThesisBean(String no, String name, String teacherName, int count,
-			String detail, int status) {
+			String detail, int status, String postTime) {
 		super();
 		this.no = no;
 		this.name = name;
@@ -21,6 +29,7 @@ public class ThesisBean implements Parcelable {
 		this.count = count;
 		this.detail = detail;
 		this.status = status;
+		this.postTime = postTime;
 	}
 
 	public String getNo() {
@@ -71,6 +80,18 @@ public class ThesisBean implements Parcelable {
 		this.status = status;
 	}
 
+	public String getPostTime() {
+		return postTime;
+	}
+
+	public void setPostTime(String postTime) {
+		this.postTime = postTime;
+	}
+
+	public static Parcelable.Creator<ThesisBean> getCreator() {
+		return CREATOR;
+	}
+
 	@Override
 	public int describeContents() {
 		// TODO 自动生成的方法存根
@@ -86,6 +107,7 @@ public class ThesisBean implements Parcelable {
 		dest.writeInt(count);
 		dest.writeString(detail);
 		dest.writeInt(status);
+		dest.writeString(postTime);
 	}
 
 	public static final Parcelable.Creator<ThesisBean> CREATOR = new Creator<ThesisBean>() {
@@ -107,13 +129,31 @@ public class ThesisBean implements Parcelable {
 		count = in.readInt();
 		detail = in.readString();
 		status = in.readInt();
+		postTime = in.readString();
+	}
+
+	public static ThesisBean createFromJSON(JSONObject jsonObject) {
+		ThesisBean t = new ThesisBean();
+		try {
+			t.setCount(jsonObject.getInt("studentQuantity"));
+			t.setDetail(jsonObject.getString("detail"));
+			t.setName(jsonObject.getString("thesisName"));
+			t.setNo(jsonObject.getString("thesisNo"));
+			t.setPostTime(jsonObject.getString("postTime"));
+			t.setStatus(jsonObject.getInt("status"));
+			t.setTeacherName(jsonObject.getString("teacherNo"));
+		} catch (JSONException e) {
+			// TODO 自动生成的 catch 块
+			return new ThesisBean();
+		}
+		return t;
 	}
 
 	@Override
 	public String toString() {
 		return "ThesisBean [no=" + no + ", name=" + name + ", teacherName="
 				+ teacherName + ", count=" + count + ", detail=" + detail
-				+ ", status=" + status + "]";
+				+ ", status=" + status + ", postTime=" + postTime + "]";
 	}
 
 }

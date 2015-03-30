@@ -41,6 +41,7 @@ public class EmbeddedListViewAdapter extends BaseExpandableListAdapter {
 			tmp.add(tb.getTeacherName());
 			tmp.add(tb.getCount() + "");
 			tmp.add(tb.getDetail());
+			tmp.add(tb.getPostTime());
 			child.add(tmp);
 		}
 	}
@@ -147,10 +148,11 @@ public class EmbeddedListViewAdapter extends BaseExpandableListAdapter {
 			childHolder = (ChildHolder) convertView.getTag();
 		}
 		StringBuffer sb = new StringBuffer();
-		sb.append("导师：").append(child.get(groupPosition).get(0)).append("\n")
-				.append("人数：").append(child.get(groupPosition).get(1))
-				.append("\n").append("详情：")
-				.append(child.get(groupPosition).get(2));
+		sb.append("导师：").append(child.get(groupPosition).get(0))
+				.append("\n人数：").append(child.get(groupPosition).get(1))
+				.append("\n详情：").append(child.get(groupPosition).get(2))
+				.append("\n发布时间：")
+				.append(child.get(groupPosition).get(3).substring(0, 11));
 		childHolder.textViewChild.setText(sb.toString());
 		childHolder.buttonLeaveMessage
 				.setOnClickListener(new OnClickListener() {

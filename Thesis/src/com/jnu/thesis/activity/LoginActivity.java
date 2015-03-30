@@ -3,6 +3,8 @@ package com.jnu.thesis.activity;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.json.JSONObject;
+
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -11,11 +13,15 @@ import android.graphics.Paint;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
 
 import com.jnu.thesis.Parameter;
@@ -28,14 +34,22 @@ public class LoginActivity extends Activity {
 
 	public static final int LOGIN_SUCCESS = 1;
 	public static final int LOGIN_FAILED = 2;
+	public static final int LOGIN_NOT_EXIST = 3;
+	public static final int LOGIN_ERROR = 4;
 	private EditText editTextUserName;
 	private EditText editTextPassword;
 	private Button buttonLogin;
 	private TextView textViewTeacherEntry;
-	private int status = 1; // 1代表学生登陆2代表教师登陆
+	/**
+	 * 1代表学生登陆2代表教师登陆
+	 */
+	private static int status = 1;
 	private Thread loginThread;
 	private Runnable loginRunnable;
 	private static Context context;
+	/**
+	 * 正在登陆进度框
+	 */
 	private static ProgressDialog dialog;
 	private static Handler handler = new Handler() {
 		public void handleMessage(Message msg) {
@@ -46,9 +60,25 @@ public class LoginActivity extends Activity {
 				break;
 			case LOGIN_SUCCESS:
 				Intent intent = new Intent();
-				intent.setClass(context, MainActivity.class);
-				context.startActivity(intent);
+				if (status == 1) {
+					intent.setClass(context, MainActivity.class);
+					String thesesString = (String) msg.obj;
+					intent.putExtra("theses", thesesString);
+				} else if (status == 2) {
+					intent.setClass(context, TeacherMainActivity.class);
+				}
+				dialog.dismiss();
 				((Activity) context).finish();
+				context.startActivity(intent);
+				break;
+			case LOGIN_NOT_EXIST:
+				dialog.dismiss();
+				Toast.makeText(context, "用户不存在", Toast.LENGTH_SHORT).show();
+				break;
+			case LOGIN_ERROR:
+				dialog.dismiss();
+				Toast.makeText(context, "网络错误", Toast.LENGTH_SHORT).show();
+				break;
 			}
 			super.handleMessage(msg);
 		}
@@ -81,20 +111,33 @@ public class LoginActivity extends Activity {
 				Map<String, String> para = new HashMap<String, String>();
 				para.put("username", userName);
 				para.put("password", password);
-				String result = "";
+				para.put("status", status + "");
+				JSONObject jResult = null;
+				String response;
 				Message msg = Message.obtain();
 				try {
-					result = util.doPost(
-							Parameter.host + Parameter.loginAction, para);
-					if (!result.equals(""))
+					response = util.doPost(Parameter.host
+							+ Parameter.loginAction, para);
+					jResult = new JSONObject(response);
+					String result = jResult.getString("result");
+					if (result.equals("success")) {
 						msg.what = LOGIN_SUCCESS;
-					else
+						if (status == 1) {
+							String thesesString = jResult.getString("theses");
+							msg.obj = thesesString;
+						}
+					} else if (result.equals("fail"))
 						msg.what = LOGIN_FAILED;
+					else if (result.equals("notexist"))
+						msg.what = LOGIN_NOT_EXIST;
+					else
+						msg.what = LOGIN_ERROR;
 					handler.sendMessage(msg);
 				} catch (Exception e) {
 					// TODO 自动生成的 catch 块
-					msg.what = LOGIN_FAILED;
+					msg.what = LOGIN_ERROR;
 					handler.sendMessage(msg);
+					e.printStackTrace();
 				}
 			}
 		};
@@ -118,6 +161,21 @@ public class LoginActivity extends Activity {
 				return true;
 			}
 		});
+		editTextPassword
+				.setOnEditorActionListener(new OnEditorActionListener() {
+
+					@Override
+					public boolean onEditorAction(TextView v, int actionId,
+							KeyEvent event) {
+						// TODO 自动生成的方法存根
+						switch (actionId) {
+						case EditorInfo.IME_ACTION_SEND:
+							buttonLogin.performClick();
+							break;
+						}
+						return true;
+					}
+				});
 		textViewTeacherEntry.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);
 		textViewTeacherEntry.setOnClickListener(new OnClickListener() {
 
@@ -137,6 +195,9 @@ public class LoginActivity extends Activity {
 		});
 	}
 
+	/**
+	 * 获取控件
+	 */
 	private void init() {
 		editTextUserName = (EditText) findViewById(R.id.editText_userName);
 		editTextPassword = (EditText) findViewById(R.id.editText_password);
@@ -144,6 +205,9 @@ public class LoginActivity extends Activity {
 		textViewTeacherEntry = (TextView) findViewById(R.id.textView_teacherEntry);
 	}
 
+	/**
+	 * 初始化信鸽
+	 */
 	public void InitXinge() {
 		// 开启logcat输出，方便debug，发布时请关闭
 		// XGPushConfig.enableDebug(this, true);
@@ -168,11 +232,22 @@ public class LoginActivity extends Activity {
 		// 删除标签：deleteTag(context, tagName)
 	}
 
+	/**
+	 * 登陆按钮
+	 * 
+	 * @author Deng
+	 *
+	 */
 	private class ButtonLoginOnClickListener implements OnClickListener {
 
 		@Override
 		public void onClick(View v) {
 			// TODO 自动生成的方法存根
+			View view = getWindow().peekDecorView();
+			if (view != null) {
+				InputMethodManager inputmanger = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+				inputmanger.hideSoftInputFromWindow(view.getWindowToken(), 0);
+			}
 			if (loginThread == null || !loginThread.isAlive()) {
 				dialog.setMessage("登录中...");
 				dialog.setIndeterminate(true);
@@ -180,12 +255,9 @@ public class LoginActivity extends Activity {
 				dialog.show();
 				loginThread = new Thread(loginRunnable);
 				loginThread.start();
-				// Intent intent = new Intent();
-				// intent.setClass(context, MainActivity.class);
-				// startActivity(intent);
-				// finish();
 			}
 		}
 
 	}
+
 }

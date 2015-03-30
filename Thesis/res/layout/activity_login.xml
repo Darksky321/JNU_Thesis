@@ -27,7 +27,10 @@
         android:layout_centerHorizontal="true"
         android:background="@drawable/shape_username"
         android:ems="10"
-        android:hint="@string/editText_userName" >
+        android:hint="@string/editText_userName"
+        android:imeOptions="actionNext"
+        android:inputType="number"
+        android:singleLine="true" >
 
         <requestFocus />
     </EditText>
@@ -41,7 +44,9 @@
         android:background="@drawable/shape_password"
         android:ems="10"
         android:hint="@string/editText_password"
-        android:inputType="textPassword" />
+        android:imeOptions="actionSend"
+        android:inputType="textPassword"
+        android:singleLine="true" />
 
     <Button
         android:id="@+id/button_login"
