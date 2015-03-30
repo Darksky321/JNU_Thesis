@@ -61,6 +61,7 @@
         android:layout_below="@+id/button_login"
         android:layout_marginTop="10dp"
         android:text="@string/teacher_entry"
-        android:textColor="@color/textcolor_checked" />
+        android:textColor="@color/textcolor_checked"
+        android:textSize="16dp" />
 
 </RelativeLayout>

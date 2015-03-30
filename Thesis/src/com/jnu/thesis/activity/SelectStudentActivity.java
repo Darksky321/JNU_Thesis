@@ -1,4 +1,4 @@
-package com.jnu.thesis;
+package com.jnu.thesis.activity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,22 +6,24 @@ import java.util.List;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.ArrayAdapter;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.jnu.thesis.R;
 import com.jnu.thesis.bean.StudentBean;
 import com.jnu.thesis.bean.ThesisBean;
 import com.jnu.thesis.view.FinishListener;
+import com.jnu.thesis.view.SelectStudentListViewAdapter;
 
 public class SelectStudentActivity extends Activity {
 
@@ -32,7 +34,6 @@ public class SelectStudentActivity extends Activity {
 	private ListView listView;
 	private ThesisBean thesis;
 	private List<StudentBean> students;
-	private List<String> studentsString;
 	private Context context;
 
 	@Override
@@ -54,30 +55,32 @@ public class SelectStudentActivity extends Activity {
 		imageViewBack.setOnClickListener(finishListener);
 		logo.setOnClickListener(finishListener);
 		students = getStudents();
-		studentsString = new ArrayList<String>();
+		List<String> names = new ArrayList<String>();
+		List<String> nos = new ArrayList<String>();
 		for (StudentBean s : students) {
-			String str = s.getNo() + "\n" + s.getName();
-			studentsString.add(str);
+			names.add(s.getName());
+			nos.add(s.getNo());
 		}
-		listView.setAdapter(new ArrayAdapter<String>(this,
-				android.R.layout.simple_list_item_multiple_choice,
-				studentsString));
-		listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+		final SelectStudentListViewAdapter adapter = new SelectStudentListViewAdapter(
+				names, nos, this);
+		listView.setAdapter(adapter);
+		listView.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				// TODO 自动生成的方法存根
+				adapter.checkChange(position);
+				adapter.notifyDataSetChanged();
+			}
+		});
 
 		buttonSubmit.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 				// TODO 自动生成的方法存根
-				int size = listView.getCount();
-				int count = 0;
-				List<Integer> selected = new ArrayList<Integer>();
-				for (int i = 0; i < size; i++) {
-					if (listView.isItemChecked(i)) {
-						count++;
-						selected.add(i);
-					}
-				}
+				int count = adapter.getCheckedCount();
 				if (count != thesis.getCount()) {
 					AlertDialog.Builder builder = new AlertDialog.Builder(
 							context);

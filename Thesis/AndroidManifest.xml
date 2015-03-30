@@ -152,7 +152,7 @@
             android:label="@string/title_activity_teacher_main" >
         </activity>
         <activity
-            android:name=".SelectStudentActivity"
+            android:name="com.jnu.thesis.activity.SelectStudentActivity"
             android:label="@string/title_activity_select_student" >
         </activity>
     </application>

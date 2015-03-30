@@ -11,12 +11,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.jnu.thesis.R;
-import com.jnu.thesis.SelectStudentActivity;
+import com.jnu.thesis.activity.SelectStudentActivity;
 import com.jnu.thesis.bean.ThesisBean;
+import com.jnu.thesis.view.TeacherThesisListViewAdapter;
 
 public class TeacherThesisFragment extends Fragment {
 	private List<ThesisBean> theses;
@@ -34,8 +34,8 @@ public class TeacherThesisFragment extends Fragment {
 		for (ThesisBean t : theses) {
 			thesesName.add(t.getName());
 		}
-		listView.setAdapter(new ArrayAdapter<String>(getActivity(),
-				android.R.layout.simple_list_item_1, thesesName));
+		listView.setAdapter(new TeacherThesisListViewAdapter(getActivity(),
+				(ArrayList<String>) thesesName));
 		listView.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
