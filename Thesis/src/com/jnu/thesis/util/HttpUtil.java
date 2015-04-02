@@ -59,8 +59,8 @@ public class HttpUtil {
 		httpURLConnection.setDoOutput(true);
 		httpURLConnection.setRequestMethod("POST");
 		httpURLConnection.setRequestProperty("Accept-Charset", charset);
-		httpURLConnection.setRequestProperty("Content-Length",
-				String.valueOf(parameterBuffer.length()));
+		httpURLConnection.setRequestProperty("Content-Length", parameterBuffer
+				.toString().getBytes().length + "");
 		httpURLConnection.setConnectTimeout(connectTimeout);
 		httpURLConnection.setReadTimeout(socketTimeout);
 		if (!sessionID.equals(""))
