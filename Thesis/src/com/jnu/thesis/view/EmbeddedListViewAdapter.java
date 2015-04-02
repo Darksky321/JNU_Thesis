@@ -151,8 +151,7 @@ public class EmbeddedListViewAdapter extends BaseExpandableListAdapter {
 		sb.append("导师：").append(child.get(groupPosition).get(0))
 				.append("\n人数：").append(child.get(groupPosition).get(1))
 				.append("\n详情：").append(child.get(groupPosition).get(2))
-				.append("\n发布时间：")
-				.append(child.get(groupPosition).get(3).substring(0, 11));
+				.append("\n发布时间：").append(child.get(groupPosition).get(3));
 		childHolder.textViewChild.setText(sb.toString());
 		childHolder.buttonLeaveMessage
 				.setOnClickListener(new OnClickListener() {

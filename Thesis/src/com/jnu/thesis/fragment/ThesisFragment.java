@@ -69,19 +69,21 @@ public class ThesisFragment extends Fragment {
 		// 初始化数据, 从返回的json串中得到论文序列
 		String thesesString = getActivity().getIntent()
 				.getStringExtra("theses");
-		theses = new ArrayList<ThesisBean>();
 		try {
-			JSONArray jsonArray = new JSONArray(thesesString);
-			for (int i = 0; i < jsonArray.length(); i++) {
-				theses.add(ThesisBean.createFromJSON((jsonArray
-						.getJSONObject(i))));
+			if (thesesString != null) {
+				theses = new ArrayList<ThesisBean>();
+				JSONArray jsonArray = new JSONArray(thesesString);
+				for (int i = 0; i < jsonArray.length(); i++) {
+					theses.add(ThesisBean.createFromJSON((jsonArray
+							.getJSONObject(i))));
+				}
+			} else {
+				theses = getThesesData();
 			}
 		} catch (JSONException e) {
 			// TODO 自动生成的 catch 块
 			e.printStackTrace();
 		}
-
-		// theses = getThesesData();
 
 		// 初始化列表
 		ScrollView sv = (ScrollView) v.findViewById(R.id.scrollView_thesis);

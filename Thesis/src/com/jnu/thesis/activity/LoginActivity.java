@@ -90,6 +90,7 @@ public class LoginActivity extends Activity {
 		setContentView(R.layout.activity_login);
 		context = this;
 		init();
+		status = 1;
 		// –≈∏Î≥ı ºªØ
 		InitXinge();
 		dialog = new ProgressDialog(this);
@@ -193,6 +194,13 @@ public class LoginActivity extends Activity {
 				}
 			}
 		});
+		// if (status == 1) {
+		// textViewTeacherEntry.setText(R.string.teacher_entry);
+		// buttonLogin.setText(R.string.button_login);
+		// } else if (status == 2) {
+		// textViewTeacherEntry.setText(R.string.back);
+		// buttonLogin.setText(R.string.button_teacher_login);
+		// }
 	}
 
 	/**
