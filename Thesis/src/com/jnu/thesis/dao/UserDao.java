@@ -24,7 +24,7 @@ public class UserDao implements UserService {
 	 * 增加用户
 	 * 
 	 * @param params
-	 *            用户属性
+	 *            用户属性 id, password, status
 	 * @return
 	 */
 	@Override
@@ -138,6 +138,7 @@ public class UserDao implements UserService {
 			}
 		} catch (Exception e) {
 			// TODO: handle exception
+			return person;
 		} finally {
 			if (database != null) {
 				database.close();
@@ -149,7 +150,28 @@ public class UserDao implements UserService {
 	@Override
 	public Map<String, String> findAllUser() {
 		// TODO 自动生成的方法存根
-		return null;
+		SQLiteDatabase database = null;
+		Map<String, String> person = new HashMap<String, String>();
+		try {
+			database = helper.getReadableDatabase();
+			Cursor cursor = database.query(table, null, null, null, null, null,
+					null);
+			while (cursor.moveToNext()) {
+				person.put("id", cursor.getString(cursor.getColumnIndex("id")));
+				person.put("password",
+						cursor.getString(cursor.getColumnIndex("password")));
+				person.put("status",
+						cursor.getInt(cursor.getColumnIndex("status")) + "");
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+			return person;
+		} finally {
+			if (database != null) {
+				database.close();
+			}
+		}
+		return person;
 	}
 
 }

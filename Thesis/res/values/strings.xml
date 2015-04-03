@@ -36,5 +36,6 @@
     <string name="title_activity_teacher_main">TeacherMainActivity</string>
     <string name="title_activity_select_student">SelectStudentActivity</string>
     <string name="loading">正在加载...</string>
+    <string name="button_logout">注销</string>
 
 </resources>

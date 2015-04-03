@@ -1,5 +1,6 @@
 package com.jnu.thesis.activity;
 
+import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,6 +14,7 @@ import android.graphics.Paint;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -26,6 +28,7 @@ import android.widget.Toast;
 
 import com.jnu.thesis.Parameter;
 import com.jnu.thesis.R;
+import com.jnu.thesis.dao.UserDao;
 import com.jnu.thesis.util.HttpUtil;
 import com.tencent.android.tpush.XGPushManager;
 import com.tencent.android.tpush.service.XGPushService;
@@ -43,7 +46,11 @@ public class LoginActivity extends Activity {
 	/**
 	 * 1代表学生登陆2代表教师登陆
 	 */
-	private static int status = 1;
+	private int status = 1;
+	/**
+	 * 数据库中的用户信息
+	 */
+	private Map<String, String> user;
 	private Thread loginThread;
 	private Runnable loginRunnable;
 	private static Context context;
@@ -51,61 +58,58 @@ public class LoginActivity extends Activity {
 	 * 正在登陆进度框
 	 */
 	private static ProgressDialog dialog;
-	private static Handler handler = new Handler() {
-		public void handleMessage(Message msg) {
-			switch (msg.what) {
-			case LOGIN_FAILED:
-				dialog.dismiss();
-				Toast.makeText(context, "登陆失败", Toast.LENGTH_SHORT).show();
-				break;
-			case LOGIN_SUCCESS:
-				Intent intent = new Intent();
-				if (status == 1) {
-					intent.setClass(context, MainActivity.class);
-					String thesesString = (String) msg.obj;
-					intent.putExtra("theses", thesesString);
-				} else if (status == 2) {
-					intent.setClass(context, TeacherMainActivity.class);
-				}
-				dialog.dismiss();
-				((Activity) context).finish();
-				context.startActivity(intent);
-				break;
-			case LOGIN_NOT_EXIST:
-				dialog.dismiss();
-				Toast.makeText(context, "用户不存在", Toast.LENGTH_SHORT).show();
-				break;
-			case LOGIN_ERROR:
-				dialog.dismiss();
-				Toast.makeText(context, "网络错误", Toast.LENGTH_SHORT).show();
-				break;
-			}
-			super.handleMessage(msg);
-		}
-	};
+	private Handler handler = new LoginHandler(this);
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
 		context = this;
-		init();
 		status = 1;
+		// 初始化控件
+		initView();
 		// 信鸽初始化
 		InitXinge();
+		// 如果数据库中有账号信息, 则使用该账号登陆
+		UserDao dao = new UserDao(this);
+		user = dao.findAllUser();
+		if (user != null & !user.isEmpty()) {
+			editTextUserName.setText(user.get("id"));
+			editTextPassword.setText(user.get("password"));
+			int sta = Integer.valueOf(user.get("status"));
+			if (sta == 2) {
+				textViewTeacherEntry.performClick();
+			}
+			buttonLogin.performClick();
+		}
+	}
+
+	/**
+	 * 获取控件, 初始化控件
+	 */
+	private void initView() {
+		editTextUserName = (EditText) findViewById(R.id.editText_userName);
+		editTextPassword = (EditText) findViewById(R.id.editText_password);
+		buttonLogin = (Button) findViewById(R.id.button_login);
+		textViewTeacherEntry = (TextView) findViewById(R.id.textView_teacherEntry);
+
 		dialog = new ProgressDialog(this);
+
+		/**
+		 * 登陆线程
+		 */
 		loginRunnable = new Runnable() {
 
 			@Override
 			public void run() {
 				// TODO 自动生成的方法存根
-				try {
-					Thread.currentThread();
-					Thread.sleep(2000);
-				} catch (InterruptedException e1) {
-					// TODO 自动生成的 catch 块
-					e1.printStackTrace();
-				} // 搞笑的
+				// try {
+				// Thread.currentThread();
+				// Thread.sleep(2000);
+				// } catch (InterruptedException e1) {
+				// // TODO 自动生成的 catch 块
+				// e1.printStackTrace();
+				// } // 搞笑的
 				HttpUtil util = new HttpUtil();
 				String userName = editTextUserName.getText().toString();
 				String password = editTextPassword.getText().toString();
@@ -142,7 +146,35 @@ public class LoginActivity extends Activity {
 				}
 			}
 		};
-		buttonLogin.setOnClickListener(new ButtonLoginOnClickListener());
+
+		/**
+		 * 登陆
+		 */
+		buttonLogin.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO 自动生成的方法存根
+				View view = getWindow().peekDecorView();
+				if (view != null) {
+					InputMethodManager inputmanger = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+					inputmanger.hideSoftInputFromWindow(view.getWindowToken(),
+							0);
+				}
+				if (loginThread == null || !loginThread.isAlive()) {
+					dialog.setMessage("登录中...");
+					dialog.setIndeterminate(true);
+					dialog.setCancelable(false);
+					dialog.show();
+					loginThread = new Thread(loginRunnable);
+					loginThread.start();
+				}
+			}
+		});
+
+		/**
+		 * 后门
+		 */
 		buttonLogin.setOnLongClickListener(new View.OnLongClickListener() {
 
 			@Override
@@ -159,9 +191,15 @@ public class LoginActivity extends Activity {
 					startActivity(intent);
 					finish();
 				}
+				Parameter.setCurrentUser(user.get("id"));
+				Parameter.setStatus(Integer.valueOf(user.get("status")));
 				return true;
 			}
 		});
+
+		/**
+		 * 输入法中按发送键登陆
+		 */
 		editTextPassword
 				.setOnEditorActionListener(new OnEditorActionListener() {
 
@@ -177,7 +215,11 @@ public class LoginActivity extends Activity {
 						return true;
 					}
 				});
-		textViewTeacherEntry.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);
+		textViewTeacherEntry.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG); // 下划线
+
+		/**
+		 * 进出教师入口, 调整UI
+		 */
 		textViewTeacherEntry.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -201,16 +243,6 @@ public class LoginActivity extends Activity {
 		// textViewTeacherEntry.setText(R.string.back);
 		// buttonLogin.setText(R.string.button_teacher_login);
 		// }
-	}
-
-	/**
-	 * 获取控件
-	 */
-	private void init() {
-		editTextUserName = (EditText) findViewById(R.id.editText_userName);
-		editTextPassword = (EditText) findViewById(R.id.editText_password);
-		buttonLogin = (Button) findViewById(R.id.button_login);
-		textViewTeacherEntry = (TextView) findViewById(R.id.textView_teacherEntry);
 	}
 
 	/**
@@ -240,32 +272,95 @@ public class LoginActivity extends Activity {
 		// 删除标签：deleteTag(context, tagName)
 	}
 
-	/**
-	 * 登陆按钮
-	 * 
-	 * @author Deng
-	 *
-	 */
-	private class ButtonLoginOnClickListener implements OnClickListener {
+	private static class LoginHandler extends Handler {
+		private final WeakReference<LoginActivity> mActivity;
 
-		@Override
-		public void onClick(View v) {
-			// TODO 自动生成的方法存根
-			View view = getWindow().peekDecorView();
-			if (view != null) {
-				InputMethodManager inputmanger = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-				inputmanger.hideSoftInputFromWindow(view.getWindowToken(), 0);
-			}
-			if (loginThread == null || !loginThread.isAlive()) {
-				dialog.setMessage("登录中...");
-				dialog.setIndeterminate(true);
-				dialog.setCancelable(false);
-				dialog.show();
-				loginThread = new Thread(loginRunnable);
-				loginThread.start();
-			}
+		LoginHandler(LoginActivity mActivity) {
+			this.mActivity = new WeakReference<LoginActivity>(mActivity);
 		}
 
+		@Override
+		public void handleMessage(Message msg) {
+			// TODO 自动生成的方法存根
+			LoginActivity activity = mActivity.get();
+			switch (msg.what) {
+			case LOGIN_FAILED:
+				dialog.dismiss();
+				Toast.makeText(activity, "登陆失败", Toast.LENGTH_SHORT).show();
+				break;
+			case LOGIN_SUCCESS:
+				Intent intent = new Intent();
+				if (activity.getStatus() == 1) {
+					intent.setClass(activity, MainActivity.class);
+					String thesesString = (String) msg.obj;
+					intent.putExtra("theses", thesesString);
+				} else if (activity.getStatus() == 2) {
+					intent.setClass(activity, TeacherMainActivity.class);
+				}
+				// 如果数据库中没有账户信息, 则保存该账户
+				if (activity.getUser() == null || activity.getUser().isEmpty()) {
+					UserDao dao = new UserDao(activity);
+					boolean b;
+					b = dao.addUser(new String[] {
+							activity.getEditTextUserName().getText().toString(),
+							activity.getEditTextPassword().getText().toString(),
+							activity.getStatus() + "" });
+					if (b) {
+						Log.i("db", "write user successful");
+					} else {
+						Log.i("db", "write user failed");
+					}
+				}
+				Parameter.setCurrentUser(activity.getEditTextUserName()
+						.getText().toString());
+				Parameter.setStatus(activity.getStatus());
+				dialog.dismiss();
+				activity.finish();
+				activity.startActivity(intent);
+				break;
+			case LOGIN_NOT_EXIST:
+				dialog.dismiss();
+				Toast.makeText(activity, "用户不存在", Toast.LENGTH_SHORT).show();
+				break;
+			case LOGIN_ERROR:
+				dialog.dismiss();
+				Toast.makeText(activity, "网络错误", Toast.LENGTH_SHORT).show();
+				break;
+			}
+			super.handleMessage(msg);
+		}
+	}
+
+	public EditText getEditTextUserName() {
+		return editTextUserName;
+	}
+
+	public void setEditTextUserName(EditText editTextUserName) {
+		this.editTextUserName = editTextUserName;
+	}
+
+	public EditText getEditTextPassword() {
+		return editTextPassword;
+	}
+
+	public void setEditTextPassword(EditText editTextPassword) {
+		this.editTextPassword = editTextPassword;
+	}
+
+	public int getStatus() {
+		return status;
+	}
+
+	public void setStatus(int status) {
+		this.status = status;
+	}
+
+	public Map<String, String> getUser() {
+		return user;
+	}
+
+	public void setUser(Map<String, String> user) {
+		this.user = user;
 	}
 
 }

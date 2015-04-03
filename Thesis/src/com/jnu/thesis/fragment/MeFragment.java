@@ -1,18 +1,82 @@
 package com.jnu.thesis.fragment;
 
-import com.jnu.thesis.R;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
 
-public class MeFragment extends Fragment
-{
+import com.jnu.thesis.Parameter;
+import com.jnu.thesis.R;
+import com.jnu.thesis.activity.LoginActivity;
+import com.jnu.thesis.dao.UserDao;
+
+public class MeFragment extends Fragment {
+
+	private TextView textViewMe;
+	private Button buttonLogout;
+
 	@Override
-	public View onCreateView(LayoutInflater inflater , ViewGroup container , Bundle savedInstanceState)
-	{
-		View v = inflater.inflate(R.layout.fragment_me, null) ;
-		return v ;
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		View v = inflater.inflate(R.layout.fragment_me, null);
+		initView(v);
+		return v;
+	}
+
+	private void initView(View v) {
+		textViewMe = (TextView) v.findViewById(R.id.textView_me);
+		buttonLogout = (Button) v.findViewById(R.id.button_logout);
+
+		textViewMe.setText("当前账号：" + Parameter.getCurrentUser());
+
+		/**
+		 * 注销账号, 删除数据库信息
+		 */
+		buttonLogout.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO 自动生成的方法存根
+				AlertDialog.Builder builder = new AlertDialog.Builder(
+						getActivity());
+				builder.setMessage("确定要注销吗？");
+				builder.setIcon(android.R.drawable.ic_dialog_alert);
+				builder.setPositiveButton("确定",
+						new DialogInterface.OnClickListener() {
+
+							@Override
+							public void onClick(DialogInterface dialog,
+									int which) {
+								// TODO 自动生成的方法存根
+								UserDao dao = new UserDao(getActivity());
+								boolean b = dao
+										.deleteUser(new String[] { Parameter
+												.getCurrentUser() });
+								if (b) {
+									Log.i("db", "delete user successful");
+								} else {
+									Log.i("db", "delete user failed");
+								}
+								Parameter.clear();
+								Intent intent = new Intent();
+								intent.setClass(getActivity(),
+										LoginActivity.class);
+								startActivity(intent);
+								getActivity().finish();
+							}
+						});
+				builder.setNegativeButton("取消", null);
+				builder.show();
+
+			}
+		});
 	}
 }

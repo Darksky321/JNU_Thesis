@@ -91,6 +91,9 @@ public class HttpUtil {
 			}
 			result = changeInputStream(inputStream);
 
+		} catch (Exception e) {
+			Log.e(TAG, "Error->" + e.toString());
+			throw e;
 		} finally {
 			if (outputStreamWriter != null) {
 				outputStreamWriter.close();
@@ -156,6 +159,9 @@ public class HttpUtil {
 			inputStream = httpURLConnection.getInputStream();
 			result = changeInputStream(inputStream);
 
+		} catch (Exception e) {
+			Log.e(TAG, "Error->" + e.toString());
+			throw e;
 		} finally {
 			if (inputStream != null) {
 				inputStream.close();
