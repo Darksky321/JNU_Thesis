@@ -191,8 +191,8 @@ public class LoginActivity extends Activity {
 					startActivity(intent);
 					finish();
 				}
-				Parameter.setCurrentUser(user.get("id"));
-				Parameter.setStatus(Integer.valueOf(user.get("status")));
+				Parameter.setCurrentUser("Deng");
+				Parameter.setStatus(status);
 				return true;
 			}
 		});
