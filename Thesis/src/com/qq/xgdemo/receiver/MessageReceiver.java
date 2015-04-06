@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.jnu.thesis.dao.impl.MessageDaoImpl;
 import com.qq.xgdemo.common.NotificationService;
 import com.qq.xgdemo.po.XGNotification;
 import com.tencent.android.tpush.XGPushBaseReceiver;
@@ -21,6 +22,7 @@ import com.tencent.android.tpush.XGPushTextMessage;
 
 /**
  * 继承信鸽保内XGPushBaseReceiver类,处理收到推送后的行为
+ * 
  * @author Deng
  *
  */
@@ -29,7 +31,8 @@ public class MessageReceiver extends XGPushBaseReceiver {
 	public static final String LogTag = "TPushReceiver";
 
 	private void show(Context context, String text) {
-//		Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
+		// Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
+		Log.i("xinge", text);
 	}
 
 	// 通知展示
@@ -51,6 +54,9 @@ public class MessageReceiver extends XGPushBaseReceiver {
 		notific.setUpdate_time(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
 				.format(Calendar.getInstance().getTime()));
 		NotificationService.getInstance(context).save(notific);
+		// 把通知保存到自建的数据库中
+		MessageDaoImpl.getInstance(context).save(notific,
+				notifiShowedRlt.getCustomContent());
 		context.sendBroadcast(intent);
 		show(context, "您有1条新消息, " + "通知被展示 ， " + notifiShowedRlt.toString());
 	}

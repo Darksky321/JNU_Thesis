@@ -17,6 +17,7 @@ import com.jnu.thesis.Parameter;
 import com.jnu.thesis.R;
 import com.jnu.thesis.activity.LoginActivity;
 import com.jnu.thesis.dao.UserDao;
+import com.jnu.thesis.dao.impl.UserDaoImpl;
 
 public class MeFragment extends Fragment {
 
@@ -56,7 +57,8 @@ public class MeFragment extends Fragment {
 							public void onClick(DialogInterface dialog,
 									int which) {
 								// TODO 自动生成的方法存根
-								UserDao dao = new UserDao(getActivity());
+								UserDao dao = UserDaoImpl.getInstance(getActivity()
+										.getApplicationContext());
 								boolean b = dao
 										.deleteUser(new String[] { Parameter
 												.getCurrentUser() });

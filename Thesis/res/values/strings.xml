@@ -12,7 +12,7 @@
     <string name="button_view_select">查看课题</string>
     <string name="button_view_result">查看选题结果</string>
     <string name="radioButton_thesis">选题</string>
-    <string name="radioButton_chat">通讯</string>
+    <string name="radioButton_chat">信息</string>
     <string name="radioButton_group">小组</string>
     <string name="radioButton_me">我</string>
     <string name="button_leave_message">留言</string>
@@ -37,5 +37,6 @@
     <string name="title_activity_select_student">SelectStudentActivity</string>
     <string name="loading">正在加载...</string>
     <string name="button_logout">注销</string>
+    <string name="title_activity_message">MessageActivity</string>
 
 </resources>

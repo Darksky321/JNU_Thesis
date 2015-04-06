@@ -29,7 +29,9 @@ import android.widget.Toast;
 import com.jnu.thesis.Parameter;
 import com.jnu.thesis.R;
 import com.jnu.thesis.dao.UserDao;
+import com.jnu.thesis.dao.impl.UserDaoImpl;
 import com.jnu.thesis.util.HttpUtil;
+import com.jnu.thesis.util.XingeRegister;
 import com.tencent.android.tpush.XGPushManager;
 import com.tencent.android.tpush.service.XGPushService;
 
@@ -57,7 +59,7 @@ public class LoginActivity extends Activity {
 	/**
 	 * 正在登陆进度框
 	 */
-	private static ProgressDialog dialog;
+	private ProgressDialog dialog;
 	private Handler handler = new LoginHandler(this);
 
 	@Override
@@ -71,7 +73,7 @@ public class LoginActivity extends Activity {
 		// 信鸽初始化
 		InitXinge();
 		// 如果数据库中有账号信息, 则使用该账号登陆
-		UserDao dao = new UserDao(this);
+		UserDao dao = UserDaoImpl.getInstance(getApplicationContext());
 		user = dao.findAllUser();
 		if (user != null & !user.isEmpty()) {
 			editTextUserName.setText(user.get("id"));
@@ -285,7 +287,7 @@ public class LoginActivity extends Activity {
 			LoginActivity activity = mActivity.get();
 			switch (msg.what) {
 			case LOGIN_FAILED:
-				dialog.dismiss();
+				activity.dialog.dismiss();
 				Toast.makeText(activity, "登陆失败", Toast.LENGTH_SHORT).show();
 				break;
 			case LOGIN_SUCCESS:
@@ -299,31 +301,40 @@ public class LoginActivity extends Activity {
 				}
 				// 如果数据库中没有账户信息, 则保存该账户
 				if (activity.getUser() == null || activity.getUser().isEmpty()) {
-					UserDao dao = new UserDao(activity);
+					UserDao userDao = UserDaoImpl.getInstance(context
+							.getApplicationContext());
 					boolean b;
-					b = dao.addUser(new String[] {
-							activity.getEditTextUserName().getText().toString(),
-							activity.getEditTextPassword().getText().toString(),
-							activity.getStatus() + "" });
+					b = userDao
+							.addUser(new String[] {
+									activity.getEditTextUserName().getText()
+											.toString(),
+									activity.getEditTextPassword().getText()
+											.toString(),
+									activity.getStatus() + "" });
 					if (b) {
 						Log.i("db", "write user successful");
 					} else {
 						Log.i("db", "write user failed");
 					}
 				}
+
+				// 保存账号信息
 				Parameter.setCurrentUser(activity.getEditTextUserName()
 						.getText().toString());
 				Parameter.setStatus(activity.getStatus());
-				dialog.dismiss();
+				// 信鸽注册账号
+				XingeRegister.regist(context.getApplicationContext(), activity
+						.getEditTextUserName().getText().toString());
+				activity.dialog.dismiss();
 				activity.finish();
 				activity.startActivity(intent);
 				break;
 			case LOGIN_NOT_EXIST:
-				dialog.dismiss();
+				activity.dialog.dismiss();
 				Toast.makeText(activity, "用户不存在", Toast.LENGTH_SHORT).show();
 				break;
 			case LOGIN_ERROR:
-				dialog.dismiss();
+				activity.dialog.dismiss();
 				Toast.makeText(activity, "网络错误", Toast.LENGTH_SHORT).show();
 				break;
 			}
@@ -361,6 +372,14 @@ public class LoginActivity extends Activity {
 
 	public void setUser(Map<String, String> user) {
 		this.user = user;
+	}
+
+	public ProgressDialog getDialog() {
+		return dialog;
+	}
+
+	public void setDialog(ProgressDialog dialog) {
+		this.dialog = dialog;
 	}
 
 }

@@ -9,6 +9,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 	private static String name = "thesis.db";
 	private static int version = 1;
+	private static DatabaseHelper instance = null;
 
 	public DatabaseHelper(Context context) {
 		super(context, name, null, version);
@@ -23,14 +24,23 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	@Override
 	public void onCreate(SQLiteDatabase db) {
 		// TODO 自动生成的方法存根
-		String sql = "create table user(id varchar(20), password varchar(30), status int)";
-		db.execSQL(sql);
+		String sql1 = "CREATE TABLE user(id varchar(20), password varchar(30), status int)";
+		String sql2 = "CREATE TABLE message (id integer primary key autoincrement,msg_id varchar(64),title varchar(128),activity varchar(256),notificationActionType varchar(512),content text,update_time varchar(16),fromName varchar(16),fromId varchar(16));";
+		db.execSQL(sql1);
+		db.execSQL(sql2);
 	}
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 		// TODO 自动生成的方法存根
 
+	}
+
+	public synchronized static DatabaseHelper getInstance(Context context) {
+		if (instance == null) {
+			instance = new DatabaseHelper(context);
+		}
+		return instance;
 	}
 
 }

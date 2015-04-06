@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
+import android.transition.ChangeBounds;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -14,14 +15,14 @@ import android.widget.TextView;
 
 import com.jnu.thesis.R;
 
-public class SelectStudentListViewAdapter extends BaseAdapter {
+public class MessageListViewAdapter extends BaseAdapter {
 
 	private List<String> names;
 	private List<String> nos;
 	private Activity activity;
 	private List<Boolean> check;
 
-	public SelectStudentListViewAdapter(List<String> names, List<String> nos,
+	public MessageListViewAdapter(List<String> names, List<String> nos,
 			Activity activity) {
 		super();
 		this.names = names;

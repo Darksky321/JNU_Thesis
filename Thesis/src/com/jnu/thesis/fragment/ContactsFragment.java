@@ -12,6 +12,7 @@ public class ContactsFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.fragment_contacts, null);
+		// getActivity().findViewById(R.id.img_right);
 		return v;
 	}
 }
