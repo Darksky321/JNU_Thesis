@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
-import android.transition.ChangeBounds;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -14,22 +13,20 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.jnu.thesis.R;
+import com.jnu.thesis.bean.MessageBean;
 
 public class MessageListViewAdapter extends BaseAdapter {
 
-	private List<String> names;
-	private List<String> nos;
+	private List<MessageBean> messages;
 	private Activity activity;
 	private List<Boolean> check;
 
-	public MessageListViewAdapter(List<String> names, List<String> nos,
-			Activity activity) {
+	public MessageListViewAdapter(List<MessageBean> messages, Activity activity) {
 		super();
-		this.names = names;
-		this.nos = nos;
+		this.messages = messages;
 		this.activity = activity;
 		check = new ArrayList<Boolean>();
-		for (int i = 0; i < names.size(); i++) {
+		for (int i = 0; i < messages.size(); i++) {
 			check.add(false);
 		}
 	}
@@ -37,13 +34,13 @@ public class MessageListViewAdapter extends BaseAdapter {
 	@Override
 	public int getCount() {
 		// TODO 自动生成的方法存根
-		return names.size();
+		return messages.size();
 	}
 
 	@Override
 	public Object getItem(int position) {
 		// TODO 自动生成的方法存根
-		return nos.get(position);
+		return messages.get(position);
 	}
 
 	@Override
@@ -58,20 +55,23 @@ public class MessageListViewAdapter extends BaseAdapter {
 		ViewHolder viewHolder = null;
 		if (convertView == null) {
 			convertView = (View) LayoutInflater.from(activity).inflate(
-					R.layout.view_select_student, parent, false);
+					R.layout.view_message_item, parent, false);
 			viewHolder = new ViewHolder();
 			viewHolder.textViewName = (TextView) convertView
-					.findViewById(R.id.textView_Name);
-			viewHolder.textViewNo = (TextView) convertView
-					.findViewById(R.id.textView_No);
+					.findViewById(R.id.textView_name);
+			viewHolder.textViewTitle = (TextView) convertView
+					.findViewById(R.id.textView_title);
+			viewHolder.textViewContent = (TextView) convertView
+					.findViewById(R.id.textView_content);
 			viewHolder.checkBox = (CheckBox) convertView
 					.findViewById(R.id.checkBox);
 			convertView.setTag(viewHolder);
 		} else {
 			viewHolder = (ViewHolder) convertView.getTag();
 		}
-		viewHolder.textViewName.setText(names.get(position));
-		viewHolder.textViewNo.setText(nos.get(position));
+		viewHolder.textViewName.setText(messages.get(position).getFromName());
+		viewHolder.textViewTitle.setText(messages.get(position).getTitle());
+		viewHolder.textViewContent.setText(messages.get(position).getContent());
 		viewHolder.checkBox.setChecked(check.get(position));
 		viewHolder.checkBox.setOnClickListener(new OnClickListener() {
 
@@ -86,7 +86,8 @@ public class MessageListViewAdapter extends BaseAdapter {
 
 	private class ViewHolder {
 		public TextView textViewName;
-		public TextView textViewNo;
+		public TextView textViewTitle;
+		public TextView textViewContent;
 		public CheckBox checkBox;
 	}
 
@@ -102,5 +103,22 @@ public class MessageListViewAdapter extends BaseAdapter {
 			}
 		}
 		return i;
+	}
+
+	public List<MessageBean> getMessages() {
+		return messages;
+	}
+
+	public void setMessages(List<MessageBean> messages) {
+		this.messages = messages;
+	}
+
+	public void refresh(List<MessageBean> msgs) {
+		this.messages = msgs;
+		check = new ArrayList<Boolean>();
+		for (int i = 0; i < messages.size(); i++) {
+			check.add(false);
+		}
+		notifyDataSetChanged();
 	}
 }

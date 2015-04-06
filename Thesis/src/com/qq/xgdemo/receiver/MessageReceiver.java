@@ -2,16 +2,18 @@ package com.qq.xgdemo.receiver;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Locale;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Context;
 import android.content.Intent;
+import android.provider.ContactsContract.CommonDataKinds.Contactables;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.jnu.thesis.dao.impl.MessageDaoImpl;
+import com.jnu.thesis.fragment.ContactsFragment;
 import com.qq.xgdemo.common.NotificationService;
 import com.qq.xgdemo.po.XGNotification;
 import com.tencent.android.tpush.XGPushBaseReceiver;
@@ -51,12 +53,15 @@ public class MessageReceiver extends XGPushBaseReceiver {
 				.getNotificationActionType());
 		// Activity,url,intent都可以通过getActivity()获得
 		notific.setActivity(notifiShowedRlt.getActivity());
-		notific.setUpdate_time(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+		notific.setUpdate_time(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss",
+				new Locale("zh", "CN"))
 				.format(Calendar.getInstance().getTime()));
 		NotificationService.getInstance(context).save(notific);
 		// 把通知保存到自建的数据库中
 		MessageDaoImpl.getInstance(context).save(notific,
 				notifiShowedRlt.getCustomContent());
+		// 更新UI
+		ContactsFragment.notifyRefresh();
 		context.sendBroadcast(intent);
 		show(context, "您有1条新消息, " + "通知被展示 ， " + notifiShowedRlt.toString());
 	}
@@ -127,8 +132,8 @@ public class MessageReceiver extends XGPushBaseReceiver {
 			// APP自己处理通知被清除后的相关动作
 			text = "通知被清除 :" + message;
 		}
-		Toast.makeText(context, "广播接收到通知被点击:" + message.toString(),
-				Toast.LENGTH_SHORT).show();
+		// Toast.makeText(context, "广播接收到通知被点击:" + message.toString(),
+		// Toast.LENGTH_SHORT).show();
 		// 获取自定义key-value
 		String customContent = message.getCustomContent();
 		if (customContent != null && customContent.length() != 0) {
@@ -160,7 +165,7 @@ public class MessageReceiver extends XGPushBaseReceiver {
 		if (errorCode == XGPushBaseReceiver.SUCCESS) {
 			text = message + "注册成功";
 			// 在这里拿token
-			String token = message.getToken();
+			// String token = message.getToken();
 		} else {
 			text = message + "注册失败，错误码：" + errorCode;
 		}

@@ -18,6 +18,7 @@ import com.jnu.thesis.R;
 import com.jnu.thesis.activity.LoginActivity;
 import com.jnu.thesis.dao.UserDao;
 import com.jnu.thesis.dao.impl.UserDaoImpl;
+import com.jnu.thesis.util.XingeRegister;
 
 public class MeFragment extends Fragment {
 
@@ -57,8 +58,10 @@ public class MeFragment extends Fragment {
 							public void onClick(DialogInterface dialog,
 									int which) {
 								// TODO 自动生成的方法存根
-								UserDao dao = UserDaoImpl.getInstance(getActivity()
-										.getApplicationContext());
+								// 清楚数据库数据
+								UserDao dao = UserDaoImpl
+										.getInstance(getActivity()
+												.getApplicationContext());
 								boolean b = dao
 										.deleteUser(new String[] { Parameter
 												.getCurrentUser() });
@@ -67,7 +70,12 @@ public class MeFragment extends Fragment {
 								} else {
 									Log.i("db", "delete user failed");
 								}
+								// 清楚内存保存的用户信息
 								Parameter.clear();
+								// 反注册信鸽
+								// XingeRegister.unRegist(getActivity()
+								// .getApplicationContext());
+
 								Intent intent = new Intent();
 								intent.setClass(getActivity(),
 										LoginActivity.class);
@@ -77,7 +85,6 @@ public class MeFragment extends Fragment {
 						});
 				builder.setNegativeButton("取消", null);
 				builder.show();
-
 			}
 		});
 	}

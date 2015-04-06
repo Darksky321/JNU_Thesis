@@ -6,6 +6,7 @@ import java.util.Map;
 import android.test.AndroidTestCase;
 import android.util.Log;
 
+import com.jnu.thesis.dao.impl.MessageDaoImpl;
 import com.jnu.thesis.dao.impl.UserDaoImpl;
 import com.jnu.thesis.db.DatabaseHelper;
 import com.jnu.thesis.util.HttpUtil;
@@ -77,5 +78,10 @@ public class TestCase extends AndroidTestCase {
 						Log.d("xinge", "×¢²áÊ§°Ü£¬´íÎóÂë£º" + errCode + ",´íÎóĞÅÏ¢£º" + msg);
 					}
 				});
+	}
+
+	public void findAllMsg() {
+		Log.i(TAG, MessageDaoImpl.getInstance(getContext()).findAllMessage()
+				.toString());
 	}
 }
