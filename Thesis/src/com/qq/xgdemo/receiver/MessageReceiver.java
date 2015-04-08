@@ -11,8 +11,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
+import com.jnu.thesis.Parameter;
 import com.jnu.thesis.dao.impl.MessageDaoImpl;
-import com.jnu.thesis.fragment.ContactsFragment;
 import com.qq.xgdemo.common.NotificationService;
 import com.qq.xgdemo.po.XGNotification;
 import com.tencent.android.tpush.XGPushBaseReceiver;
@@ -28,7 +28,8 @@ import com.tencent.android.tpush.XGPushTextMessage;
  *
  */
 public class MessageReceiver extends XGPushBaseReceiver {
-	private Intent intent = new Intent("com.qq.xgdemo.activity.UPDATE_LISTVIEW");
+	private Intent intent = new Intent(
+			"com.jnu.thesis.activity.UPDATE_LISTVIEW");
 	public static final String LogTag = "TPushReceiver";
 
 	private void show(Context context, String text) {
@@ -58,9 +59,8 @@ public class MessageReceiver extends XGPushBaseReceiver {
 		NotificationService.getInstance(context).save(notific);
 		// 把通知保存到自建的数据库中
 		MessageDaoImpl.getInstance(context).save(notific,
-				notifiShowedRlt.getCustomContent());
+				notifiShowedRlt.getCustomContent(), Parameter.getCurrentUser());
 		// 更新UI
-		ContactsFragment.notifyRefresh();
 		context.sendBroadcast(intent);
 		show(context, "您有1条新消息, " + "通知被展示 ， " + notifiShowedRlt.toString());
 	}

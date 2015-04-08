@@ -7,11 +7,12 @@ import com.qq.xgdemo.po.XGNotification;
 
 public interface MessageDao {
 
-	public boolean save(XGNotification notification, String customContent);
+	public boolean save(XGNotification notification, String customContent,
+			String toId);
 
-	public boolean delete(String[] id);
+	public boolean delete(String id);
 
-	public boolean deleteAll();
+	public boolean deleteAll(String toId);
 
-	public ArrayList<MessageBean> findAllMessage();
+	public ArrayList<MessageBean> findAllMessage(String toId);
 }

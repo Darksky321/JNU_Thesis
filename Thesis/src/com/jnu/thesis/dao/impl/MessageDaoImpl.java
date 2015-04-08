@@ -31,7 +31,8 @@ public class MessageDaoImpl implements MessageDao {
 		return instance;
 	}
 
-	public boolean save(XGNotification notification, String customContent) {
+	public boolean save(XGNotification notification, String customContent,
+			String toId) {
 		SQLiteDatabase db = helper.getWritableDatabase();
 		ContentValues values = new ContentValues();
 		values.put("msg_id", notification.getMsg_id());
@@ -53,6 +54,7 @@ public class MessageDaoImpl implements MessageDao {
 		}
 		values.put("fromName", fromName);
 		values.put("fromId", fromId);
+		values.put("toID", toId);
 		long l = db.insert(TABLE, null, values);
 		if (db != null)
 			db.close();
@@ -63,10 +65,10 @@ public class MessageDaoImpl implements MessageDao {
 	}
 
 	@Override
-	public boolean delete(String[] id) {
+	public boolean delete(String id) {
 		// TODO 自动生成的方法存根
 		SQLiteDatabase db = helper.getWritableDatabase();
-		int i = db.delete(TABLE, "id=?", id);
+		int i = db.delete(TABLE, "id=?", new String[] { id });
 		if (db != null)
 			db.close();
 		if (i > 0)
@@ -76,10 +78,10 @@ public class MessageDaoImpl implements MessageDao {
 	}
 
 	@Override
-	public boolean deleteAll() {
+	public boolean deleteAll(String toId) {
 		// TODO 自动生成的方法存根
 		SQLiteDatabase db = helper.getWritableDatabase();
-		int i = db.delete(TABLE, "", null);
+		int i = db.delete(TABLE, "toId=?", new String[] { toId });
 		if (db != null)
 			db.close();
 		if (i > 0)
@@ -89,14 +91,14 @@ public class MessageDaoImpl implements MessageDao {
 	}
 
 	@Override
-	public ArrayList<MessageBean> findAllMessage() {
+	public ArrayList<MessageBean> findAllMessage(String toId) {
 		// TODO 自动生成的方法存根
 		SQLiteDatabase db = null;
 		ArrayList<MessageBean> messages = new ArrayList<MessageBean>();
 		try {
 			db = helper.getReadableDatabase();
-			Cursor cursor = db.query(TABLE, null, null, null, null, null,
-					"update_time DESC");
+			Cursor cursor = db.query(TABLE, null, "toId=?",
+					new String[] { toId }, null, null, "update_time DESC");
 			while (cursor.moveToNext()) {
 				MessageBean msg = new MessageBean();
 				msg.setId(cursor.getInt(cursor.getColumnIndex("id")));

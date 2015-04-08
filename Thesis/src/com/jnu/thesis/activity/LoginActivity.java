@@ -55,7 +55,6 @@ public class LoginActivity extends Activity {
 	private Map<String, String> user;
 	private Thread loginThread;
 	private Runnable loginRunnable;
-	private static Context context;
 	/**
 	 * 正在登陆进度框
 	 */
@@ -66,7 +65,6 @@ public class LoginActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
-		context = this;
 		status = 1;
 		// 初始化控件
 		initView();
@@ -184,17 +182,19 @@ public class LoginActivity extends Activity {
 				// TODO 自动生成的方法存根
 				if (status == 1) {
 					Intent intent = new Intent();
-					intent.setClass(context, MainActivity.class);
+					intent.setClass(LoginActivity.this, MainActivity.class);
 					startActivity(intent);
 					finish();
 				} else {
 					Intent intent = new Intent();
-					intent.setClass(context, TeacherMainActivity.class);
+					intent.setClass(LoginActivity.this,
+							TeacherMainActivity.class);
 					startActivity(intent);
 					finish();
 				}
 				Parameter.setCurrentUser("Deng");
 				Parameter.setStatus(status);
+				// XingeRegister.regist(getApplicationContext(), "2011051682");
 				return true;
 			}
 		});
@@ -301,7 +301,7 @@ public class LoginActivity extends Activity {
 				}
 				// 如果数据库中没有账户信息, 则保存该账户
 				if (activity.getUser() == null || activity.getUser().isEmpty()) {
-					UserDao userDao = UserDaoImpl.getInstance(context
+					UserDao userDao = UserDaoImpl.getInstance(activity
 							.getApplicationContext());
 					boolean b;
 					b = userDao
@@ -323,7 +323,7 @@ public class LoginActivity extends Activity {
 						.getText().toString());
 				Parameter.setStatus(activity.getStatus());
 				// 信鸽注册账号
-				XingeRegister.regist(context.getApplicationContext(), activity
+				XingeRegister.regist(activity.getApplicationContext(), activity
 						.getEditTextUserName().getText().toString());
 				activity.dialog.dismiss();
 				activity.finish();

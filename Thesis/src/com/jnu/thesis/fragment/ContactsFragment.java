@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -18,6 +20,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.jnu.thesis.Parameter;
 import com.jnu.thesis.R;
 import com.jnu.thesis.activity.MessageActivity;
 import com.jnu.thesis.bean.MessageBean;
@@ -28,7 +31,11 @@ import com.jnu.thesis.view.MessageListViewAdapter;
 public class ContactsFragment extends Fragment {
 
 	private ListView listViewMessage;
-	private static MessageListViewAdapter adapter;
+	private MessageListViewAdapter adapter;
+	/**
+	 * 监听消息接受
+	 */
+	private MsgReceiver updateListViewReceiver;
 	private static Context context;
 
 	@Override
@@ -39,7 +46,8 @@ public class ContactsFragment extends Fragment {
 		initView(v);
 		MessageDao dao = MessageDaoImpl.getInstance(getActivity()
 				.getApplicationContext());
-		List<MessageBean> messages = dao.findAllMessage();
+		List<MessageBean> messages = dao.findAllMessage(Parameter
+				.getCurrentUser());
 		adapter = new MessageListViewAdapter(messages, getActivity());
 		listViewMessage.setAdapter(adapter);
 		/**
@@ -58,6 +66,12 @@ public class ContactsFragment extends Fragment {
 				startActivity(intent);
 			}
 		});
+
+		// 初始化广播接收器
+		updateListViewReceiver = new MsgReceiver();
+		IntentFilter intentFilter = new IntentFilter();
+		intentFilter.addAction("com.jnu.thesis.activity.UPDATE_LISTVIEW");
+		getActivity().registerReceiver(updateListViewReceiver, intentFilter);
 		return v;
 	}
 
@@ -116,7 +130,7 @@ public class ContactsFragment extends Fragment {
 										}
 										int count = 0;
 										for (String s : checkedItems) {
-											if (dao.delete(new String[] { s }))
+											if (dao.delete(s))
 												++count;
 										}
 										Toast.makeText(
@@ -139,12 +153,22 @@ public class ContactsFragment extends Fragment {
 	/**
 	 * 数据更改后更新列表
 	 */
-	public static void notifyRefresh() {
+	public void notifyRefresh() {
 		if (adapter != null) {
 			MessageDao dao = MessageDaoImpl.getInstance(context
 					.getApplicationContext());
-			List<MessageBean> msgs = dao.findAllMessage();
+			List<MessageBean> msgs = dao.findAllMessage(Parameter
+					.getCurrentUser());
 			adapter.refresh(msgs);
+		}
+	}
+
+	public class MsgReceiver extends BroadcastReceiver {
+
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			// TODO Auto-generated method stub
+			notifyRefresh();
 		}
 	}
 }

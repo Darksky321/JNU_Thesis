@@ -14,6 +14,7 @@ public class MessageBean implements Parcelable {
 	private String update_time;
 	private String fromName;
 	private String fromId;
+	private String toId;
 
 	public MessageBean() {
 		// TODO 自动生成的构造函数存根
@@ -29,6 +30,7 @@ public class MessageBean implements Parcelable {
 		update_time = in.readString();
 		fromName = in.readString();
 		fromId = in.readString();
+		toId = in.readString();
 	}
 
 	@Override
@@ -49,6 +51,7 @@ public class MessageBean implements Parcelable {
 		dest.writeString(update_time);
 		dest.writeString(fromName);
 		dest.writeString(fromId);
+		dest.writeString(toId);
 	}
 
 	public static final Parcelable.Creator<MessageBean> CREATOR = new Creator<MessageBean>() {
@@ -135,13 +138,20 @@ public class MessageBean implements Parcelable {
 		this.fromId = fromId;
 	}
 
+	public String getToId() {
+		return toId;
+	}
+
+	public void setToId(String toId) {
+		this.toId = toId;
+	}
+
 	@Override
 	public String toString() {
 		return "MessageBean [id=" + id + ", msg_id=" + msg_id + ", title="
 				+ title + ", content=" + content + ", activity=" + activity
 				+ ", notificationActionType=" + notificationActionType
 				+ ", update_time=" + update_time + ", fromName=" + fromName
-				+ ", fromId=" + fromId + "]";
+				+ ", fromId=" + fromId + ", toId=" + toId + "]";
 	}
-
 }

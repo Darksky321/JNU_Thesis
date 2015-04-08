@@ -25,7 +25,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	public void onCreate(SQLiteDatabase db) {
 		// TODO 自动生成的方法存根
 		String sql1 = "CREATE TABLE user(id varchar(20), password varchar(30), status int)";
-		String sql2 = "CREATE TABLE message (id integer primary key autoincrement,msg_id varchar(64),title varchar(128),activity varchar(256),notificationActionType varchar(512),content text,update_time varchar(16),fromName varchar(16),fromId varchar(16));";
+		String sql2 = "CREATE TABLE message (id integer primary key autoincrement,msg_id varchar(64),title varchar(128),activity varchar(256),notificationActionType varchar(512),content text,update_time varchar(16),fromName varchar(16),fromId varchar(16),toId varchar(16));";
 		db.execSQL(sql1);
 		db.execSQL(sql2);
 	}

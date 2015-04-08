@@ -81,7 +81,8 @@ public class TestCase extends AndroidTestCase {
 	}
 
 	public void findAllMsg() {
-		Log.i(TAG, MessageDaoImpl.getInstance(getContext()).findAllMessage()
-				.toString());
+		Log.i(TAG,
+				MessageDaoImpl.getInstance(getContext())
+						.findAllMessage("2011051682").toString());
 	}
 }
