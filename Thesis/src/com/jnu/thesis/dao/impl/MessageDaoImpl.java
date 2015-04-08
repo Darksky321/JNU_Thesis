@@ -63,10 +63,10 @@ public class MessageDaoImpl implements MessageDao {
 	}
 
 	@Override
-	public boolean delete(Integer id) {
+	public boolean delete(String[] id) {
 		// TODO 自动生成的方法存根
 		SQLiteDatabase db = helper.getWritableDatabase();
-		int i = db.delete(TABLE, "id=?", new String[] { id.toString() });
+		int i = db.delete(TABLE, "id=?", id);
 		if (db != null)
 			db.close();
 		if (i > 0)

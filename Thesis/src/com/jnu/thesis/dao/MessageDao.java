@@ -9,7 +9,7 @@ public interface MessageDao {
 
 	public boolean save(XGNotification notification, String customContent);
 
-	public boolean delete(Integer id);
+	public boolean delete(String[] id);
 
 	public boolean deleteAll();
 

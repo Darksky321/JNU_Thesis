@@ -16,7 +16,7 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
-            android:src="@drawable/ic_ab_back_white" />
+            android:src="@drawable/ic_ab_back_holo_dark_am" />
 
         <ImageView
             android:id="@+id/img"

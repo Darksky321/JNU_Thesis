@@ -63,6 +63,8 @@ public class MessageListViewAdapter extends BaseAdapter {
 					.findViewById(R.id.textView_title);
 			viewHolder.textViewContent = (TextView) convertView
 					.findViewById(R.id.textView_content);
+			viewHolder.textViewTime = (TextView) convertView
+					.findViewById(R.id.textView_time);
 			viewHolder.checkBox = (CheckBox) convertView
 					.findViewById(R.id.checkBox);
 			convertView.setTag(viewHolder);
@@ -72,6 +74,8 @@ public class MessageListViewAdapter extends BaseAdapter {
 		viewHolder.textViewName.setText(messages.get(position).getFromName());
 		viewHolder.textViewTitle.setText(messages.get(position).getTitle());
 		viewHolder.textViewContent.setText(messages.get(position).getContent());
+		viewHolder.textViewTime.setText(messages.get(position).getUpdate_time()
+				.substring(5, 10));
 		viewHolder.checkBox.setChecked(check.get(position));
 		viewHolder.checkBox.setOnClickListener(new OnClickListener() {
 
@@ -88,6 +92,7 @@ public class MessageListViewAdapter extends BaseAdapter {
 		public TextView textViewName;
 		public TextView textViewTitle;
 		public TextView textViewContent;
+		public TextView textViewTime;
 		public CheckBox checkBox;
 	}
 
@@ -120,5 +125,34 @@ public class MessageListViewAdapter extends BaseAdapter {
 			check.add(false);
 		}
 		notifyDataSetChanged();
+	}
+
+	public void checkAll() {
+		for (int location = 0; location < check.size(); ++location)
+			check.set(location, true);
+		notifyDataSetChanged();
+	}
+
+	public void unCheckAll() {
+		for (int location = 0; location < check.size(); ++location)
+			check.set(location, false);
+		notifyDataSetChanged();
+	}
+
+	public boolean checkedAll() {
+		for (int location = 0; location < check.size(); ++location) {
+			if (check.get(location) == false) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	public List<Boolean> getCheck() {
+		return check;
+	}
+
+	public void setCheck(List<Boolean> check) {
+		this.check = check;
 	}
 }

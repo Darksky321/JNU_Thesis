@@ -1,17 +1,25 @@
 package com.jnu.thesis.fragment;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.jnu.thesis.R;
+import com.jnu.thesis.activity.MessageActivity;
 import com.jnu.thesis.bean.MessageBean;
 import com.jnu.thesis.dao.MessageDao;
 import com.jnu.thesis.dao.impl.MessageDaoImpl;
@@ -20,7 +28,6 @@ import com.jnu.thesis.view.MessageListViewAdapter;
 public class ContactsFragment extends Fragment {
 
 	private ListView listViewMessage;
-	private List<MessageBean> messages;
 	private static MessageListViewAdapter adapter;
 	private static Context context;
 
@@ -32,36 +39,106 @@ public class ContactsFragment extends Fragment {
 		initView(v);
 		MessageDao dao = MessageDaoImpl.getInstance(getActivity()
 				.getApplicationContext());
-		messages = dao.findAllMessage();
+		List<MessageBean> messages = dao.findAllMessage();
 		adapter = new MessageListViewAdapter(messages, getActivity());
 		listViewMessage.setAdapter(adapter);
+		/**
+		 * 点击查看详情
+		 */
+		listViewMessage.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				// TODO 自动生成的方法存根
+				MessageBean msg = adapter.getMessages().get(position);
+				Intent intent = new Intent();
+				intent.putExtra("message", msg);
+				intent.setClass(getActivity(), MessageActivity.class);
+				startActivity(intent);
+			}
+		});
 		return v;
 	}
 
 	private void initView(View v) {
+		/**
+		 * 全选按钮
+		 */
 		v.findViewById(R.id.button_check).setOnClickListener(
 				new OnClickListener() {
 
 					@Override
 					public void onClick(View v) {
 						// TODO 自动生成的方法存根
-
+						if (adapter.checkedAll()) {
+							adapter.unCheckAll();
+						} else {
+							adapter.checkAll();
+						}
 					}
 				});
 
+		/**
+		 * 删除数据库中记录
+		 */
 		v.findViewById(R.id.button_delete).setOnClickListener(
 				new OnClickListener() {
 
 					@Override
 					public void onClick(View v) {
 						// TODO 自动生成的方法存根
+						AlertDialog.Builder builder = new AlertDialog.Builder(
+								getActivity());
+						builder.setTitle(R.string.button_select);
+						builder.setMessage("确定要删除吗？");
+						builder.setIcon(android.R.drawable.ic_dialog_alert);
+						builder.setPositiveButton("确定",
+								new DialogInterface.OnClickListener() {
 
+									@Override
+									public void onClick(DialogInterface dialog,
+											int which) {
+										// TODO 自动生成的方法存根
+										MessageDao dao = MessageDaoImpl
+												.getInstance(getActivity()
+														.getApplicationContext());
+										List<MessageBean> msgs = adapter
+												.getMessages();
+										List<Boolean> check = adapter
+												.getCheck();
+										List<String> checkedItems = new ArrayList<String>();
+										for (int i = 0; i < check.size(); i++) {
+											if (check.get(i) == true) {
+												checkedItems.add(msgs.get(i)
+														.getId() + "");
+											}
+										}
+										int count = 0;
+										for (String s : checkedItems) {
+											if (dao.delete(new String[] { s }))
+												++count;
+										}
+										Toast.makeText(
+												getActivity(),
+												count + "/"
+														+ checkedItems.size()
+														+ " 删除成功",
+												Toast.LENGTH_SHORT).show();
+										notifyRefresh();
+									}
+								});
+						builder.setNegativeButton("取消", null);
+						builder.show();
 					}
 				});
 
 		listViewMessage = (ListView) v.findViewById(R.id.listView_message);
 	}
 
+	/**
+	 * 数据更改后更新列表
+	 */
 	public static void notifyRefresh() {
 		if (adapter != null) {
 			MessageDao dao = MessageDaoImpl.getInstance(context

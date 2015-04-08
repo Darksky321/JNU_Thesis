@@ -66,6 +66,15 @@
             android:singleLine="true"
             android:textColor="#aaaaaa"
             android:textSize="16dp" />
+
+        <TextView
+            android:id="@+id/textView_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/textView_name"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:textColor="#aaaaaa" />
     </RelativeLayout>
 
 </RelativeLayout>

@@ -9,7 +9,6 @@ import org.json.JSONObject;
 
 import android.content.Context;
 import android.content.Intent;
-import android.provider.ContactsContract.CommonDataKinds.Contactables;
 import android.util.Log;
 
 import com.jnu.thesis.dao.impl.MessageDaoImpl;
