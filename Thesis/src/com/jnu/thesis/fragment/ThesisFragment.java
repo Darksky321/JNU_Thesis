@@ -1,5 +1,6 @@
 package com.jnu.thesis.fragment;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -10,7 +11,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
@@ -21,6 +21,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.Toast;
 
@@ -32,110 +33,73 @@ import com.jnu.thesis.view.EmbeddedListView;
 import com.jnu.thesis.view.EmbeddedListViewAdapter;
 
 public class ThesisFragment extends Fragment {
+
+	private static final int SUBMIT_FAIL = 0;
+	private static final int SUBMIT_SUCCESS = 1;
+	private static final int THESIS_FAIL = 2;
+	private static final int THESIS_SUCCESS = 3;
+
 	private Button buttonViewResult;
 	private Button buttonSubmit;
 	private EmbeddedListView listViewThesis;
 	private EmbeddedListViewAdapter listViewAdapter;
+	private ScrollView sv;
+	private Button buttonRefresh;
+	private LinearLayout llLoading;
+	private LinearLayout llRefresh;
+
 	private List<ThesisBean> theses;
 	private Thread submitThread;
-	private Runnable submitRunnable;
-	private static Context context;
-	private static final int SUBMIT_FAIL = 0;
-	private static final int SUBMIT_SUCCESS = 1;
-	private static Handler handler = new Handler() {
-
-		@Override
-		public void handleMessage(Message msg) {
-			// TODO 自动生成的方法存根
-			super.handleMessage(msg);
-			switch (msg.what) {
-			case SUBMIT_FAIL:
-				Toast.makeText(context, "提交成功", Toast.LENGTH_SHORT).show();
-				break;
-			case SUBMIT_SUCCESS:
-				Toast.makeText(context, "提交失败", Toast.LENGTH_SHORT).show();
-				break;
-			}
-		}
-
-	};
+	private Thread thesisThread;
+	private Handler handler;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		// View v = inflater.inflate(R.layout.thesis_fragment, null);
 		View v = inflater.inflate(R.layout.fragment_thesis, container, false);
-		context = getActivity();
-		// 初始化数据, 从返回的json串中得到论文序列
-		String thesesString = getActivity().getIntent()
-				.getStringExtra("theses");
-		try {
-			if (thesesString != null) {
-				theses = new ArrayList<ThesisBean>();
-				JSONArray jsonArray = new JSONArray(thesesString);
-				for (int i = 0; i < jsonArray.length(); i++) {
-					theses.add(ThesisBean.createFromJSON((jsonArray
-							.getJSONObject(i))));
-				}
-			} else {
-				theses = getThesesData();
-			}
-		} catch (JSONException e) {
-			// TODO 自动生成的 catch 块
-			e.printStackTrace();
-		}
+		handler = new ThesisHandler(this);
+		// 获取论文列表
+		thesisThread = new Thread(new ThesisRunnable());
+		thesisThread.start();
 
 		// 初始化列表
-		ScrollView sv = (ScrollView) v.findViewById(R.id.scrollView_thesis);
+		initView(v);
+
 		sv.smoothScrollTo(0, 0); // 否则会直接显示ListView, 不显示上面的Button
-		listViewThesis = (EmbeddedListView) v
-				.findViewById(R.id.listView_thesis);
-		listViewAdapter = new EmbeddedListViewAdapter(getActivity(), theses);
+
+		listViewAdapter = new EmbeddedListViewAdapter(getActivity(),
+				new ArrayList<ThesisBean>());
 		// listViewThesis.setGroupIndicator(getResources().getDrawable(
 		// R.drawable.expand_list_indicator));
 		// listViewThesis.setIndicatorBounds(48, 48);
 		listViewThesis.setGroupIndicator(null);
 		listViewThesis.setAdapter(listViewAdapter);
 
-		submitRunnable = new Runnable() {
+		return v;
+	}
 
-			@Override
-			public void run() {
-				// TODO 自动生成的方法存根
-				int[] choices = listViewAdapter.getChoices();
-				String first = theses.get(choices[0]).getNo();
-				String second = theses.get(choices[1]).getNo();
-				String third = theses.get(choices[2]).getNo();
-				Map<String, String> para = new HashMap<String, String>();
-				para.put("Fir_choice", first);
-				para.put("Sec_choice", second);
-				para.put("Thir_choice", third);
-				HttpUtil httpUtil = new HttpUtil();
-				try {
-					String response = httpUtil.doPost(Parameter.host
-							+ Parameter.submitChoice, para);
-					JSONObject jsonObject = new JSONObject(response);
-					String result = jsonObject.getString("result");
-					Message msg = Message.obtain();
-					if (result != null && result.equals("success")) {
-						msg.what = SUBMIT_SUCCESS;
-					} else {
-						msg.what = SUBMIT_FAIL;
-					}
-					handler.sendMessage(msg);
-				} catch (Exception e) {
-					// TODO 自动生成的 catch 块
-					Message msg = Message.obtain();
-					msg.what = SUBMIT_FAIL;
-					handler.sendMessage(msg);
-					e.printStackTrace();
-				}
-			}
-		};
-
-		// 初始化按钮
+	private void initView(View v) {
+		sv = (ScrollView) v.findViewById(R.id.scrollView_thesis);
+		listViewThesis = (EmbeddedListView) v
+				.findViewById(R.id.listView_thesis);
+		llLoading = (LinearLayout) v.findViewById(R.id.loading);
+		llRefresh = (LinearLayout) v.findViewById(R.id.refresh);
+		buttonRefresh = (Button) v.findViewById(R.id.button_refresh);
 		buttonViewResult = (Button) v.findViewById(R.id.button_view_result);
 		buttonSubmit = (Button) v.findViewById(R.id.button_submit);
+
+		buttonRefresh.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO 自动生成的方法存根
+				thesisThread = new Thread(new ThesisRunnable());
+				thesisThread.start();
+				llRefresh.setVisibility(View.GONE);
+				llLoading.setVisibility(View.VISIBLE);
+			}
+		});
 
 		buttonViewResult.setOnClickListener(new OnClickListener() {
 
@@ -179,7 +143,8 @@ public class ThesisFragment extends Fragment {
 									// TODO 自动生成的方法存根
 									Toast.makeText(getActivity(), "正在提交...",
 											Toast.LENGTH_SHORT).show();
-									submitThread = new Thread(submitRunnable);
+									submitThread = new Thread(
+											new SubmitRunnable());
 									submitThread.start();
 								}
 							});
@@ -188,11 +153,138 @@ public class ThesisFragment extends Fragment {
 				}
 			}
 		});
-
-		return v;
 	}
 
-	private List<ThesisBean> getThesesData() {
+	/**
+	 * 获取论文列表
+	 * 
+	 * @author Deng
+	 *
+	 */
+	private class ThesisRunnable implements Runnable {
+
+		@Override
+		public void run() {
+			// TODO 自动生成的方法存根
+			HttpUtil httpUtil = new HttpUtil();
+			String ret = "";
+			Message msg = Message.obtain();
+			try {
+				ret = httpUtil.doGet(Parameter.host + Parameter.studentMain,
+						null);
+				msg.what = THESIS_SUCCESS;
+				msg.obj = ret;
+				handler.sendMessage(msg);
+			} catch (Exception e) {
+				// TODO 自动生成的 catch 块
+				msg.what = THESIS_FAIL;
+				handler.sendMessage(msg);
+				e.printStackTrace();
+			}
+		}
+	}
+
+	/**
+	 * 获取论文列表
+	 * 
+	 * @author Deng
+	 *
+	 */
+	private class SubmitRunnable implements Runnable {
+
+		@Override
+		public void run() {
+			// TODO 自动生成的方法存根
+			int[] choices = listViewAdapter.getChoices();
+			String first = theses.get(choices[0]).getNo();
+			String second = theses.get(choices[1]).getNo();
+			String third = theses.get(choices[2]).getNo();
+			Map<String, String> para = new HashMap<String, String>();
+			para.put("Fir_choice", first);
+			para.put("Sec_choice", second);
+			para.put("Thir_choice", third);
+			HttpUtil httpUtil = new HttpUtil();
+			try {
+				String response = httpUtil.doPost(Parameter.host
+						+ Parameter.submitChoice, para);
+				JSONObject jsonObject = new JSONObject(response);
+				String result = jsonObject.getString("result");
+				Message msg = Message.obtain();
+				if (result != null && result.equals("success")) {
+					msg.what = SUBMIT_SUCCESS;
+				} else {
+					msg.what = SUBMIT_FAIL;
+				}
+				handler.sendMessage(msg);
+			} catch (Exception e) {
+				// TODO 自动生成的 catch 块
+				Message msg = Message.obtain();
+				msg.what = SUBMIT_FAIL;
+				handler.sendMessage(msg);
+				e.printStackTrace();
+			}
+		}
+
+	}
+
+	private static class ThesisHandler extends Handler {
+		private final WeakReference<ThesisFragment> mFragment;
+
+		ThesisHandler(ThesisFragment mFragment) {
+			this.mFragment = new WeakReference<ThesisFragment>(mFragment);
+		}
+
+		@Override
+		public void handleMessage(Message msg) {
+			// TODO 自动生成的方法存根
+			ThesisFragment fragment = mFragment.get();
+
+			switch (msg.what) {
+			case SUBMIT_FAIL:
+				Toast.makeText(fragment.getActivity(), "提交成功",
+						Toast.LENGTH_SHORT).show();
+				break;
+			case SUBMIT_SUCCESS:
+				Toast.makeText(fragment.getActivity(), "提交失败",
+						Toast.LENGTH_SHORT).show();
+				break;
+			case THESIS_FAIL:
+				Toast.makeText(fragment.getActivity(), "获取列表失败",
+						Toast.LENGTH_SHORT).show();
+				fragment.getLlLoading().setVisibility(View.GONE);
+				fragment.getLlRefresh().setVisibility(View.VISIBLE);
+				break;
+			case THESIS_SUCCESS:
+				String thesesString = (String) msg.obj;
+				try {
+					if (thesesString != null) {
+						List<ThesisBean> theses = new ArrayList<ThesisBean>();
+						JSONObject retJson = new JSONObject(thesesString);
+						JSONArray jsonArray = retJson.getJSONArray("theses");
+						for (int i = 0; i < jsonArray.length(); i++) {
+							theses.add(ThesisBean.createFromJSON((jsonArray
+									.getJSONObject(i))));
+						}
+						fragment.getLlLoading().setVisibility(View.GONE);
+						fragment.getSv().setVisibility(View.VISIBLE);
+						fragment.getListViewAdapter().setData(theses);
+						fragment.getListViewAdapter().notifyDataSetChanged();
+					}
+				} catch (JSONException e) {
+					// TODO 自动生成的 catch 块
+					Toast.makeText(fragment.getActivity(), "获取列表失败",
+							Toast.LENGTH_SHORT).show();
+					fragment.getLlLoading().setVisibility(View.GONE);
+					fragment.getLlRefresh().setVisibility(View.VISIBLE);
+					e.printStackTrace();
+				}
+				break;
+			}
+			super.handleMessage(msg);
+		}
+	}
+
+	private static List<ThesisBean> getThesesData() {
 		List<ThesisBean> theses = new ArrayList<ThesisBean>();
 		theses.add(new ThesisBean("1", "毕业论文指导系统", "孟小华", 2,
 				"辣鸡来选辣鸡来选辣鸡来选辣鸡来选辣鸡来选辣鸡来选辣鸡来选辣鸡来选辣鸡来选辣鸡来选辣鸡来选辣鸡来选辣鸡来选", 0,
@@ -210,5 +302,53 @@ public class ThesisFragment extends Fragment {
 		theses.add(new ThesisBean("9", "test9", "i", 1, "zzzz", 0, "date"));
 		theses.add(new ThesisBean("10", "test10", "j", 1, "cxzdsa", 1, "date"));
 		return theses;
+	}
+
+	public List<ThesisBean> getTheses() {
+		return theses;
+	}
+
+	public void setTheses(List<ThesisBean> theses) {
+		this.theses = theses;
+	}
+
+	public EmbeddedListViewAdapter getListViewAdapter() {
+		return listViewAdapter;
+	}
+
+	public void setListViewAdapter(EmbeddedListViewAdapter listViewAdapter) {
+		this.listViewAdapter = listViewAdapter;
+	}
+
+	public ScrollView getSv() {
+		return sv;
+	}
+
+	public void setSv(ScrollView sv) {
+		this.sv = sv;
+	}
+
+	public Button getButtonRefresh() {
+		return buttonRefresh;
+	}
+
+	public void setButtonRefresh(Button buttonRefresh) {
+		this.buttonRefresh = buttonRefresh;
+	}
+
+	public LinearLayout getLlLoading() {
+		return llLoading;
+	}
+
+	public void setLlLoading(LinearLayout llLoading) {
+		this.llLoading = llLoading;
+	}
+
+	public LinearLayout getLlRefresh() {
+		return llRefresh;
+	}
+
+	public void setLlRefresh(LinearLayout llRefresh) {
+		this.llRefresh = llRefresh;
 	}
 }

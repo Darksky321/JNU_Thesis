@@ -32,17 +32,7 @@ public class EmbeddedListViewAdapter extends BaseExpandableListAdapter {
 	public EmbeddedListViewAdapter(Activity activity, List<ThesisBean> theses) {
 		super();
 		this.activity = activity;
-		group = new ArrayList<String>();
-		child = new ArrayList<List<String>>();
-		for (ThesisBean tb : theses) {
-			group.add(tb.getName());
-			List<String> tmp = new ArrayList<String>();
-			tmp.add(tb.getTeacherName());
-			tmp.add(tb.getCount() + "");
-			tmp.add(tb.getDetail());
-			tmp.add(tb.getPostTime());
-			child.add(tmp);
-		}
+		setData(theses);
 	}
 
 	@Override
@@ -253,5 +243,19 @@ public class EmbeddedListViewAdapter extends BaseExpandableListAdapter {
 		first = choices[0];
 		second = choices[1];
 		third = choices[2];
+	}
+
+	public void setData(List<ThesisBean> theses) {
+		group = new ArrayList<String>();
+		child = new ArrayList<List<String>>();
+		for (ThesisBean tb : theses) {
+			group.add(tb.getName());
+			List<String> tmp = new ArrayList<String>();
+			tmp.add(tb.getTeacherName());
+			tmp.add(tb.getCount() + "");
+			tmp.add(tb.getDetail());
+			tmp.add(tb.getPostTime());
+			child.add(tmp);
+		}
 	}
 }

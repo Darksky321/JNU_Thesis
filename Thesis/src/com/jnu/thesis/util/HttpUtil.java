@@ -50,6 +50,7 @@ public class HttpUtil {
 			}
 		}
 
+		Log.i(TAG, "POST URL : " + urlString);
 		Log.i(TAG, "POST parameter : " + parameterBuffer.toString());
 
 		URL url = new URL(urlString);
@@ -79,6 +80,8 @@ public class HttpUtil {
 			outputStreamWriter.flush();
 
 			if (httpURLConnection.getResponseCode() >= 300) {
+				Log.e(TAG, "HTTP Request is not success, Response code is "
+						+ httpURLConnection.getResponseCode());
 				throw new Exception(
 						"HTTP Request is not success, Response code is "
 								+ httpURLConnection.getResponseCode());
@@ -106,7 +109,7 @@ public class HttpUtil {
 			}
 		}
 
-		Log.i(TAG, "POST result : " + result);
+		Log.i(TAG, "POST result : \n" + result);
 		return result;
 	}
 
@@ -132,6 +135,7 @@ public class HttpUtil {
 			}
 			urlString = urlString + "?" + parameterBuffer;
 		}
+		Log.i(TAG, "GET URL : " + urlString);
 		Log.i(TAG, "GET parameter : " + parameterBuffer.toString());
 
 		URL url = new URL(urlString);
@@ -144,12 +148,15 @@ public class HttpUtil {
 		httpURLConnection.setConnectTimeout(connectTimeout);
 		httpURLConnection.setReadTimeout(socketTimeout);
 		if (!sessionID.equals(""))
-			httpURLConnection.setRequestProperty("Cookie", sessionID);
+			httpURLConnection.setRequestProperty("Cookie",
+					sessionID.substring(0, sessionID.indexOf(";")));
 
 		InputStream inputStream = null;
 		String result = "";
 
 		if (httpURLConnection.getResponseCode() >= 300) {
+			Log.e(TAG, "HTTP Request is not success, Response code is "
+					+ httpURLConnection.getResponseCode());
 			throw new Exception(
 					"HTTP Request is not success, Response code is "
 							+ httpURLConnection.getResponseCode());
@@ -167,7 +174,7 @@ public class HttpUtil {
 				inputStream.close();
 			}
 		}
-		Log.i(TAG, "GET result : " + result);
+		Log.i(TAG, "GET result : \n" + result);
 		return result;
 	}
 

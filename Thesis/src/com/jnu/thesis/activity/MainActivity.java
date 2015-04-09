@@ -1,9 +1,16 @@
 package com.jnu.thesis.activity;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.Map;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -12,29 +19,46 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.Toast;
 
+import com.jnu.thesis.Parameter;
 import com.jnu.thesis.R;
+import com.jnu.thesis.dao.UserDao;
+import com.jnu.thesis.dao.impl.UserDaoImpl;
 import com.jnu.thesis.fragment.ContactsFragment;
 import com.jnu.thesis.fragment.DiscoverFragment;
 import com.jnu.thesis.fragment.MeFragment;
 import com.jnu.thesis.fragment.ThesisFragment;
+import com.jnu.thesis.service.CallBack;
+import com.jnu.thesis.service.LoginThread;
+import com.jnu.thesis.util.XingeUtil;
 
 public class MainActivity extends FragmentActivity implements
 		OnCheckedChangeListener {
+
+	public static final int LOGIN_SUCCESS = 1;
+	public static final int LOGIN_FAILED = 2;
+	public static final int LOGIN_NOT_EXIST = 3;
+	public static final int LOGIN_ERROR = 4;
+
 	// ViewPager控件
 	private ViewPager main_viewPager;
 	// RadioGroup控件
 	private RadioGroup main_tab_RadioGroup;
 	// RadioButton控件
-	private RadioButton radio_chats, radio_contacts, radio_discover, radio_me;
+	// private RadioButton radio_chats, radio_contacts, radio_discover,
+	// radio_me;
 	// 类型为Fragment的动态数组
 	private ArrayList<Fragment> fragmentList;
+
+	// 用户信息
+	private String id;
+
 	// 点击返回键时间
 	private Long clickTime = 0L;
+	private MainHandler handler = new MainHandler(MainActivity.this);
 
 	@Override
 	protected void onResume() {
@@ -47,6 +71,57 @@ public class MainActivity extends FragmentActivity implements
 	public void onCreate(Bundle savedInstanceState) {
 		Log.i("mytest", "Intent to Main: " + getIntent().toString());
 		super.onCreate(savedInstanceState);
+		Intent intent = getIntent();
+		intent.setClass(MainActivity.this, LoginActivity.class);
+		// 由信鸽启动
+		if (intent.getFlags() == 0x4020000) {
+			UserDao dao = UserDaoImpl.getInstance(getApplicationContext());
+			Map<String, String> user = dao.findAllUser();
+			// 有学生登陆信息
+			if (user != null && !user.isEmpty()
+					&& user.get("status").equals("1")) {
+				id = user.get("id");
+				Thread loginThread = new LoginThread(user.get("id"),
+						user.get("password"), 1, new CallBack() {
+
+							@Override
+							public void onFinish(String ret, Exception e) {
+								// TODO 自动生成的方法存根
+								Message msg = Message.obtain();
+								if (e != null) {
+									msg.what = LOGIN_ERROR;
+									handler.sendMessage(msg);
+								} else {
+									try {
+										JSONObject jResult;
+										jResult = new JSONObject(ret);
+										String result = jResult
+												.getString("result");
+										if (result.equals("success")) {
+											msg.what = LOGIN_SUCCESS;
+										} else if (result.equals("fail"))
+											msg.what = LOGIN_FAILED;
+										else if (result.equals("notexist"))
+											msg.what = LOGIN_NOT_EXIST;
+										else
+											msg.what = LOGIN_ERROR;
+										handler.sendMessage(msg);
+									} catch (JSONException e1) {
+										// TODO 自动生成的 catch 块
+										msg.what = LOGIN_ERROR;
+										handler.sendMessage(msg);
+										e1.printStackTrace();
+									}
+								}
+							}
+						});
+				loginThread.start();
+			} else {
+				finish();
+				startActivity(intent);
+				return;
+			}
+		}
 		setContentView(R.layout.activity_main);
 		// 界面初始函数，用来获取定义的各控件对应的ID
 		InitView();
@@ -57,10 +132,10 @@ public class MainActivity extends FragmentActivity implements
 	public void InitView() {
 		main_tab_RadioGroup = (RadioGroup) findViewById(R.id.main_tab_RadioGroup);
 
-		radio_chats = (RadioButton) findViewById(R.id.radio_chats);
-		radio_contacts = (RadioButton) findViewById(R.id.radio_contacts);
-		radio_discover = (RadioButton) findViewById(R.id.radio_discover);
-		radio_me = (RadioButton) findViewById(R.id.radio_me);
+		// radio_chats = (RadioButton) findViewById(R.id.radio_chats);
+		// radio_contacts = (RadioButton) findViewById(R.id.radio_contacts);
+		// radio_discover = (RadioButton) findViewById(R.id.radio_discover);
+		// radio_me = (RadioButton) findViewById(R.id.radio_me);
 
 		main_tab_RadioGroup.setOnCheckedChangeListener(this);
 	}
@@ -186,4 +261,53 @@ public class MainActivity extends FragmentActivity implements
 			this.finish();
 		}
 	}
+
+	private static class MainHandler extends Handler {
+		private final WeakReference<MainActivity> mActivity;
+
+		MainHandler(MainActivity mActivity) {
+			this.mActivity = new WeakReference<MainActivity>(mActivity);
+		}
+
+		@Override
+		public void handleMessage(Message msg) {
+			// TODO 自动生成的方法存根
+			MainActivity activity = mActivity.get();
+			Intent intent = new Intent();
+			intent.setClass(activity, LoginActivity.class);
+			switch (msg.what) {
+			case LOGIN_FAILED:
+				activity.finish();
+				activity.startActivity(intent);
+				break;
+			case LOGIN_SUCCESS:
+				// 信鸽注册账号
+				XingeUtil.regist(activity.getApplicationContext(),
+						activity.getId());
+				Parameter.setCurrentUser(activity.getId());
+				Parameter.setStatus(1);
+				break;
+			case LOGIN_NOT_EXIST:
+				Toast.makeText(activity, "用户不存在", Toast.LENGTH_SHORT).show();
+				activity.finish();
+				activity.startActivity(intent);
+				break;
+			case LOGIN_ERROR:
+				Toast.makeText(activity, "网络错误", Toast.LENGTH_SHORT).show();
+				activity.finish();
+				activity.startActivity(intent);
+				break;
+			}
+			super.handleMessage(msg);
+		}
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
 }

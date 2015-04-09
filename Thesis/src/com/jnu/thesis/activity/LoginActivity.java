@@ -32,9 +32,7 @@ import com.jnu.thesis.dao.UserDao;
 import com.jnu.thesis.dao.impl.UserDaoImpl;
 import com.jnu.thesis.service.CallBack;
 import com.jnu.thesis.service.LoginThread;
-import com.jnu.thesis.util.XingeRegister;
-import com.tencent.android.tpush.XGPushManager;
-import com.tencent.android.tpush.service.XGPushService;
+import com.jnu.thesis.util.XingeUtil;
 
 public class LoginActivity extends Activity {
 
@@ -76,11 +74,11 @@ public class LoginActivity extends Activity {
 		// 初始化控件
 		initView();
 		// 信鸽初始化
-		InitXinge();
+		XingeUtil.initXinge(this);
 		// 如果数据库中有账号信息, 则使用该账号登录
 		UserDao dao = UserDaoImpl.getInstance(getApplicationContext());
 		user = dao.findAllUser();
-		if (user != null & !user.isEmpty()) {
+		if (user != null && !user.isEmpty()) {
 			editTextUserName.setText(user.get("id"));
 			editTextPassword.setText(user.get("password"));
 			int sta = Integer.valueOf(user.get("status"));
@@ -141,11 +139,6 @@ public class LoginActivity extends Activity {
 													.getString("result");
 											if (result.equals("success")) {
 												msg.what = LOGIN_SUCCESS;
-												if (status == 1) {
-													String thesesString = jResult
-															.getString("theses");
-													msg.obj = thesesString;
-												}
 											} else if (result.equals("fail"))
 												msg.what = LOGIN_FAILED;
 											else if (result.equals("notexist"))
@@ -189,7 +182,7 @@ public class LoginActivity extends Activity {
 				}
 				Parameter.setCurrentUser("Deng");
 				Parameter.setStatus(status);
-				XingeRegister.regist(getApplicationContext(), "2011051682");
+				XingeUtil.regist(getApplicationContext(), "2011051682");
 				return true;
 			}
 		});
@@ -242,33 +235,6 @@ public class LoginActivity extends Activity {
 		// }
 	}
 
-	/**
-	 * 初始化信鸽
-	 */
-	public void InitXinge() {
-		// 开启logcat输出，方便debug，发布时请关闭
-		// XGPushConfig.enableDebug(this, true);
-		// 如果需要知道注册是否成功，请使用registerPush(getApplicationContext(),
-		// XGIOperateCallback)带callback版本
-		// 如果需要绑定账号，请使用registerPush(getApplicationContext(),account)版本
-		// 具体可参考详细的开发指南
-		// 传递的参数为ApplicationContext
-		Context context = getApplicationContext();
-		XGPushManager.registerPush(context);
-
-		// 2.36（不包括）之前的版本需要调用以下2行代码
-		Intent service = new Intent(context, XGPushService.class);
-		context.startService(service);
-
-		// 其它常用的API：
-		// 绑定账号（别名）注册：registerPush(context,account)或registerPush(context,account,
-		// XGIOperateCallback)，其中account为APP账号，可以为任意字符串（qq、openid或任意第三方），业务方一定要注意终端与后台保持一致。
-		// 取消绑定账号（别名）：registerPush(context,"*")，即account="*"为取消绑定，解绑后，该针对该账号的推送将失效
-		// 反注册（不再接收消息）：unregisterPush(context)
-		// 设置标签：setTag(context, tagName)
-		// 删除标签：deleteTag(context, tagName)
-	}
-
 	private static class LoginHandler extends Handler {
 		private final WeakReference<LoginActivity> mActivity;
 
@@ -289,8 +255,6 @@ public class LoginActivity extends Activity {
 				Intent intent = new Intent();
 				if (activity.getStatus() == 1) {
 					intent.setClass(activity, MainActivity.class);
-					String thesesString = (String) msg.obj;
-					intent.putExtra("theses", thesesString);
 				} else if (activity.getStatus() == 2) {
 					intent.setClass(activity, TeacherMainActivity.class);
 				}
@@ -313,13 +277,15 @@ public class LoginActivity extends Activity {
 					}
 				}
 
-				// 保存账号信息
+				// 保存账号信息到内存
 				Parameter.setCurrentUser(activity.getEditTextUserName()
 						.getText().toString());
 				Parameter.setStatus(activity.getStatus());
+
 				// 信鸽注册账号
-				XingeRegister.regist(activity.getApplicationContext(), activity
+				XingeUtil.regist(activity.getApplicationContext(), activity
 						.getEditTextUserName().getText().toString());
+
 				activity.dialog.dismiss();
 				activity.finish();
 				activity.startActivity(intent);

@@ -18,7 +18,6 @@ import com.jnu.thesis.R;
 import com.jnu.thesis.activity.LoginActivity;
 import com.jnu.thesis.dao.UserDao;
 import com.jnu.thesis.dao.impl.UserDaoImpl;
-import com.jnu.thesis.util.XingeRegister;
 
 public class MeFragment extends Fragment {
 
@@ -28,7 +27,7 @@ public class MeFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View v = inflater.inflate(R.layout.fragment_me, null);
+		View v = inflater.inflate(R.layout.fragment_me, container, false);
 		initView(v);
 		return v;
 	}
