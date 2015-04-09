@@ -11,8 +11,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-import com.jnu.thesis.Parameter;
+import com.jnu.thesis.dao.UserDao;
 import com.jnu.thesis.dao.impl.MessageDaoImpl;
+import com.jnu.thesis.dao.impl.UserDaoImpl;
 import com.qq.xgdemo.common.NotificationService;
 import com.qq.xgdemo.po.XGNotification;
 import com.tencent.android.tpush.XGPushBaseReceiver;
@@ -58,8 +59,10 @@ public class MessageReceiver extends XGPushBaseReceiver {
 				.format(Calendar.getInstance().getTime()));
 		NotificationService.getInstance(context).save(notific);
 		// 把通知保存到自建的数据库中
+		UserDao dao = UserDaoImpl.getInstance(context.getApplicationContext());
+		String id = dao.getCurrentUserId();
 		MessageDaoImpl.getInstance(context).save(notific,
-				notifiShowedRlt.getCustomContent(), Parameter.getCurrentUser());
+				notifiShowedRlt.getCustomContent(), id);
 		// 更新UI
 		context.sendBroadcast(intent);
 		show(context, "您有1条新消息, " + "通知被展示 ， " + notifiShowedRlt.toString());

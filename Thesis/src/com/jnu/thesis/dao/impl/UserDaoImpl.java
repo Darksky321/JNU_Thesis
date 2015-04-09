@@ -182,4 +182,27 @@ public class UserDaoImpl implements UserDao {
 		return person;
 	}
 
+	@Override
+	public String getCurrentUserId() {
+		// TODO 自动生成的方法存根
+		SQLiteDatabase database = null;
+		String id = "";
+		try {
+			database = helper.getReadableDatabase();
+			Cursor cursor = database.query(TABLE, null, null, null, null, null,
+					null);
+			while (cursor.moveToNext()) {
+				id = cursor.getString(cursor.getColumnIndex("id"));
+				break;
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+			return "";
+		} finally {
+			if (database != null) {
+				database.close();
+			}
+		}
+		return id;
+	}
 }

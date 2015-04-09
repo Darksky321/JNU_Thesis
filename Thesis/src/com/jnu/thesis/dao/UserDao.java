@@ -13,4 +13,6 @@ public interface UserDao {
 	public Map<String, String> viewPerson(String[] selectionArgs);
 
 	public Map<String, String> findAllUser();
+
+	public String getCurrentUserId();
 }

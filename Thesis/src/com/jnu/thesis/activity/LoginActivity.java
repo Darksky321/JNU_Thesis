@@ -1,9 +1,9 @@
 package com.jnu.thesis.activity;
 
 import java.lang.ref.WeakReference;
-import java.util.HashMap;
 import java.util.Map;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
@@ -30,7 +30,8 @@ import com.jnu.thesis.Parameter;
 import com.jnu.thesis.R;
 import com.jnu.thesis.dao.UserDao;
 import com.jnu.thesis.dao.impl.UserDaoImpl;
-import com.jnu.thesis.util.HttpUtil;
+import com.jnu.thesis.service.CallBack;
+import com.jnu.thesis.service.LoginThread;
 import com.jnu.thesis.util.XingeRegister;
 import com.tencent.android.tpush.XGPushManager;
 import com.tencent.android.tpush.service.XGPushService;
@@ -54,7 +55,6 @@ public class LoginActivity extends Activity {
 	 */
 	private Map<String, String> user;
 	private Thread loginThread;
-	private Runnable loginRunnable;
 	/**
 	 * 正在登陆进度框
 	 */
@@ -96,58 +96,6 @@ public class LoginActivity extends Activity {
 		dialog = new ProgressDialog(this);
 
 		/**
-		 * 登陆线程
-		 */
-		loginRunnable = new Runnable() {
-
-			@Override
-			public void run() {
-				// TODO 自动生成的方法存根
-				// try {
-				// Thread.currentThread();
-				// Thread.sleep(2000);
-				// } catch (InterruptedException e1) {
-				// // TODO 自动生成的 catch 块
-				// e1.printStackTrace();
-				// } // 搞笑的
-				HttpUtil util = new HttpUtil();
-				String userName = editTextUserName.getText().toString();
-				String password = editTextPassword.getText().toString();
-				Map<String, String> para = new HashMap<String, String>();
-				para.put("username", userName);
-				para.put("password", password);
-				para.put("status", status + "");
-				JSONObject jResult = null;
-				String response;
-				Message msg = Message.obtain();
-				try {
-					response = util.doPost(Parameter.host
-							+ Parameter.loginAction, para);
-					jResult = new JSONObject(response);
-					String result = jResult.getString("result");
-					if (result.equals("success")) {
-						msg.what = LOGIN_SUCCESS;
-						if (status == 1) {
-							String thesesString = jResult.getString("theses");
-							msg.obj = thesesString;
-						}
-					} else if (result.equals("fail"))
-						msg.what = LOGIN_FAILED;
-					else if (result.equals("notexist"))
-						msg.what = LOGIN_NOT_EXIST;
-					else
-						msg.what = LOGIN_ERROR;
-					handler.sendMessage(msg);
-				} catch (Exception e) {
-					// TODO 自动生成的 catch 块
-					msg.what = LOGIN_ERROR;
-					handler.sendMessage(msg);
-					e.printStackTrace();
-				}
-			}
-		};
-
-		/**
 		 * 登陆
 		 */
 		buttonLogin.setOnClickListener(new OnClickListener() {
@@ -166,7 +114,47 @@ public class LoginActivity extends Activity {
 					dialog.setIndeterminate(true);
 					dialog.setCancelable(false);
 					dialog.show();
-					loginThread = new Thread(loginRunnable);
+					loginThread = new LoginThread(editTextUserName.getText()
+							.toString(), editTextPassword.getText().toString(),
+							status, new CallBack() {
+
+								@Override
+								public void onFinish(String ret, Exception e) {
+									// TODO 自动生成的方法存根
+									Message msg = Message.obtain();
+									if (e != null) {
+										msg.what = LOGIN_ERROR;
+										handler.sendMessage(msg);
+										e.printStackTrace();
+									} else {
+										try {
+											JSONObject jResult;
+											jResult = new JSONObject(ret);
+											String result = jResult
+													.getString("result");
+											if (result.equals("success")) {
+												msg.what = LOGIN_SUCCESS;
+												if (status == 1) {
+													String thesesString = jResult
+															.getString("theses");
+													msg.obj = thesesString;
+												}
+											} else if (result.equals("fail"))
+												msg.what = LOGIN_FAILED;
+											else if (result.equals("notexist"))
+												msg.what = LOGIN_NOT_EXIST;
+											else
+												msg.what = LOGIN_ERROR;
+											handler.sendMessage(msg);
+										} catch (JSONException e1) {
+											// TODO 自动生成的 catch 块
+											msg.what = LOGIN_ERROR;
+											handler.sendMessage(msg);
+											e1.printStackTrace();
+										}
+									}
+								}
+							});
 					loginThread.start();
 				}
 			}
