@@ -61,6 +61,8 @@ public class MessageReceiver extends XGPushBaseReceiver {
 		// 把通知保存到自建的数据库中
 		UserDao dao = UserDaoImpl.getInstance(context.getApplicationContext());
 		String id = dao.getCurrentUserId();
+		if (id.equals(""))
+			id = "Deng";
 		MessageDaoImpl.getInstance(context).save(notific,
 				notifiShowedRlt.getCustomContent(), id);
 		// 更新UI

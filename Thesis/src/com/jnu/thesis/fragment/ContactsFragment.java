@@ -75,6 +75,13 @@ public class ContactsFragment extends Fragment {
 		return v;
 	}
 
+	@Override
+	public void onDestroy() {
+		// TODO 自动生成的方法存根
+		getActivity().unregisterReceiver(updateListViewReceiver);
+		super.onDestroy();
+	}
+
 	private void initView(View v) {
 		/**
 		 * 全选按钮

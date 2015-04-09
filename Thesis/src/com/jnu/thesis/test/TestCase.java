@@ -3,9 +3,11 @@ package com.jnu.thesis.test;
 import java.util.HashMap;
 import java.util.Map;
 
+import android.content.Intent;
 import android.test.AndroidTestCase;
 import android.util.Log;
 
+import com.jnu.thesis.activity.LoginActivity;
 import com.jnu.thesis.dao.impl.MessageDaoImpl;
 import com.jnu.thesis.dao.impl.UserDaoImpl;
 import com.jnu.thesis.db.DatabaseHelper;
@@ -84,5 +86,13 @@ public class TestCase extends AndroidTestCase {
 		Log.i(TAG,
 				MessageDaoImpl.getInstance(getContext())
 						.findAllMessage("2011051682").toString());
+	}
+
+	public void intentUri() {
+		Intent intent = new Intent();
+		// intent.setAction("com.jnu.thesis.MainActivity");
+		// intent.setFlags(0x4020000);
+		intent.setClass(getContext(), LoginActivity.class);
+		getContext().startActivity(intent);
 	}
 }

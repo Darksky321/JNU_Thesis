@@ -47,7 +47,7 @@ public class LoginActivity extends Activity {
 	private Button buttonLogin;
 	private TextView textViewTeacherEntry;
 	/**
-	 * 1代表学生登陆2代表教师登陆
+	 * 1代表学生登录2代表教师登录
 	 */
 	private int status = 1;
 	/**
@@ -56,10 +56,17 @@ public class LoginActivity extends Activity {
 	private Map<String, String> user;
 	private Thread loginThread;
 	/**
-	 * 正在登陆进度框
+	 * 正在登录进度框
 	 */
 	private ProgressDialog dialog;
 	private Handler handler = new LoginHandler(this);
+
+	@Override
+	protected void onResume() {
+		// TODO 自动生成的方法存根
+		Log.i("mytest", "loginResume:" + this.getTaskId());
+		super.onResume();
+	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +77,7 @@ public class LoginActivity extends Activity {
 		initView();
 		// 信鸽初始化
 		InitXinge();
-		// 如果数据库中有账号信息, 则使用该账号登陆
+		// 如果数据库中有账号信息, 则使用该账号登录
 		UserDao dao = UserDaoImpl.getInstance(getApplicationContext());
 		user = dao.findAllUser();
 		if (user != null & !user.isEmpty()) {
@@ -96,7 +103,7 @@ public class LoginActivity extends Activity {
 		dialog = new ProgressDialog(this);
 
 		/**
-		 * 登陆
+		 * 登录
 		 */
 		buttonLogin.setOnClickListener(new OnClickListener() {
 
@@ -182,13 +189,13 @@ public class LoginActivity extends Activity {
 				}
 				Parameter.setCurrentUser("Deng");
 				Parameter.setStatus(status);
-				// XingeRegister.regist(getApplicationContext(), "2011051682");
+				XingeRegister.regist(getApplicationContext(), "2011051682");
 				return true;
 			}
 		});
 
 		/**
-		 * 输入法中按发送键登陆
+		 * 输入法中按发送键登录
 		 */
 		editTextPassword
 				.setOnEditorActionListener(new OnEditorActionListener() {
@@ -276,7 +283,7 @@ public class LoginActivity extends Activity {
 			switch (msg.what) {
 			case LOGIN_FAILED:
 				activity.dialog.dismiss();
-				Toast.makeText(activity, "登陆失败", Toast.LENGTH_SHORT).show();
+				Toast.makeText(activity, "登录失败", Toast.LENGTH_SHORT).show();
 				break;
 			case LOGIN_SUCCESS:
 				Intent intent = new Intent();

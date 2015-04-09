@@ -2,6 +2,7 @@ package com.jnu.thesis.activity;
 
 import java.util.ArrayList;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -9,9 +10,12 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
+import android.widget.Toast;
 
 import com.jnu.thesis.R;
 import com.jnu.thesis.fragment.ContactsFragment;
@@ -29,9 +33,19 @@ public class MainActivity extends FragmentActivity implements
 	private RadioButton radio_chats, radio_contacts, radio_discover, radio_me;
 	// 类型为Fragment的动态数组
 	private ArrayList<Fragment> fragmentList;
+	// 点击返回键时间
+	private Long clickTime = 0L;
+
+	@Override
+	protected void onResume() {
+		// TODO 自动生成的方法存根
+		Log.i("mytest", "MainResume:" + this.getTaskId());
+		super.onResume();
+	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
+		Log.i("mytest", "Intent to Main: " + getIntent().toString());
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		// 界面初始函数，用来获取定义的各控件对应的ID
@@ -154,4 +168,22 @@ public class MainActivity extends FragmentActivity implements
 		}
 	}
 
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if (keyCode == KeyEvent.KEYCODE_BACK) {
+			exit();
+			return true;
+		}
+		return super.onKeyDown(keyCode, event);
+	}
+
+	private void exit() {
+		if ((System.currentTimeMillis() - clickTime) > 1000) {
+			Toast.makeText(getApplicationContext(), "再按一次返回键键退出程序",
+					Toast.LENGTH_SHORT).show();
+			clickTime = System.currentTimeMillis();
+		} else {
+			this.finish();
+		}
+	}
 }

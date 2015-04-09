@@ -7,7 +7,7 @@ import com.jnu.thesis.Parameter;
 import com.jnu.thesis.util.HttpUtil;
 
 /**
- * 登陆线程
+ * 登录线程
  * 
  * @author Deng
  *
@@ -20,7 +20,7 @@ public class LoginThread extends Thread {
 	private CallBack callBack;
 
 	/**
-	 * 登陆线程
+	 * 登录线程
 	 * 
 	 * @param userName
 	 *            用户名
@@ -29,7 +29,7 @@ public class LoginThread extends Thread {
 	 * @param status
 	 *            身份(1教师2学生)
 	 * @param callBack
-	 *            回调接口, 登陆完毕后执行
+	 *            回调接口, 登录完毕后执行
 	 */
 	public LoginThread(String userName, String password, int status,
 			CallBack callBack) {
