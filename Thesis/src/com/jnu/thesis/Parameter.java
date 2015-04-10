@@ -4,7 +4,9 @@ public class Parameter {
 	public static final String host = "http://192.168.137.1:8080/Thesis_Supervision/";
 	public static final String loginAction = "login.action";
 	public static final String studentMain = "studentMain.action";
-	public static final String submitChoice = "submitchoice.action";
+	public static final String studentSelect = "studentSelectMain.action";
+
+	public static final String ACCOUNT_PWD = "user.pwd";
 
 	private static String currentUser = "";
 	private static int status = 0;

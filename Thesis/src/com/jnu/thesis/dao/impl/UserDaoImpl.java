@@ -8,8 +8,10 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.jnu.thesis.Parameter;
 import com.jnu.thesis.dao.UserDao;
 import com.jnu.thesis.db.DatabaseHelper;
+import com.jnu.thesis.util.CyptoUtils;
 
 public class UserDaoImpl implements UserDao {
 
@@ -44,7 +46,8 @@ public class UserDaoImpl implements UserDao {
 			database = helper.getWritableDatabase();
 			ContentValues values = new ContentValues();
 			values.put("id", (String) params[0]);
-			values.put("password", params[1]);
+			values.put("password",
+					CyptoUtils.encode(Parameter.ACCOUNT_PWD, params[1]));
 			values.put("status", params[2]);
 			long row = database.insert(TABLE, null, values);
 			if (row > 0)
@@ -105,7 +108,8 @@ public class UserDaoImpl implements UserDao {
 		try {
 			database = helper.getWritableDatabase();
 			ContentValues values = new ContentValues();
-			values.put("password", params[0]);
+			values.put("password",
+					CyptoUtils.encode(Parameter.ACCOUNT_PWD, params[0]));
 			values.put("status", params[1]);
 			long row = database.update(TABLE, values, "id=?",
 					new String[] { id });
@@ -166,8 +170,8 @@ public class UserDaoImpl implements UserDao {
 					null);
 			while (cursor.moveToNext()) {
 				person.put("id", cursor.getString(cursor.getColumnIndex("id")));
-				person.put("password",
-						cursor.getString(cursor.getColumnIndex("password")));
+				person.put("password", CyptoUtils.decode(Parameter.ACCOUNT_PWD,
+						cursor.getString(cursor.getColumnIndex("password"))));
 				person.put("status",
 						cursor.getInt(cursor.getColumnIndex("status")) + "");
 			}

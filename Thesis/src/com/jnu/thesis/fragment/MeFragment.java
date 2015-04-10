@@ -1,5 +1,8 @@
 package com.jnu.thesis.fragment;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -16,13 +19,17 @@ import android.widget.TextView;
 import com.jnu.thesis.Parameter;
 import com.jnu.thesis.R;
 import com.jnu.thesis.activity.LoginActivity;
+import com.jnu.thesis.activity.SelectedThesisActivity;
+import com.jnu.thesis.bean.ThesisBean;
 import com.jnu.thesis.dao.UserDao;
 import com.jnu.thesis.dao.impl.UserDaoImpl;
 
 public class MeFragment extends Fragment {
 
 	private TextView textViewMe;
+	private TextView buttonMyList;
 	private Button buttonLogout;
+	private List<ThesisBean> myList;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -34,9 +41,24 @@ public class MeFragment extends Fragment {
 
 	private void initView(View v) {
 		textViewMe = (TextView) v.findViewById(R.id.textView_me);
+		buttonMyList = (TextView) v.findViewById(R.id.button_myList);
 		buttonLogout = (Button) v.findViewById(R.id.button_logout);
 
 		textViewMe.setText("当前账号：" + Parameter.getCurrentUser());
+
+		myList = new ArrayList<ThesisBean>();
+		buttonMyList.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO 自动生成的方法存根
+				Intent intent = new Intent();
+				intent.putParcelableArrayListExtra("myList",
+						(ArrayList<ThesisBean>) myList);
+				intent.setClass(getActivity(), SelectedThesisActivity.class);
+				getActivity().startActivity(intent);
+			}
+		});
 
 		/**
 		 * 注销账号, 删除数据库信息
@@ -86,5 +108,13 @@ public class MeFragment extends Fragment {
 				builder.show();
 			}
 		});
+	}
+
+	public List<ThesisBean> getMyList() {
+		return myList;
+	}
+
+	public void setMyList(List<ThesisBean> myList) {
+		this.myList = myList;
 	}
 }

@@ -40,5 +40,9 @@
     <string name="title_activity_message">MessageActivity</string>
     <string name="message_detail">消息详情</string>
     <string name="refresh">刷新</string>
+    <string name="textView_selected">已选课题：</string>
+    <string name="button_reSelect">更改选题</string>
+    <string name="button_myList">已选课题</string>
+    <string name="title_activity_selected_thesis">SelectedThesisActivity</string>
 
 </resources>

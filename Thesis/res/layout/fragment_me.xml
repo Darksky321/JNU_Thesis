@@ -32,6 +32,19 @@
             android:layout_height="16dp"
             android:background="#00FFFFFF" />
 
+        <TextView
+            android:id="@+id/button_myList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/blank_button_selector"
+            android:text="@string/button_myList"
+            android:textSize="18dp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="16dp"
+            android:background="#00FFFFFF" />
+
         <Button
             android:id="@+id/button_logout"
             android:layout_width="match_parent"
