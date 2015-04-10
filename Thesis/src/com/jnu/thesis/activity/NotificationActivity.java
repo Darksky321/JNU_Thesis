@@ -12,23 +12,23 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.jnu.thesis.R;
-import com.jnu.thesis.bean.MessageBean;
-import com.jnu.thesis.dao.MessageDao;
-import com.jnu.thesis.dao.impl.MessageDaoImpl;
+import com.jnu.thesis.bean.NotificationBean;
+import com.jnu.thesis.dao.NotificationDao;
+import com.jnu.thesis.dao.impl.NotificationDaoImpl;
 import com.jnu.thesis.view.FinishListener;
 
-public class MessageActivity extends Activity {
+public class NotificationActivity extends Activity {
 
 	private TextView textViewTitle;
 	private TextView textViewName;
 	private TextView textViewTime;
 	private TextView textViewContent;
-	private MessageBean msg;
+	private NotificationBean msg;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_message);
+		setContentView(R.layout.activity_notification);
 		msg = getIntent().getParcelableExtra("message");
 		Log.i("mytest", msg.toString());
 		initView();
@@ -53,7 +53,7 @@ public class MessageActivity extends Activity {
 					public void onClick(View v) {
 						// TODO 自动生成的方法存根
 						AlertDialog.Builder builder = new AlertDialog.Builder(
-								MessageActivity.this);
+								NotificationActivity.this);
 						builder.setTitle(R.string.button_select);
 						builder.setMessage("确定要删除吗？");
 						builder.setIcon(android.R.drawable.ic_dialog_alert);
@@ -64,22 +64,22 @@ public class MessageActivity extends Activity {
 									public void onClick(DialogInterface dialog,
 											int which) {
 										// TODO 自动生成的方法存根
-										MessageDao dao = MessageDaoImpl
+										NotificationDao dao = NotificationDaoImpl
 												.getInstance(getApplicationContext());
 										if (dao.delete(msg.getId() + ""))
 											Toast.makeText(
-													MessageActivity.this,
+													NotificationActivity.this,
 													"删除成功", Toast.LENGTH_SHORT)
 													.show();
 										else
 											Toast.makeText(
-													MessageActivity.this,
+													NotificationActivity.this,
 													"删除失败", Toast.LENGTH_SHORT)
 													.show();
 										Intent intent = new Intent(
 												"com.jnu.thesis.activity.UPDATE_LISTVIEW");
 										sendBroadcast(intent);
-										MessageActivity.this.finish();
+										NotificationActivity.this.finish();
 									}
 								});
 						builder.setNegativeButton("取消", null);

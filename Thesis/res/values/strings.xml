@@ -37,7 +37,7 @@
     <string name="title_activity_select_student">SelectStudentActivity</string>
     <string name="loading">正在加载&#8230;</string>
     <string name="button_logout">注销</string>
-    <string name="title_activity_message">MessageActivity</string>
+    <string name="title_activity_notification">NotificationActivity</string>
     <string name="message_detail">消息详情</string>
     <string name="refresh">刷新</string>
     <string name="textView_selected">已选课题：</string>

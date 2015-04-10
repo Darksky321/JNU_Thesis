@@ -8,7 +8,7 @@ import android.test.AndroidTestCase;
 import android.util.Log;
 
 import com.jnu.thesis.activity.LoginActivity;
-import com.jnu.thesis.dao.impl.MessageDaoImpl;
+import com.jnu.thesis.dao.impl.NotificationDaoImpl;
 import com.jnu.thesis.dao.impl.UserDaoImpl;
 import com.jnu.thesis.db.DatabaseHelper;
 import com.jnu.thesis.util.HttpUtil;
@@ -83,9 +83,8 @@ public class TestCase extends AndroidTestCase {
 	}
 
 	public void findAllMsg() {
-		Log.i(TAG,
-				MessageDaoImpl.getInstance(getContext())
-						.findAllMessage("2011051682").toString());
+		Log.i(TAG, NotificationDaoImpl.getInstance(getContext())
+				.findAllNotifications("2011051682").toString());
 	}
 
 	public void intentUri() {

@@ -12,7 +12,7 @@ import android.content.Intent;
 import android.util.Log;
 
 import com.jnu.thesis.dao.UserDao;
-import com.jnu.thesis.dao.impl.MessageDaoImpl;
+import com.jnu.thesis.dao.impl.NotificationDaoImpl;
 import com.jnu.thesis.dao.impl.UserDaoImpl;
 import com.qq.xgdemo.common.NotificationService;
 import com.qq.xgdemo.po.XGNotification;
@@ -63,7 +63,7 @@ public class MessageReceiver extends XGPushBaseReceiver {
 		String id = dao.getCurrentUserId();
 		if (id.equals(""))
 			id = "Deng";
-		MessageDaoImpl.getInstance(context).save(notific,
+		NotificationDaoImpl.getInstance(context).save(notific,
 				notifiShowedRlt.getCustomContent(), id);
 		// ¸üÐÂUI
 		context.sendBroadcast(intent);

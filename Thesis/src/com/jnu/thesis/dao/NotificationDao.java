@@ -2,10 +2,10 @@ package com.jnu.thesis.dao;
 
 import java.util.ArrayList;
 
-import com.jnu.thesis.bean.MessageBean;
+import com.jnu.thesis.bean.NotificationBean;
 import com.qq.xgdemo.po.XGNotification;
 
-public interface MessageDao {
+public interface NotificationDao {
 
 	public boolean save(XGNotification notification, String customContent,
 			String toId);
@@ -14,5 +14,5 @@ public interface MessageDao {
 
 	public boolean deleteAll(String toId);
 
-	public ArrayList<MessageBean> findAllMessage(String toId);
+	public ArrayList<NotificationBean> findAllNotifications(String toId);
 }

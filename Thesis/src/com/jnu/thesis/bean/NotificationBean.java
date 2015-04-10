@@ -3,7 +3,7 @@ package com.jnu.thesis.bean;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class MessageBean implements Parcelable {
+public class NotificationBean implements Parcelable {
 
 	private Integer id;
 	private Long msg_id;
@@ -16,11 +16,11 @@ public class MessageBean implements Parcelable {
 	private String fromId;
 	private String toId;
 
-	public MessageBean() {
+	public NotificationBean() {
 		// TODO 自动生成的构造函数存根
 	}
 
-	public MessageBean(Parcel in) {
+	public NotificationBean(Parcel in) {
 		id = in.readInt();
 		msg_id = in.readLong();
 		title = in.readString();
@@ -54,15 +54,15 @@ public class MessageBean implements Parcelable {
 		dest.writeString(toId);
 	}
 
-	public static final Parcelable.Creator<MessageBean> CREATOR = new Creator<MessageBean>() {
+	public static final Parcelable.Creator<NotificationBean> CREATOR = new Creator<NotificationBean>() {
 		@Override
-		public MessageBean[] newArray(int size) {
-			return new MessageBean[size];
+		public NotificationBean[] newArray(int size) {
+			return new NotificationBean[size];
 		}
 
 		@Override
-		public MessageBean createFromParcel(Parcel in) {
-			return new MessageBean(in);
+		public NotificationBean createFromParcel(Parcel in) {
+			return new NotificationBean(in);
 		}
 	};
 
@@ -148,7 +148,7 @@ public class MessageBean implements Parcelable {
 
 	@Override
 	public String toString() {
-		return "MessageBean [id=" + id + ", msg_id=" + msg_id + ", title="
+		return "NotificationBean [id=" + id + ", msg_id=" + msg_id + ", title="
 				+ title + ", content=" + content + ", activity=" + activity
 				+ ", notificationActionType=" + notificationActionType
 				+ ", update_time=" + update_time + ", fromName=" + fromName

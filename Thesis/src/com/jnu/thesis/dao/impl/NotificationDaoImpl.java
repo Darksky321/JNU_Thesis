@@ -10,23 +10,23 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.jnu.thesis.bean.MessageBean;
-import com.jnu.thesis.dao.MessageDao;
+import com.jnu.thesis.bean.NotificationBean;
+import com.jnu.thesis.dao.NotificationDao;
 import com.jnu.thesis.db.DatabaseHelper;
 import com.qq.xgdemo.po.XGNotification;
 
-public class MessageDaoImpl implements MessageDao {
+public class NotificationDaoImpl implements NotificationDao {
 	private DatabaseHelper helper = null;
-	private static final String TABLE = "message";
-	private static MessageDaoImpl instance;
+	private static final String TABLE = "notification";
+	private static NotificationDaoImpl instance;
 
-	private MessageDaoImpl(Context context) {
+	private NotificationDaoImpl(Context context) {
 		helper = DatabaseHelper.getInstance(context);
 	}
 
-	public synchronized static MessageDaoImpl getInstance(Context context) {
+	public synchronized static NotificationDaoImpl getInstance(Context context) {
 		if (null == instance) {
-			instance = new MessageDaoImpl(context);
+			instance = new NotificationDaoImpl(context);
 		}
 		return instance;
 	}
@@ -91,40 +91,40 @@ public class MessageDaoImpl implements MessageDao {
 	}
 
 	@Override
-	public ArrayList<MessageBean> findAllMessage(String toId) {
+	public ArrayList<NotificationBean> findAllNotifications(String toId) {
 		// TODO 自动生成的方法存根
 		SQLiteDatabase db = null;
-		ArrayList<MessageBean> messages = new ArrayList<MessageBean>();
+		ArrayList<NotificationBean> notis = new ArrayList<NotificationBean>();
 		try {
 			db = helper.getReadableDatabase();
 			Cursor cursor = db.query(TABLE, null, "toId=?",
 					new String[] { toId }, null, null, "update_time DESC");
 			while (cursor.moveToNext()) {
-				MessageBean msg = new MessageBean();
-				msg.setId(cursor.getInt(cursor.getColumnIndex("id")));
-				msg.setMsg_id(cursor.getLong(cursor.getColumnIndex("msg_id")));
-				msg.setTitle(cursor.getString(cursor.getColumnIndex("title")));
-				msg.setActivity(cursor.getString(cursor
+				NotificationBean noti = new NotificationBean();
+				noti.setId(cursor.getInt(cursor.getColumnIndex("id")));
+				noti.setMsg_id(cursor.getLong(cursor.getColumnIndex("msg_id")));
+				noti.setTitle(cursor.getString(cursor.getColumnIndex("title")));
+				noti.setActivity(cursor.getString(cursor
 						.getColumnIndex("activity")));
-				msg.setNotificationActionType(cursor.getInt(cursor
+				noti.setNotificationActionType(cursor.getInt(cursor
 						.getColumnIndex("notificationActionType")));
-				msg.setContent(cursor.getString(cursor
+				noti.setContent(cursor.getString(cursor
 						.getColumnIndex("content")));
-				msg.setUpdate_time(cursor.getString(cursor
+				noti.setUpdate_time(cursor.getString(cursor
 						.getColumnIndex("update_time")));
-				msg.setFromName(cursor.getString(cursor
+				noti.setFromName(cursor.getString(cursor
 						.getColumnIndex("fromName")));
-				msg.setFromId(cursor.getString(cursor.getColumnIndex("fromId")));
-				messages.add(msg);
+				noti.setFromId(cursor.getString(cursor.getColumnIndex("fromId")));
+				notis.add(noti);
 			}
 		} catch (Exception e) {
 			// TODO: handle exception
-			return messages;
+			return notis;
 		} finally {
 			if (db != null) {
 				db.close();
 			}
 		}
-		return messages;
+		return notis;
 	}
 }

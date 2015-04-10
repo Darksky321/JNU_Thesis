@@ -22,10 +22,10 @@ import android.widget.Toast;
 
 import com.jnu.thesis.Parameter;
 import com.jnu.thesis.R;
-import com.jnu.thesis.activity.MessageActivity;
-import com.jnu.thesis.bean.MessageBean;
-import com.jnu.thesis.dao.MessageDao;
-import com.jnu.thesis.dao.impl.MessageDaoImpl;
+import com.jnu.thesis.activity.NotificationActivity;
+import com.jnu.thesis.bean.NotificationBean;
+import com.jnu.thesis.dao.NotificationDao;
+import com.jnu.thesis.dao.impl.NotificationDaoImpl;
 import com.jnu.thesis.view.MessageListViewAdapter;
 
 public class ContactsFragment extends Fragment {
@@ -44,9 +44,9 @@ public class ContactsFragment extends Fragment {
 		View v = inflater.inflate(R.layout.fragment_contacts, null);
 		context = getActivity();
 		initView(v);
-		MessageDao dao = MessageDaoImpl.getInstance(getActivity()
+		NotificationDao dao = NotificationDaoImpl.getInstance(getActivity()
 				.getApplicationContext());
-		List<MessageBean> messages = dao.findAllMessage(Parameter
+		List<NotificationBean> messages = dao.findAllNotifications(Parameter
 				.getCurrentUser());
 		adapter = new MessageListViewAdapter(messages, getActivity());
 		listViewMessage.setAdapter(adapter);
@@ -59,10 +59,10 @@ public class ContactsFragment extends Fragment {
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
 				// TODO 自动生成的方法存根
-				MessageBean msg = adapter.getMessages().get(position);
+				NotificationBean msg = adapter.getMessages().get(position);
 				Intent intent = new Intent();
 				intent.putExtra("message", msg);
-				intent.setClass(getActivity(), MessageActivity.class);
+				intent.setClass(getActivity(), NotificationActivity.class);
 				startActivity(intent);
 			}
 		});
@@ -121,10 +121,10 @@ public class ContactsFragment extends Fragment {
 									public void onClick(DialogInterface dialog,
 											int which) {
 										// TODO 自动生成的方法存根
-										MessageDao dao = MessageDaoImpl
+										NotificationDao dao = NotificationDaoImpl
 												.getInstance(getActivity()
 														.getApplicationContext());
-										List<MessageBean> msgs = adapter
+										List<NotificationBean> msgs = adapter
 												.getMessages();
 										List<Boolean> check = adapter
 												.getCheck();
@@ -162,9 +162,9 @@ public class ContactsFragment extends Fragment {
 	 */
 	public void notifyRefresh() {
 		if (adapter != null) {
-			MessageDao dao = MessageDaoImpl.getInstance(context
+			NotificationDao dao = NotificationDaoImpl.getInstance(context
 					.getApplicationContext());
-			List<MessageBean> msgs = dao.findAllMessage(Parameter
+			List<NotificationBean> msgs = dao.findAllNotifications(Parameter
 					.getCurrentUser());
 			adapter.refresh(msgs);
 		}

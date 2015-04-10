@@ -13,15 +13,15 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.jnu.thesis.R;
-import com.jnu.thesis.bean.MessageBean;
+import com.jnu.thesis.bean.NotificationBean;
 
 public class MessageListViewAdapter extends BaseAdapter {
 
-	private List<MessageBean> messages;
+	private List<NotificationBean> messages;
 	private Activity activity;
 	private List<Boolean> check;
 
-	public MessageListViewAdapter(List<MessageBean> messages, Activity activity) {
+	public MessageListViewAdapter(List<NotificationBean> messages, Activity activity) {
 		super();
 		this.messages = messages;
 		this.activity = activity;
@@ -110,15 +110,15 @@ public class MessageListViewAdapter extends BaseAdapter {
 		return i;
 	}
 
-	public List<MessageBean> getMessages() {
+	public List<NotificationBean> getMessages() {
 		return messages;
 	}
 
-	public void setMessages(List<MessageBean> messages) {
+	public void setMessages(List<NotificationBean> messages) {
 		this.messages = messages;
 	}
 
-	public void refresh(List<MessageBean> msgs) {
+	public void refresh(List<NotificationBean> msgs) {
 		this.messages = msgs;
 		check = new ArrayList<Boolean>();
 		for (int i = 0; i < messages.size(); i++) {
