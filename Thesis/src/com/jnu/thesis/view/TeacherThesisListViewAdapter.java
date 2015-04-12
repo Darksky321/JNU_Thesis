@@ -1,6 +1,7 @@
 package com.jnu.thesis.view;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import android.app.Activity;
 import android.view.LayoutInflater;
@@ -10,6 +11,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.jnu.thesis.R;
+import com.jnu.thesis.bean.ThesisBean;
 
 public class TeacherThesisListViewAdapter extends BaseAdapter {
 
@@ -61,5 +63,12 @@ public class TeacherThesisListViewAdapter extends BaseAdapter {
 
 	private class ViewHolder {
 		public TextView textView;
+	}
+
+	public void setData(List<ThesisBean> thesisBeans) {
+		theses = new ArrayList<String>();
+		for (ThesisBean tb : thesisBeans) {
+			theses.add(tb.getName());
+		}
 	}
 }

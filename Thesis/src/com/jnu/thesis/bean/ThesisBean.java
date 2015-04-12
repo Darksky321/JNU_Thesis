@@ -149,6 +149,22 @@ public class ThesisBean implements Parcelable {
 		return t;
 	}
 
+	public static ThesisBean createFromJSON2(JSONObject jsonObject) {
+		ThesisBean t = new ThesisBean();
+		try {
+			t.setCount(jsonObject.getInt("studentQuantity"));
+			t.setDetail(jsonObject.getString("detail"));
+			t.setName(jsonObject.getString("thesisName"));
+			t.setNo(jsonObject.getString("thesisNo"));
+			t.setPostTime(jsonObject.getString("postTime"));
+			t.setStatus(jsonObject.getInt("status"));
+		} catch (JSONException e) {
+			// TODO 自动生成的 catch 块
+			return new ThesisBean();
+		}
+		return t;
+	}
+
 	@Override
 	public String toString() {
 		return "ThesisBean [no=" + no + ", name=" + name + ", teacherName="

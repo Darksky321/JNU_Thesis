@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.Button;
+import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
@@ -28,6 +29,7 @@ public class EmbeddedListViewAdapter extends BaseExpandableListAdapter {
 	private int first = -1;
 	private int second = -1;
 	private int third = -1;
+	private ExpandableListView listView;
 
 	public EmbeddedListViewAdapter(Activity activity, List<ThesisBean> theses) {
 		super();
@@ -258,4 +260,13 @@ public class EmbeddedListViewAdapter extends BaseExpandableListAdapter {
 			child.add(tmp);
 		}
 	}
+
+	public ExpandableListView getListView() {
+		return listView;
+	}
+
+	public void setListView(ExpandableListView listView) {
+		this.listView = listView;
+	}
+
 }

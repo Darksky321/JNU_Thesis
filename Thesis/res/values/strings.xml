@@ -43,6 +43,10 @@
     <string name="textView_selected">已选课题：</string>
     <string name="button_reSelect">更改选题</string>
     <string name="button_myList">已选课题</string>
-    <string name="title_activity_selected_thesis">SelectedThesisActivity</string>
+    <string name="title_activity_selected_thesis">已选课题</string>
+    <string name="title_activity_edit_thesis">编辑课题</string>
+    <string name="textView_thesisName">论文题目</string>
+    <string name="textView_count">人数限制</string>
+    <string name="textView_detail">详细信息</string>
 
 </resources>

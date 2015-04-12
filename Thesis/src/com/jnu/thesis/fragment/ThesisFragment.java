@@ -21,6 +21,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ExpandableListView.OnGroupExpandListener;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.Toast;
@@ -76,6 +77,19 @@ public class ThesisFragment extends Fragment {
 		// listViewThesis.setIndicatorBounds(48, 48);
 		listViewThesis.setGroupIndicator(null);
 		listViewThesis.setAdapter(listViewAdapter);
+		listViewAdapter.setListView(listViewThesis);
+		listViewThesis.setOnGroupExpandListener(new OnGroupExpandListener() {
+
+			@Override
+			public void onGroupExpand(int groupPosition) {
+				for (int i = 0; i < theses.size(); i++) {
+					if (groupPosition != i) {
+						listViewThesis.collapseGroup(i);
+					}
+				}
+			}
+
+		});
 
 		return v;
 	}
@@ -97,8 +111,7 @@ public class ThesisFragment extends Fragment {
 				// TODO 自动生成的方法存根
 				thesisThread = new Thread(new ThesisRunnable());
 				thesisThread.start();
-				llRefresh.setVisibility(View.GONE);
-				llLoading.setVisibility(View.VISIBLE);
+				displayLoading();
 			}
 		});
 
