@@ -6,7 +6,7 @@ import java.util.Map;
 import org.json.JSONObject;
 
 import android.app.Activity;
-import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -60,6 +60,18 @@ public class EditThesisActivity extends Activity {
 		setContentView(R.layout.activity_edit_thesis);
 		context = this;
 		initView();
+		Intent intent = getIntent();
+		String type = intent.getStringExtra("type");
+		if (type != null && type.equals("edit")) {
+			String name = intent.getStringExtra("name");
+			String count = intent.getStringExtra("count");
+			String detail = intent.getStringExtra("detail");
+			if (name != null && count != null && detail != null) {
+				editTextName.setText(name);
+				editTextCount.setText(count);
+				editTextDetail.setText(detail);
+			}
+		}
 	}
 
 	private void initView() {

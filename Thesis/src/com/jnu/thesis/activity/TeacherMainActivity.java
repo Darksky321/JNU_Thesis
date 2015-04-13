@@ -16,7 +16,7 @@ import android.widget.RadioGroup.OnCheckedChangeListener;
 import com.jnu.thesis.R;
 import com.jnu.thesis.fragment.ContactsFragment;
 import com.jnu.thesis.fragment.DiscoverFragment;
-import com.jnu.thesis.fragment.MeFragment;
+import com.jnu.thesis.fragment.TeacherMeFragment;
 import com.jnu.thesis.fragment.TeacherThesisFragment;
 
 public class TeacherMainActivity extends FragmentActivity implements
@@ -60,7 +60,7 @@ public class TeacherMainActivity extends FragmentActivity implements
 		Fragment thesisFragment = new TeacherThesisFragment();
 		Fragment contactsFragment = new ContactsFragment();
 		Fragment discoverFragment = new DiscoverFragment();
-		Fragment meFragment = new MeFragment();
+		Fragment meFragment = new TeacherMeFragment();
 
 		// 将各Fragment加入数组中
 		fragmentList.add(thesisFragment);

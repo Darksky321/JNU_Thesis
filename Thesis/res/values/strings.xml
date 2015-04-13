@@ -48,5 +48,7 @@
     <string name="textView_thesisName">论文题目</string>
     <string name="textView_count">人数限制</string>
     <string name="textView_detail">详细信息</string>
+    <string name="delete">删除</string>
+    <string name="edit">修改</string>
 
 </resources>

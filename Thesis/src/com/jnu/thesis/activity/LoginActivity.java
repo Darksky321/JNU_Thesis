@@ -249,6 +249,10 @@ public class LoginActivity extends Activity {
 			switch (msg.what) {
 			case LOGIN_FAILED:
 				activity.dialog.dismiss();
+				UserDao dao = UserDaoImpl.getInstance(activity
+						.getApplicationContext());
+				dao.deleteUser(new String[] { activity.getEditTextUserName()
+						.getText().toString() });
 				Toast.makeText(activity, "µÇÂ¼Ê§°Ü", Toast.LENGTH_SHORT).show();
 				break;
 			case LOGIN_SUCCESS:

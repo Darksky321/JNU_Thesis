@@ -15,13 +15,14 @@ public class ThesisBean implements Parcelable {
 	private String detail;
 	private int status;
 	private String postTime;
+	private int chosenQuantity;
 
 	public ThesisBean() {
 		super();
 	}
 
 	public ThesisBean(String no, String name, String teacherName, int count,
-			String detail, int status, String postTime) {
+			String detail, int status, String postTime, int chosenQuantity) {
 		super();
 		this.no = no;
 		this.name = name;
@@ -30,6 +31,7 @@ public class ThesisBean implements Parcelable {
 		this.detail = detail;
 		this.status = status;
 		this.postTime = postTime;
+		this.chosenQuantity = chosenQuantity;
 	}
 
 	public String getNo() {
@@ -158,6 +160,8 @@ public class ThesisBean implements Parcelable {
 			t.setNo(jsonObject.getString("thesisNo"));
 			t.setPostTime(jsonObject.getString("postTime"));
 			t.setStatus(jsonObject.getInt("status"));
+			t.setChosenQuantity(Integer.valueOf(jsonObject
+					.getString("chosen_quantity")));
 		} catch (JSONException e) {
 			// TODO 自动生成的 catch 块
 			return new ThesisBean();
@@ -165,11 +169,20 @@ public class ThesisBean implements Parcelable {
 		return t;
 	}
 
+	public int getChosenQuantity() {
+		return chosenQuantity;
+	}
+
+	public void setChosenQuantity(int chosenQuantity) {
+		this.chosenQuantity = chosenQuantity;
+	}
+
 	@Override
 	public String toString() {
 		return "ThesisBean [no=" + no + ", name=" + name + ", teacherName="
 				+ teacherName + ", count=" + count + ", detail=" + detail
-				+ ", status=" + status + ", postTime=" + postTime + "]";
+				+ ", status=" + status + ", postTime=" + postTime
+				+ ", chosenQuantity=" + chosenQuantity + "]";
 	}
 
 }

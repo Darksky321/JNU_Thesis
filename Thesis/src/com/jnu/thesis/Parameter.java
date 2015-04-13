@@ -1,7 +1,7 @@
 package com.jnu.thesis;
 
 public class Parameter {
-	public static final String host = "http://172.17.135.175:8080/Thesis_Supervision/";
+	public static final String host = "http://192.168.102.125:8080/Thesis_Supervision/";
 	// / public static final String host =
 	// "http://192.168.102.100:8080/Thesis_Supervision/";
 

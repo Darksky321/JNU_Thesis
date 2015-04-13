@@ -35,7 +35,6 @@ public class TeacherThesisFragment extends Fragment {
 	public static final int THESIS_SUCCESS = 1;
 
 	private List<ThesisBean> theses;
-	private List<String> thesesName;
 	private ListView listView;
 	private Button buttonRefresh;
 	private LinearLayout llLoading;
@@ -99,15 +98,8 @@ public class TeacherThesisFragment extends Fragment {
 		initView(v);
 
 		adapter = new TeacherThesisListViewAdapter(getActivity(),
-				new ArrayList<String>());
+				new ArrayList<ThesisBean>());
 		listView.setAdapter(adapter);
-
-		theses = getThesesData();
-		thesesName = new ArrayList<String>();
-		for (ThesisBean t : theses) {
-			thesesName.add(t.getName());
-		}
-
 		listView.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
@@ -137,6 +129,7 @@ public class TeacherThesisFragment extends Fragment {
 						// TODO 自动生成的方法存根
 						Intent intent = new Intent();
 						intent.setClass(getActivity(), EditThesisActivity.class);
+						intent.putExtra("type", "new");
 						startActivity(intent);
 					}
 				});
@@ -201,23 +194,4 @@ public class TeacherThesisFragment extends Fragment {
 		listView.setVisibility(View.GONE);
 	}
 
-	private List<ThesisBean> getThesesData() {
-		List<ThesisBean> theses = new ArrayList<ThesisBean>();
-		theses.add(new ThesisBean("1", "毕业论文指导系统", "孟小华", 2,
-				"辣鸡来选辣鸡来选辣鸡来选辣鸡来选辣鸡来选辣鸡来选辣鸡来选辣鸡来选辣鸡来选辣鸡来选辣鸡来选辣鸡来选辣鸡来选", 0,
-				"date"));
-		theses.add(new ThesisBean("2", "我的题目很长很长很长很长很长很长很长很长很长很长很长很长很长很长",
-				"邓舜光", 1, "我的题目不可能这么长", 1, "date"));
-		theses.add(new ThesisBean("3", "我不会做毕业设计怎么想都是你们的错", "nico", 1, "怎样也好了",
-				0, "date"));
-		theses.add(new ThesisBean("4", "我的毕业设计很坑", "d", 1, "我的后宫很多", 1, "date"));
-		theses.add(new ThesisBean("5", "我们仍未知道那天所做的毕业设计的名字", "a1", 1, "找到你了!",
-				0, "date"));
-		theses.add(new ThesisBean("6", "test6", "f", 1, "bbbb", 1, "date"));
-		theses.add(new ThesisBean("7", "test7", "g", 1, "aaaa", 0, "date"));
-		theses.add(new ThesisBean("8", "test8", "h", 1, "zcvx", 1, "date"));
-		theses.add(new ThesisBean("9", "test9", "i", 1, "zzzz", 0, "date"));
-		theses.add(new ThesisBean("10", "test10", "j", 1, "cxzdsa", 1, "date"));
-		return theses;
-	}
 }
