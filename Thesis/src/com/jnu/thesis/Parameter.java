@@ -1,7 +1,7 @@
 package com.jnu.thesis;
 
 public class Parameter {
-	public static final String host = "http://192.168.102.125:8080/Thesis_Supervision/";
+	public static final String host = "http://192.168.102.163:8080/Thesis_Supervision/";
 	// / public static final String host =
 	// "http://192.168.102.100:8080/Thesis_Supervision/";
 
@@ -10,6 +10,7 @@ public class Parameter {
 	public static final String studentSelect = "studentSelectMain.action";
 	public static final String teacherMain = "teacherMainSelect.action";
 	public static final String teacherRefresh = "teacherMainRelease.action";
+	public static final String teacherTopicCreate = "teacherTopicCreate.action";
 
 	public static final String ACCOUNT_PWD = "user.pwd";
 

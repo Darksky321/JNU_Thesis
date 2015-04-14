@@ -27,7 +27,6 @@ import com.jnu.thesis.dao.impl.UserDaoImpl;
 public class TeacherMeFragment extends Fragment {
 
 	private TextView textViewMe;
-	private TextView buttonMyList;
 	private Button buttonLogout;
 	private List<ThesisBean> myList;
 
@@ -41,24 +40,9 @@ public class TeacherMeFragment extends Fragment {
 
 	private void initView(View v) {
 		textViewMe = (TextView) v.findViewById(R.id.textView_me);
-		buttonMyList = (TextView) v.findViewById(R.id.button_myList);
 		buttonLogout = (Button) v.findViewById(R.id.button_logout);
 
 		textViewMe.setText("当前账号：" + Parameter.getCurrentUser());
-
-		myList = new ArrayList<ThesisBean>();
-		buttonMyList.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				// TODO 自动生成的方法存根
-				Intent intent = new Intent();
-				intent.putParcelableArrayListExtra("myList",
-						(ArrayList<ThesisBean>) myList);
-				intent.setClass(getActivity(), SelectedThesisActivity.class);
-				getActivity().startActivity(intent);
-			}
-		});
 
 		/**
 		 * 注销账号, 删除数据库信息

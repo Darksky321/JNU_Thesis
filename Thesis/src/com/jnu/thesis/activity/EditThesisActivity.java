@@ -41,6 +41,9 @@ public class EditThesisActivity extends Activity {
 			// TODO 自动生成的方法存根
 			switch (msg.what) {
 			case SUBMIT_FAIL:
+				Intent intent = new Intent();
+				intent.setAction("com.jnu.thesis.activity.NEW_THESIS");
+				sendBroadcast(intent);
 				Toast.makeText(context, "提交失败", Toast.LENGTH_SHORT).show();
 				break;
 			case SUBMIT_SUCCESS:
@@ -117,11 +120,12 @@ public class EditThesisActivity extends Activity {
 			// TODO 自动生成的方法存根
 			HttpUtil httpUtil = new HttpUtil();
 			Map<String, String> para = new HashMap<String, String>();
-			para.put("", editTextName.getText().toString());
-			para.put("", editTextDetail.getText().toString());
-			para.put("", editTextCount.getText().toString());
+			para.put("topicname", editTextName.getText().toString());
+			para.put("detail", editTextDetail.getText().toString());
+			para.put("stuquantity", editTextCount.getText().toString());
 			try {
-				String s = httpUtil.doPost(Parameter.host, para);
+				String s = httpUtil.doPost(Parameter.host
+						+ Parameter.teacherTopicCreate, para);
 				JSONObject jo = new JSONObject(s);
 				String res = jo.getString("result");
 				Message msg = Message.obtain();

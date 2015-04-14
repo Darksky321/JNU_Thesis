@@ -14,8 +14,8 @@ import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 
 import com.jnu.thesis.R;
-import com.jnu.thesis.fragment.ContactsFragment;
-import com.jnu.thesis.fragment.DiscoverFragment;
+import com.jnu.thesis.fragment.GroupFragment;
+import com.jnu.thesis.fragment.TeacherContactsFragment;
 import com.jnu.thesis.fragment.TeacherMeFragment;
 import com.jnu.thesis.fragment.TeacherThesisFragment;
 
@@ -58,8 +58,8 @@ public class TeacherMainActivity extends FragmentActivity implements
 		fragmentList = new ArrayList<Fragment>();
 
 		Fragment thesisFragment = new TeacherThesisFragment();
-		Fragment contactsFragment = new ContactsFragment();
-		Fragment discoverFragment = new DiscoverFragment();
+		Fragment contactsFragment = new TeacherContactsFragment();
+		Fragment discoverFragment = new GroupFragment();
 		Fragment meFragment = new TeacherMeFragment();
 
 		// 将各Fragment加入数组中

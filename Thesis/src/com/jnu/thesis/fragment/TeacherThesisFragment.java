@@ -6,7 +6,10 @@ import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -41,6 +44,7 @@ public class TeacherThesisFragment extends Fragment {
 	private LinearLayout llRefresh;
 
 	private Thread thesisThread;
+	private NewThesisReceiver updateListViewReceiver;
 
 	private TeacherThesisListViewAdapter adapter;
 
@@ -112,7 +116,19 @@ public class TeacherThesisFragment extends Fragment {
 				startActivity(intent);
 			}
 		});
+		// 初始化广播接收器
+		updateListViewReceiver = new NewThesisReceiver();
+		IntentFilter intentFilter = new IntentFilter();
+		intentFilter.addAction("com.jnu.thesis.activity.NEW_THESIS");
+		getActivity().registerReceiver(updateListViewReceiver, intentFilter);
 		return v;
+	}
+
+	@Override
+	public void onDestroy() {
+		// TODO 自动生成的方法存根
+		getActivity().unregisterReceiver(updateListViewReceiver);
+		super.onDestroy();
 	}
 
 	private void initView(View v) {
@@ -192,6 +208,17 @@ public class TeacherThesisFragment extends Fragment {
 		llLoading.setVisibility(View.GONE);
 		llRefresh.setVisibility(View.VISIBLE);
 		listView.setVisibility(View.GONE);
+	}
+
+	public class NewThesisReceiver extends BroadcastReceiver {
+
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			// TODO Auto-generated method stub
+			thesisThread = new Thread(new ThesisRunnable());
+			thesisThread.start();
+			displayLoading();
+		}
 	}
 
 }

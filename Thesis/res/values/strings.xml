@@ -50,5 +50,11 @@
     <string name="textView_detail">详细信息</string>
     <string name="delete">删除</string>
     <string name="edit">修改</string>
+    <string name="title_activity_edit_notification">EditNotificationActivity</string>
+    <string name="edit_notification">编辑通知</string>
+    <string name="notification_title">通知标题</string>
+    <string name="notification_content">通知正文</string>
+    <string name="button_chat">组内交流</string>
+    <string name="title_activity_chat">ChatActivity</string>
 
 </resources>

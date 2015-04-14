@@ -1,0 +1,90 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#dddddd"
+    tools:context="${relativePackage}.${activityClass}" >
+
+    <RelativeLayout
+        android:id="@+id/title"
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/qq_dimen_96px"
+        android:background="#2E3132" >
+
+        <ImageView
+            android:id="@+id/imageView_back"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_ab_back_holo_dark_am" />
+
+        <ImageView
+            android:id="@+id/img"
+            android:layout_width="@dimen/qq_dimen_80px"
+            android:layout_height="@dimen/qq_dimen_80px"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:background="@drawable/logo" />
+
+        <TextView
+            android:id="@+id/textView_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="@dimen/qq_dimen_8px"
+            android:layout_marginStart="@dimen/qq_dimen_8px"
+            android:layout_toEndOf="@+id/img"
+            android:layout_toRightOf="@+id/img"
+            android:text="@string/button_chat"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/qq_dimen_30px" />
+    </RelativeLayout>
+
+    <ListView
+        android:id="@+id/list_chat"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/title"
+        android:layout_marginBottom="30dp"
+        android:background="#dddddd"
+        android:divider="@null"
+        android:listSelector="#00000000" >
+    </ListView>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="#ffffff" >
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_alignParentTop="true"
+            android:background="#bcbcbc" />
+
+        <ImageButton
+            android:id="@+id/button_send"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/blank_selector"
+            android:src="@drawable/ic_menu_send" />
+
+        <EditText
+            android:id="@+id/editText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_toLeftOf="@id/button_send"
+            android:layout_toStartOf="@id/button_send"
+            android:background="@drawable/edittext_selector" />
+    </RelativeLayout>
+
+</RelativeLayout>

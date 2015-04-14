@@ -28,7 +28,7 @@ import com.jnu.thesis.R;
 import com.jnu.thesis.dao.UserDao;
 import com.jnu.thesis.dao.impl.UserDaoImpl;
 import com.jnu.thesis.fragment.ContactsFragment;
-import com.jnu.thesis.fragment.DiscoverFragment;
+import com.jnu.thesis.fragment.GroupFragment;
 import com.jnu.thesis.fragment.MeFragment;
 import com.jnu.thesis.fragment.ThesisFragment;
 import com.jnu.thesis.service.CallBack;
@@ -147,7 +147,7 @@ public class MainActivity extends FragmentActivity implements
 
 		Fragment thesisFragment = new ThesisFragment();
 		Fragment contactsFragment = new ContactsFragment();
-		Fragment discoverFragment = new DiscoverFragment();
+		Fragment discoverFragment = new GroupFragment();
 		Fragment meFragment = new MeFragment();
 
 		// 将各Fragment加入数组中
