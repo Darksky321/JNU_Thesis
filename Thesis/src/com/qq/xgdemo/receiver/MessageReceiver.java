@@ -3,6 +3,7 @@ package com.qq.xgdemo.receiver;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
+import java.util.Map;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -63,6 +64,10 @@ public class MessageReceiver extends XGPushBaseReceiver {
 		String id = dao.getCurrentUserId();
 		if (id.equals(""))
 			id = "Deng";
+		else {
+			Map<String, String> user = dao.findAllUser();
+			id = user.get("id");
+		}
 		NotificationDaoImpl.getInstance(context).save(notific,
 				notifiShowedRlt.getCustomContent(), id);
 		// ¸üÐÂUI

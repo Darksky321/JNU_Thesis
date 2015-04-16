@@ -1,6 +1,10 @@
 package com.jnu.thesis.view;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import org.json.JSONObject;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -16,9 +20,11 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.jnu.thesis.Parameter;
 import com.jnu.thesis.R;
 import com.jnu.thesis.activity.EditThesisActivity;
 import com.jnu.thesis.bean.ThesisBean;
+import com.jnu.thesis.util.HttpUtil;
 
 public class TeacherThesisListViewAdapter extends BaseAdapter {
 
@@ -139,6 +145,31 @@ public class TeacherThesisListViewAdapter extends BaseAdapter {
 				if (theses.get(groupPosition).getChosenQuantity() != 0) {
 					Toast.makeText(activity, "已有学生选题，不能删除", Toast.LENGTH_SHORT)
 							.show();
+				} else {
+					new Thread(new Runnable() {
+
+						@Override
+						public void run() {
+							// TODO 自动生成的方法存根
+							HttpUtil httpUtil = new HttpUtil();
+							Map<String, String> para = new HashMap<String, String>();
+							para.put("getThesisNo", groupPosition + "");
+							try {
+								String str = httpUtil.doGet(Parameter.host
+										+ Parameter.teacherTopicDelete, para);
+								JSONObject jo = new JSONObject(str);
+								if (jo.getString("result").equals("success")) {
+									Intent intent = new Intent();
+									intent.setAction("com.jnu.thesis.activity.DELETE_THESIS");
+									activity.sendBroadcast(intent);
+								}
+							} catch (Exception e) {
+								// TODO 自动生成的 catch 块
+								e.printStackTrace();
+							}
+						}
+
+					}).start();
 				}
 			}
 		});

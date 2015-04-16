@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 
 import com.jnu.thesis.R;
 import com.jnu.thesis.activity.ChatActivity;
+import com.jnu.thesis.activity.UploadActivity;
 
 public class GroupFragment extends Fragment {
 	@Override
@@ -32,5 +33,17 @@ public class GroupFragment extends Fragment {
 						getActivity().startActivity(intent);
 					}
 				});
+		v.findViewById(R.id.button_upload).setOnClickListener(
+				new OnClickListener() {
+
+					@Override
+					public void onClick(View v) {
+						// TODO 自动生成的方法存根
+						Intent intent = new Intent();
+						intent.setClass(getActivity(), UploadActivity.class);
+						getActivity().startActivity(intent);
+					}
+				});
+
 	}
 }

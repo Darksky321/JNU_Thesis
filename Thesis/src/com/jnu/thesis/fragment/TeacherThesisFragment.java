@@ -23,6 +23,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.jnu.thesis.Parameter;
 import com.jnu.thesis.R;
@@ -112,6 +113,7 @@ public class TeacherThesisFragment extends Fragment {
 				// TODO 自动生成的方法存根
 				Intent intent = new Intent();
 				intent.putExtra("thesis", theses.get(position));
+				intent.putExtra("getThesisNo", position);
 				intent.setClass(getActivity(), SelectStudentActivity.class);
 				startActivity(intent);
 			}
@@ -120,6 +122,7 @@ public class TeacherThesisFragment extends Fragment {
 		updateListViewReceiver = new NewThesisReceiver();
 		IntentFilter intentFilter = new IntentFilter();
 		intentFilter.addAction("com.jnu.thesis.activity.NEW_THESIS");
+		intentFilter.addAction("com.jnu.thesis.activity.DELETE_THESIS");
 		getActivity().registerReceiver(updateListViewReceiver, intentFilter);
 		return v;
 	}
@@ -215,9 +218,20 @@ public class TeacherThesisFragment extends Fragment {
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			// TODO Auto-generated method stub
-			thesisThread = new Thread(new ThesisRunnable());
-			thesisThread.start();
-			displayLoading();
+
+			if (intent.getAction().equals(
+					"com.jnu.thesis.activity.DELETE_THESIS")) {
+				Toast.makeText(getActivity(), "删除成功", Toast.LENGTH_SHORT)
+						.show();
+				thesisThread = new Thread(new ThesisRunnable());
+				thesisThread.start();
+				displayLoading();
+			} else if (intent.getAction().equals(
+					"com.jnu.thesis.activity.NEW_THESIS")) {
+				thesisThread = new Thread(new ThesisRunnable());
+				thesisThread.start();
+				displayLoading();
+			}
 		}
 	}
 

@@ -13,6 +13,7 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.jnu.thesis.R;
+import com.jnu.thesis.bean.StudentBean;
 
 public class SelectStudentListViewAdapter extends BaseAdapter {
 
@@ -101,5 +102,27 @@ public class SelectStudentListViewAdapter extends BaseAdapter {
 			}
 		}
 		return i;
+	}
+
+	public void setData(List<StudentBean> students) {
+		names = new ArrayList<String>();
+		nos = new ArrayList<String>();
+		check = new ArrayList<Boolean>();
+		for (StudentBean s : students) {
+			names.add(s.getName());
+			nos.add(s.getNo());
+			check.add(false);
+		}
+		notifyDataSetChanged();
+	}
+
+	public List<String> getCheckedNos() {
+		List<String> list = new ArrayList<String>();
+		for (int i = 0; i < check.size(); ++i) {
+			if (check.get(i)) {
+				list.add(nos.get(i));
+			}
+		}
+		return list;
 	}
 }

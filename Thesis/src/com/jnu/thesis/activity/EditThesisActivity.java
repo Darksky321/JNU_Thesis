@@ -34,6 +34,8 @@ public class EditThesisActivity extends Activity {
 	private Activity context;
 	private Thread editThread;
 
+	private String type = "";
+
 	private Handler handler = new Handler() {
 
 		@Override
@@ -41,12 +43,12 @@ public class EditThesisActivity extends Activity {
 			// TODO 自动生成的方法存根
 			switch (msg.what) {
 			case SUBMIT_FAIL:
-				Intent intent = new Intent();
-				intent.setAction("com.jnu.thesis.activity.NEW_THESIS");
-				sendBroadcast(intent);
 				Toast.makeText(context, "提交失败", Toast.LENGTH_SHORT).show();
 				break;
 			case SUBMIT_SUCCESS:
+				Intent intent = new Intent();
+				intent.setAction("com.jnu.thesis.activity.NEW_THESIS");
+				sendBroadcast(intent);
 				Toast.makeText(context, "提交成功", Toast.LENGTH_SHORT).show();
 				context.finish();
 			default:
@@ -64,7 +66,7 @@ public class EditThesisActivity extends Activity {
 		context = this;
 		initView();
 		Intent intent = getIntent();
-		String type = intent.getStringExtra("type");
+		type = intent.getStringExtra("type");
 		if (type != null && type.equals("edit")) {
 			String name = intent.getStringExtra("name");
 			String count = intent.getStringExtra("count");
@@ -124,8 +126,15 @@ public class EditThesisActivity extends Activity {
 			para.put("detail", editTextDetail.getText().toString());
 			para.put("stuquantity", editTextCount.getText().toString());
 			try {
-				String s = httpUtil.doPost(Parameter.host
-						+ Parameter.teacherTopicCreate, para);
+				String s;
+				if (type != null && type.equals("edit")) {
+
+					s = httpUtil.doPost(Parameter.host
+							+ Parameter.teacherTopicUpdate, para);
+				} else {
+					s = httpUtil.doPost(Parameter.host
+							+ Parameter.teacherTopicCreate, para);
+				}
 				JSONObject jo = new JSONObject(s);
 				String res = jo.getString("result");
 				Message msg = Message.obtain();
@@ -142,6 +151,5 @@ public class EditThesisActivity extends Activity {
 				e.printStackTrace();
 			}
 		}
-
 	}
 }
