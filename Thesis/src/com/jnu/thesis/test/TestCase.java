@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import android.content.Intent;
+import android.os.Environment;
 import android.test.AndroidTestCase;
 import android.util.Log;
 
@@ -11,6 +12,7 @@ import com.jnu.thesis.activity.LoginActivity;
 import com.jnu.thesis.dao.impl.NotificationDaoImpl;
 import com.jnu.thesis.dao.impl.UserDaoImpl;
 import com.jnu.thesis.db.DatabaseHelper;
+import com.jnu.thesis.util.FileUtil;
 import com.jnu.thesis.util.HttpUtil;
 import com.tencent.android.tpush.XGIOperateCallback;
 import com.tencent.android.tpush.XGPushManager;
@@ -93,5 +95,13 @@ public class TestCase extends AndroidTestCase {
 		// intent.setFlags(0x4020000);
 		intent.setClass(getContext(), LoginActivity.class);
 		getContext().startActivity(intent);
+	}
+
+	public void download() {
+		int b = FileUtil
+				.downloadFile(
+						"http://192.168.137.1:8080/Thesis_Supervision/fileDownload.action?fileName=00275236_p.jpg",
+						Environment.getExternalStorageDirectory().toString());
+		Log.i(TAG, b + "");
 	}
 }

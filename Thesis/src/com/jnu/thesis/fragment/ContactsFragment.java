@@ -41,13 +41,14 @@ public class ContactsFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View v = inflater.inflate(R.layout.fragment_contacts, null);
+		View v = inflater.inflate(R.layout.fragment_contacts, container, false);
 		context = getActivity();
 		initView(v);
 		NotificationDao dao = NotificationDaoImpl.getInstance(getActivity()
 				.getApplicationContext());
-		List<NotificationBean> messages = dao.findAllNotifications(Parameter
-				.getCurrentUser());
+		// List<NotificationBean> messages = dao.findAllNotifications(Parameter
+		// .getCurrentUser());
+		List<NotificationBean> messages = dao.findAllNotifications();
 		adapter = new MessageListViewAdapter(messages, getActivity());
 		listViewMessage.setAdapter(adapter);
 		/**

@@ -33,6 +33,8 @@ import com.jnu.thesis.dao.impl.UserDaoImpl;
 import com.jnu.thesis.service.CallBack;
 import com.jnu.thesis.service.LoginThread;
 import com.jnu.thesis.util.XingeUtil;
+import com.tencent.android.tpush.XGPushConfig;
+import com.tencent.android.tpush.XGPushManager;
 
 public class LoginActivity extends Activity {
 
@@ -180,9 +182,17 @@ public class LoginActivity extends Activity {
 					startActivity(intent);
 					finish();
 				}
-				Parameter.setCurrentUser("Deng");
+				Parameter.setCurrentUser(editTextUserName.getText().toString());
+				if (status == 2)
+					Parameter.setCurrentUserName("√œ‘∆");
+				else
+					Parameter.setCurrentUserName("µÀÀ¥π‚");
 				Parameter.setStatus(status);
 				XingeUtil.regist(getApplicationContext(), "2011051682");
+				XGPushManager.setTag(getApplicationContext(), "tagForTest");
+				if (!Parameter.getTheses().isEmpty())
+					XGPushManager.setTag(getApplicationContext(), Parameter
+							.getTheses().get(0));
 				return true;
 			}
 		});

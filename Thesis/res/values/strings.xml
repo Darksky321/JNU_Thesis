@@ -57,5 +57,7 @@
     <string name="button_chat">组内交流</string>
     <string name="title_activity_chat">ChatActivity</string>
     <string name="upload">上传文件</string>
+    <string name="button_download">下载文件</string>
+    <string name="title_activity_download">DownloadActivity</string>
 
 </resources>

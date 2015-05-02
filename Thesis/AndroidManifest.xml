@@ -112,7 +112,7 @@
             <intent-filter>
 
                 <!-- 【必须】 请修改为当前APP名包.PUSH_ACTION，如demo的包名为：com.qq.xgdemo -->
-                <action android:name="com.qq.xgdemo.PUSH_ACTION" />
+                <action android:name="com.jnu.thesis.PUSH_ACTION" />
             </intent-filter>
         </service>
 
@@ -120,14 +120,14 @@
         <!--
             <service
             android:name="com.tencent.android.tpush.service.XGDaemonService"
-            android:process=":qq_push_daemon" />
+            android:process=":qq_push_daemon" />
         -->
         <!-- 【可选】信鸽拉起其他APP应用，若应用在本地找不到可以自动下载 -->
         <!--
               <service
             android:name="com.tencent.android.tpush.XGDownloadService"
             android:enabled="true"
-            android:exported="false" />
+            android:exported="false" />
         -->
         <!-- 【可选】APP实现的Receiver，用于接收消息透传和操作结果的回调，请根据需要添加 -->
         <!-- YOUR_PACKAGE_PATH.CustomPushReceiver需要改为自己的Receiver： -->
@@ -171,16 +171,20 @@
             android:label="@string/title_activity_edit_thesis" >
         </activity>
         <activity
-            android:name="com.jnu.thesis.activity.EditNotificationActivity"
+            android:name=".activity.EditNotificationActivity"
             android:label="@string/title_activity_edit_notification" >
         </activity>
         <activity
-            android:name="com.jnu.thesis.activity.ChatActivity"
+            android:name=".activity.ChatActivity"
             android:label="@string/title_activity_chat" >
         </activity>
         <activity
-            android:name="com.jnu.thesis.activity.UploadActivity"
+            android:name=".activity.UploadActivity"
             android:label="@string/upload" >
+        </activity>
+        <activity
+            android:name="com.jnu.thesis.activity.DownloadActivity"
+            android:label="@string/button_download" >
         </activity>
     </application>
 

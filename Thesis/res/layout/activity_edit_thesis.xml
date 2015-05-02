@@ -37,7 +37,7 @@
             android:layout_marginStart="@dimen/qq_dimen_8px"
             android:layout_toEndOf="@+id/img"
             android:layout_toRightOf="@+id/img"
-            android:text="@string/message_detail"
+            android:text="@string/title_activity_edit_thesis"
             android:textColor="@android:color/white"
             android:textSize="@dimen/qq_dimen_30px" />
     </RelativeLayout>

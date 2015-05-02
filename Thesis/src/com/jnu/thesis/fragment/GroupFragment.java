@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 
 import com.jnu.thesis.R;
 import com.jnu.thesis.activity.ChatActivity;
+import com.jnu.thesis.activity.DownloadActivity;
 import com.jnu.thesis.activity.UploadActivity;
 
 public class GroupFragment extends Fragment {
@@ -33,6 +34,19 @@ public class GroupFragment extends Fragment {
 						getActivity().startActivity(intent);
 					}
 				});
+
+		v.findViewById(R.id.button_download).setOnClickListener(
+				new OnClickListener() {
+
+					@Override
+					public void onClick(View v) {
+						// TODO 自动生成的方法存根
+						Intent intent = new Intent();
+						intent.setClass(getActivity(), DownloadActivity.class);
+						getActivity().startActivity(intent);
+					}
+				});
+
 		v.findViewById(R.id.button_upload).setOnClickListener(
 				new OnClickListener() {
 

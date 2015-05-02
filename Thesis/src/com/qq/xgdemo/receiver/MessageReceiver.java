@@ -12,7 +12,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
+import com.jnu.thesis.dao.MessageDao;
 import com.jnu.thesis.dao.UserDao;
+import com.jnu.thesis.dao.impl.MessageDaoImpl;
 import com.jnu.thesis.dao.impl.NotificationDaoImpl;
 import com.jnu.thesis.dao.impl.UserDaoImpl;
 import com.qq.xgdemo.common.NotificationService;
@@ -198,6 +200,16 @@ public class MessageReceiver extends XGPushBaseReceiver {
 					Log.d(LogTag, "get custom value:" + value);
 				}
 				// ...
+				MessageDao dao = MessageDaoImpl.getInstance(context
+						.getApplicationContext());
+				dao.save(message.getContent(), new SimpleDateFormat(
+						"yyyy-MM-dd HH:mm:ss", new Locale("zh", "CN"))
+						.format(Calendar.getInstance().getTime()), obj
+						.getString("fromName"), obj.getString("tag"), 0);
+				Intent intent = new Intent("com.jnu.thesis.NEW_MSG");
+				intent.putExtra("content", message.getContent());
+				intent.putExtra("fromName", obj.getString("fromName"));
+				context.sendBroadcast(intent);
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
@@ -206,5 +218,4 @@ public class MessageReceiver extends XGPushBaseReceiver {
 		Log.d(LogTag, text);
 		show(context, text);
 	}
-
 }

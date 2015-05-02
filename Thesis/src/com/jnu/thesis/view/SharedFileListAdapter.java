@@ -1,50 +1,30 @@
 package com.jnu.thesis.view;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-
 import android.app.Activity;
 import android.os.Environment;
+import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
-import android.widget.CheckBox;
+import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 
+import com.jnu.thesis.Parameter;
 import com.jnu.thesis.R;
+import com.jnu.thesis.activity.DownloadActivity;
+import com.jnu.thesis.util.FileUtil;
 
-public class FileListAdapter extends BaseAdapter {
+public class SharedFileListAdapter extends BaseAdapter {
 
-	private String filePath;
 	private String[] fileName;
 	private Activity activity;
-	private ListView listView;
-	private List<Boolean> check;
 
-	public FileListAdapter(Activity activity, ListView listView) {
+	public SharedFileListAdapter(Activity activity) {
 		this.activity = activity;
-		this.listView = listView;
-		listView.setOnItemClickListener(new OnItemClickListener() {
-
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view,
-					int position, long id) {
-				// TODO 自动生成的方法存根
-				File file = new File(filePath, fileName[position]);
-				if (file.isDirectory()) {
-					setFilePath(file.toString());
-				}
-			}
-		});
-		filePath = Environment.getExternalStorageDirectory().toString();
-		setFilePath(filePath);
+		fileName = new String[] {};
 	}
 
 	@Override
@@ -71,15 +51,15 @@ public class FileListAdapter extends BaseAdapter {
 		// Log.i("uploadactivity","getview begin");
 		ViewHolder viewHolder;
 		if (convertView == null) {
-			convertView = LayoutInflater.from(activity).inflate(R.layout.list,
-					parent, false);
+			convertView = LayoutInflater.from(activity).inflate(
+					R.layout.view_share_file_list, parent, false);
 			viewHolder = new ViewHolder();
 			viewHolder.textView = (TextView) convertView
 					.findViewById(R.id.list_item);
 			viewHolder.imageView = (ImageView) convertView
 					.findViewById(R.id.list_image);
-			viewHolder.checkBox = (CheckBox) convertView
-					.findViewById(R.id.list_checkbox);
+			viewHolder.button = (ImageButton) convertView
+					.findViewById(R.id.list_button);
 			convertView.setTag(viewHolder);
 		} else {
 			viewHolder = (ViewHolder) convertView.getTag();
@@ -89,9 +69,7 @@ public class FileListAdapter extends BaseAdapter {
 		// viewHolder.textView.setTextSize(25);
 		// viewHolder.textView.setTextColor(Color.BLACK);
 		String fn = fileName[position];
-		File mFile = new File(filePath, fn);
-		if (mFile.isDirectory()) {// fn.substring(fn.lastIndexOf(".") + 1,
-									// fn.length()).equals(fn)
+		if (fn.substring(fn.lastIndexOf(".") + 1, fn.length()).equals(fn)) {
 			viewHolder.imageView.setImageResource(R.drawable.folder);
 		} else if (fn.substring(fn.lastIndexOf(".") + 1, fn.length()).equals(
 				"jpg")) {
@@ -160,16 +138,52 @@ public class FileListAdapter extends BaseAdapter {
 			viewHolder.imageView.setImageResource(R.drawable.file);
 		}
 
-		viewHolder.checkBox.setOnClickListener(new OnClickListener() {
+		viewHolder.button.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 				// TODO 自动生成的方法存根
-				Boolean b = check.get(position);
-				check.set(position, !b);
+				// download
+				((DownloadActivity) activity).showDialog();
+				// final DownloadInfoBean bean = new DownloadInfoBean(
+				// Parameter.host + Parameter.downloadFile + "?fileName="
+				// + fileName[position], Environment
+				// .getExternalStorageDirectory().toString(), 5);
+				// DownloadTask dt;
+				// try {
+				// dt = new DownloadTask(bean, activity);
+				// dt.start();
+				// } catch (IOException e) {
+				// // TODO 自动生成的 catch 块
+				// e.printStackTrace();
+				// }
+				new Thread(new Runnable() {
+
+					@Override
+					public void run() {
+						// TODO 自动生成的方法存根
+						int b = FileUtil.downloadFile(Parameter.host
+								+ Parameter.downloadFile + "?fileName="
+								+ fileName[position], Environment
+								.getExternalStorageDirectory().toString());
+						if (b == 1) {
+							Message msg = Message.obtain();
+							msg.what = 2;
+							DownloadActivity.handler.sendMessage(msg);
+						} else if (b == 0) {
+							Message msg = Message.obtain();
+							msg.what = 3;
+							DownloadActivity.handler.sendMessage(msg);
+						} else if (b == 2) {
+							Message msg = Message.obtain();
+							msg.what = 4;
+							DownloadActivity.handler.sendMessage(msg);
+						}
+					}
+
+				}).start();
 			}
 		});
-		viewHolder.checkBox.setChecked(check.get(position));
 
 		return convertView;
 	}
@@ -177,29 +191,7 @@ public class FileListAdapter extends BaseAdapter {
 	public class ViewHolder {
 		public ImageView imageView;
 		public TextView textView;
-		public CheckBox checkBox;
-	}
-
-	public void setFilePath(String filePath) {
-		this.filePath = filePath;
-		File file = new File(filePath);
-		fileName = file.list();
-		check = new ArrayList<Boolean>();
-		for (int i = 0; i < file.list().length; i++)
-			check.add(false);
-		notifyDataSetChanged();
-	}
-
-	public String getFilePath() {
-		return filePath;
-	}
-
-	public List<Boolean> getCheck() {
-		return check;
-	}
-
-	public void setCheck(List<Boolean> check) {
-		this.check = check;
+		public ImageButton button;
 	}
 
 	public String[] getFileName() {

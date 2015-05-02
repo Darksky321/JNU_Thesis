@@ -44,8 +44,7 @@ public class TeacherContactsFragment extends Fragment {
 		initView(v);
 		NotificationDao dao = NotificationDaoImpl.getInstance(getActivity()
 				.getApplicationContext());
-		List<NotificationBean> messages = dao.findAllNotifications(Parameter
-				.getCurrentUser());
+		List<NotificationBean> messages = dao.findAllNotifications();
 		adapter = new MessageListViewAdapter(messages, getActivity());
 		listViewMessage.setAdapter(adapter);
 		/**

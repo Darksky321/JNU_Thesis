@@ -32,6 +32,7 @@ import com.jnu.thesis.bean.ThesisBean;
 import com.jnu.thesis.util.HttpUtil;
 import com.jnu.thesis.view.EmbeddedListView;
 import com.jnu.thesis.view.EmbeddedListViewAdapter;
+import com.tencent.android.tpush.XGPushManager;
 
 public class ThesisFragment extends Fragment {
 

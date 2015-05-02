@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import com.jnu.thesis.Parameter;
 import com.jnu.thesis.R;
 import com.jnu.thesis.bean.MessageBean;
 
@@ -44,7 +45,8 @@ public class MessageListAdapter extends BaseAdapter {
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		// TODO 自动生成的方法存根
-		if (!msgList.get(position).getFromName().equals("me")) {
+		if (!msgList.get(position).getFromName()
+				.equals(Parameter.getCurrentUserName())) {
 			convertView = LayoutInflater.from(activity).inflate(
 					R.layout.view_left_dialog, parent, false);
 		} else {

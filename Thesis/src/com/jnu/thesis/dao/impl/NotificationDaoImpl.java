@@ -127,4 +127,42 @@ public class NotificationDaoImpl implements NotificationDao {
 		}
 		return notis;
 	}
+
+	@Override
+	public ArrayList<NotificationBean> findAllNotifications() {
+		// TODO 自动生成的方法存根
+		SQLiteDatabase db = null;
+		ArrayList<NotificationBean> notis = new ArrayList<NotificationBean>();
+		try {
+			db = helper.getReadableDatabase();
+			Cursor cursor = db.query(TABLE, null, null, null, null, null,
+					"update_time DESC");
+			while (cursor.moveToNext()) {
+				NotificationBean noti = new NotificationBean();
+				noti.setId(cursor.getInt(cursor.getColumnIndex("id")));
+				noti.setMsg_id(cursor.getLong(cursor.getColumnIndex("msg_id")));
+				noti.setTitle(cursor.getString(cursor.getColumnIndex("title")));
+				noti.setActivity(cursor.getString(cursor
+						.getColumnIndex("activity")));
+				noti.setNotificationActionType(cursor.getInt(cursor
+						.getColumnIndex("notificationActionType")));
+				noti.setContent(cursor.getString(cursor
+						.getColumnIndex("content")));
+				noti.setUpdate_time(cursor.getString(cursor
+						.getColumnIndex("update_time")));
+				noti.setFromName(cursor.getString(cursor
+						.getColumnIndex("fromName")));
+				noti.setFromId(cursor.getString(cursor.getColumnIndex("fromId")));
+				notis.add(noti);
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+			return notis;
+		} finally {
+			if (db != null) {
+				db.close();
+			}
+		}
+		return notis;
+	}
 }

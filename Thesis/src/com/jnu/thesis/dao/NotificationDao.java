@@ -15,4 +15,6 @@ public interface NotificationDao {
 	public boolean deleteAll(String toId);
 
 	public ArrayList<NotificationBean> findAllNotifications(String toId);
+
+	public ArrayList<NotificationBean> findAllNotifications();
 }

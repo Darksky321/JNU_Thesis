@@ -1,11 +1,19 @@
 package com.jnu.thesis.util;
 
+import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
+
+import android.content.Intent;
+import android.util.Log;
 
 import com.jnu.thesis.Parameter;
 
@@ -61,11 +69,61 @@ public class FileUtil {
 			InputStream inputStream = httpURLConnection.getInputStream();
 			String msg = HttpUtil.changeInputStream(inputStream);
 			dataOutputStream.close();
+			Log.i("filehttp", msg);
 			return msg;
 		} catch (Exception e) {
 			// TODO 自动生成的 catch 块
 			e.printStackTrace();
 			return "";
+		}
+	}
+
+	public static int downloadFile(String urlStr, String to) {
+		DataInputStream dis = null;
+		FileOutputStream fos = null;
+		to = to
+				+ "/"
+				+ urlStr.substring(urlStr.lastIndexOf("=") + 1, urlStr.length());
+		System.out.println(to);
+		try {
+			URL url = new URL(urlStr);
+			HttpURLConnection urlConn = (HttpURLConnection) url
+					.openConnection();
+			urlConn.setRequestMethod("GET");
+			urlConn.setConnectTimeout(5000);
+			urlConn.setReadTimeout(5000);
+			urlConn.setDoInput(true);
+			System.out.println(urlConn.getRequestProperties());
+			urlConn.connect();
+			dis = new DataInputStream(urlConn.getInputStream());
+			File file = new File(to);
+			if (!file.exists())
+				file.createNewFile();
+			else
+				return 2;
+			fos = new FileOutputStream(new File(to));
+			byte[] b = new byte[1024];
+			int i = 0;
+			while ((i = dis.read(b)) != -1) {
+				fos.write(b, 0, i);
+			}
+			// System.out.println(urlConn.getHeaderFields());
+			return 1;
+		} catch (Exception e) {
+			// TODO 自动生成的 catch 块
+			e.printStackTrace();
+			Log.e("filehttp", e.toString());
+			return 0;
+		} finally {
+			try {
+				if (dis != null)
+					dis.close();
+				if (fos != null)
+					fos.close();
+			} catch (IOException e) {
+				// TODO 自动生成的 catch 块
+				e.printStackTrace();
+			}
 		}
 	}
 }
